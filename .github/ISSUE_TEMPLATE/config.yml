@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Where do I get artwork?
+    url: https://github.com/gufranco/snes-graphics-python#faq
+    about: Not from here. Dump a cartridge you own, and never attach what it contains.
+  - name: Where compressed artwork comes from
+    url: https://github.com/gufranco/snes-sdd1-python
+    about: Two cartridges expand their graphics on the way past, and that is where.

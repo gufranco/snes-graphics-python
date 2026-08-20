@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+title: snes-graphics-python
+message: >-
+  If you use this work, please cite it.
+type: software
+authors:
+  - given-names: Gustavo
+    family-names: Franco
+    alias: gufranco
+repository-code: https://github.com/gufranco/snes-graphics-python
+url: https://github.com/gufranco/snes-graphics-python
+abstract: >-
+  A model of how the Super Nintendo reads graphics: bitplane tiles at every
+  depth, tilemaps, the object attribute table, palettes in fifteen bit colour,
+  and the mode 7 affine transform. Every case is settled exhaustively rather than
+  by sampling, because the input space of a tile decoder is small enough to walk
+  in full.
+keywords:
+  - emulation
+  - super-nintendo
+  - graphics
+  - mode-7
+  - tilemap
+  - hardware-model
+  - conformance
+license: MIT
+version: 1.0.0
