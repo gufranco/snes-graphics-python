@@ -28,6 +28,8 @@ no Super Nintendo background mode, and Mode 7 does not store its tiles this way
 at all, so neither is here. Mode 7 is in its own module.
 """
 
+from collections.abc import Sequence
+
 TILE_PIXELS = 64
 
 TILE_WIDTH = 8
@@ -58,11 +60,11 @@ class OutOfRange(Exception):
     pass
 
 
-def _listed():
+def _listed() -> str:
     return ", ".join(str(depth) for depth in DEPTHS)
 
 
-def depth_of(name):
+def depth_of(name: str | int) -> int:
     """The bit depth something is called, however it happens to be written."""
     if isinstance(name, int):
         if name in DEPTHS:
@@ -74,18 +76,18 @@ def depth_of(name):
     return found
 
 
-def _checked(depth):
+def _checked(depth: int) -> int:
     if depth not in DEPTHS:
         raise UnknownDepth(f"{depth} is not a depth the hardware has; it has {_listed()}")
     return depth
 
 
-def tile_bytes(depth):
+def tile_bytes(depth: int) -> int:
     """How many bytes one tile of that depth occupies."""
     return _checked(depth) * TILE_WIDTH
 
 
-def _plane_offset(plane):
+def _plane_offset(plane: int) -> int:
     """Where a plane's first byte sits, which is the whole of the layout.
 
     Planes are paired and each pair is interleaved by row, so the pair a plane
@@ -95,7 +97,7 @@ def _plane_offset(plane):
     return (plane // 2) * PLANE_PAIR_BYTES + (plane % 2)
 
 
-def decode(data, depth):
+def decode(data: bytes | bytearray, depth: int) -> list[int]:
     """One tile, as sixty four colour numbers read left to right, top to bottom."""
     depth = _checked(depth)
     size = tile_bytes(depth)
@@ -117,7 +119,7 @@ def decode(data, depth):
     return pixels
 
 
-def encode(pixels, depth):
+def encode(pixels: Sequence[int], depth: int) -> bytes:
     """The bytes a tile of those colour numbers occupies."""
     depth = _checked(depth)
     if len(pixels) != TILE_PIXELS:
@@ -138,7 +140,7 @@ def encode(pixels, depth):
     return bytes(data)
 
 
-def decode_sheet(data, depth):
+def decode_sheet(data: bytes | bytearray, depth: int) -> list[list[int]]:
     """Every tile in a run of bytes, refusing a run that stops mid tile."""
     size = tile_bytes(depth)
     if len(data) % size:
@@ -146,12 +148,12 @@ def decode_sheet(data, depth):
     return [decode(data[at : at + size], depth) for at in range(0, len(data), size)]
 
 
-def encode_sheet(sheet, depth):
+def encode_sheet(sheet: Sequence[Sequence[int]], depth: int) -> bytes:
     """The bytes a run of tiles occupies."""
     return b"".join(encode(pixels, depth) for pixels in sheet)
 
 
-def flip(pixels, horizontal=False, vertical=False):
+def flip(pixels: Sequence[int], horizontal: bool = False, vertical: bool = False) -> list[int]:
     """A tile mirrored the way a background or sprite entry can ask for."""
     out = list(pixels)
     if horizontal:

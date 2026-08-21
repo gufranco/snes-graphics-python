@@ -20,6 +20,8 @@ first colour of whichever block is in use is not drawn at all; it is the one the
 layer behind shows through.
 """
 
+from collections.abc import Sequence
+
 COLOURS = 256
 
 BYTES_PER_COLOUR = 2
@@ -43,13 +45,13 @@ class Truncated(Exception):
     pass
 
 
-def _narrow(channel):
+def _narrow(channel: int) -> int:
     if not 0 <= channel <= 0xFF:
         raise OutOfRange(f"{channel} is not a channel value; a channel is one byte")
     return channel >> 3
 
 
-def _widen(value):
+def _widen(value: int) -> int:
     """Five bits into eight, by repeating the value's own high bits into the gap.
 
     Shifting and padding with zeroes would leave the brightest colour the
@@ -60,12 +62,12 @@ def _widen(value):
     return (value << 3) | (value >> 2)
 
 
-def to_word(red, green, blue):
+def to_word(red: int, green: int, blue: int) -> int:
     """The fifteen bit word for a colour, dropping what the hardware cannot hold."""
     return _narrow(red) | (_narrow(green) << CHANNEL_BITS) | (_narrow(blue) << (CHANNEL_BITS * 2))
 
 
-def to_rgb(word):
+def to_rgb(word: int) -> tuple[int, int, int]:
     """The three channels a word names, widened to a byte each."""
     if not 0 <= word <= 0xFFFF:
         raise OutOfRange(f"{word} is not a colour word; a word is sixteen bits")
@@ -77,14 +79,14 @@ def to_rgb(word):
     )
 
 
-def decode(data):
+def decode(data: bytes | bytearray) -> list[tuple[int, int, int]]:
     """Every colour in a run of bytes, two bytes each, low byte first."""
     if len(data) % BYTES_PER_COLOUR:
         raise Truncated(f"{len(data)} bytes is not a whole number of colours")
     return [to_rgb(data[at] | (data[at + 1] << 8)) for at in range(0, len(data), BYTES_PER_COLOUR)]
 
 
-def encode(colours):
+def encode(colours: Sequence[tuple[int, int, int]]) -> bytes:
     """The bytes a run of colours occupies."""
     data = bytearray()
     for red, green, blue in colours:
@@ -94,7 +96,7 @@ def encode(colours):
     return bytes(data)
 
 
-def normalise(data):
+def normalise(data: bytes | bytearray) -> bytes:
     """The same bytes with the unused top bit cleared, which is what a round trip keeps."""
     if len(data) % BYTES_PER_COLOUR:
         raise Truncated(f"{len(data)} bytes is not a whole number of colours")
@@ -104,7 +106,7 @@ def normalise(data):
     return bytes(out)
 
 
-def block_size(depth):
+def block_size(depth: int) -> int:
     """How many colours a tile of that depth reaches at once."""
     found = BLOCKS.get(depth)
     if found is None:
@@ -112,7 +114,7 @@ def block_size(depth):
     return found
 
 
-def block_start(depth, block):
+def block_start(depth: int, block: int) -> int:
     """Where a palette block begins in the table."""
     size = block_size(depth)
     if not 0 <= block < COLOURS // size:
@@ -120,7 +122,9 @@ def block_start(depth, block):
     return block * size
 
 
-def resolve(table, pixel, depth, block):
+def resolve(
+    table: Sequence[tuple[int, int, int]], pixel: int, depth: int, block: int
+) -> tuple[int, int, int] | None:
     """The colour the hardware would show for a pixel of that number."""
     size = block_size(depth)
     if not 0 <= pixel < size:
@@ -128,6 +132,6 @@ def resolve(table, pixel, depth, block):
     return table[block_start(depth, block) + pixel]
 
 
-def is_transparent(pixel):
+def is_transparent(pixel: int) -> bool:
     """Whether a colour number is the one the layer behind shows through."""
     return pixel == TRANSPARENT

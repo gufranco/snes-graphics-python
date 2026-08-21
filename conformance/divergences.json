@@ -1,0 +1,43 @@
+{
+  "comment": "What this package's exhaustive walks do and do not establish, and where a layout rests on something other than a figure Nintendo printed.",
+  "sources": {
+    "document": "Nintendo's SNES Development Manual, Book 1, Appendix A. Pinned in hardware.json.",
+    "exhaustion": "conformance/exhaustive.py, which walks each format's whole input space rather than sampling it."
+  },
+  "divergences": [
+    {
+      "id": "exhaustion-proves-round-trip-not-layout",
+      "parts": ["snes-graphics"],
+      "severity": "high",
+      "status": "closed",
+      "documentSays": "The figures in Appendix A give the layout of a character, a tilemap entry and a colour.",
+      "referenceDoes": "The exhaustive walks decode and re-encode every value each space can hold and check that nothing changes.",
+      "packageFollows": "document",
+      "reasoning": "A complete round trip over a whole space is strong and it is not a claim about the hardware: a decoder and an encoder that were wrong in exactly opposite ways would pass every one of those cases. Until conformance/hardware.test.py existed, nothing here compared a layout against a figure Nintendo printed, and the package's own badge counted 165,248 cases of self-consistency.",
+      "wouldReopenIt": "Removing the comparison against the pinned figures, or adding a format whose layout is not pinned to one.",
+      "wouldSettleIt": "Already settled: every field of the tilemap entry and every word count of the character formats is now held to the manual."
+    },
+    {
+      "id": "the-channel-width-is-arithmetic",
+      "parts": ["snes-graphics"],
+      "severity": "low",
+      "status": "open",
+      "documentSays": "That a colour is two bytes, and that register 2132H orders its fields blue, green, red.",
+      "referenceDoes": "Uses five bits per channel and leaves the top bit of the word unused.",
+      "packageFollows": "neither",
+      "reasoning": "Fifteen bits over three channels gives five each. That follows from the two figures rather than being printed as one, so it is named here rather than quoted in hardware.json as though Nintendo had written it down.",
+      "wouldSettleIt": "The CGRAM figure at A-17, or a passage giving the channel width outright."
+    },
+    {
+      "id": "nothing-here-is-a-timing-claim",
+      "parts": ["snes-graphics"],
+      "severity": "low",
+      "status": "notModelled",
+      "documentSays": "Layouts in memory.",
+      "referenceDoes": "n/a",
+      "packageFollows": "document",
+      "reasoning": "When the PPU reads one of these, and what happens if the console writes while it does, is a different question. This package converts between a layout and pixels and asks nothing about time.",
+      "wouldSettleIt": "n/a. This is a scope boundary rather than an unknown."
+    }
+  ]
+}

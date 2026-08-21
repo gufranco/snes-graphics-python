@@ -2,3 +2,4 @@ __pycache__/
 *.pyc
 .coverage
 node_modules/
+.mypy_cache/

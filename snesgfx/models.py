@@ -10,6 +10,9 @@ Every entry decodes and encodes, and the pair is a round trip on every input the
 format accepts. That is the whole contract.
 """
 
+from collections.abc import Callable, Sequence
+from typing import Any, override
+
 from . import mode7, oam, palette, tilemap, tiles
 
 
@@ -20,18 +23,26 @@ class UnknownFormat(Exception):
 class Format:
     """One layout: what it is, and how to read and write it."""
 
-    def __init__(self, name, summary, decode, encode, aliases=()):
+    def __init__(
+        self,
+        name: str,
+        summary: str,
+        decode: Callable[..., Any],
+        encode: Callable[..., bytes],
+        aliases: Sequence[str] = (),
+    ) -> None:
         self.name = name
         self.summary = summary
         self.decode = decode
         self.encode = encode
         self.aliases = tuple(aliases)
 
-    def __repr__(self):
+    @override
+    def __repr__(self) -> str:
         return f"<Format {self.name}>"
 
 
-def _tile_format(depth, summary, aliases):
+def _tile_format(depth: int, summary: str, aliases: Sequence[str]) -> "Format":
     return Format(
         name=f"{depth}bpp",
         summary=summary,
@@ -111,11 +122,11 @@ for _found in _CATALOGUE:
         _BY_ALIAS[_alias.replace("-", "")] = _found
 
 
-def _normalise(name):
+def _normalise(name: str) -> str:
     return str(name).strip().lower().replace("-", "").replace("_", "").replace(" ", "")
 
 
-def describe(name):
+def describe(name: str) -> "Format":
     """The format of that name, however it happens to be written."""
     found = _BY_ALIAS.get(_normalise(name))
     if found is None:

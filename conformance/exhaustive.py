@@ -24,7 +24,9 @@ Usage:
 """
 
 import sys
+from collections.abc import Callable, Sequence
 from pathlib import Path
+from typing import override
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
@@ -40,40 +42,41 @@ class Usage(Exception):
 
 
 class Options:
-    def __init__(self, only=None):
+    def __init__(self, only: str | None = None) -> None:
         self.only = only
 
 
 class Result:
     """What one check settled, and anything it found."""
 
-    def __init__(self, name, cases, failures):
+    def __init__(self, name: str, cases: int, failures: Sequence[str]) -> None:
         self.name = name
         self.cases = cases
         self.failures = failures
 
     @property
-    def clean(self):
+    def clean(self) -> bool:
         return not self.failures
 
-    def __repr__(self):
+    @override
+    def __repr__(self) -> str:
         return f"<Result {self.name}: {self.cases} cases, {len(self.failures)} failures>"
 
 
 class Check:
     """One space, and the walk that settles it."""
 
-    def __init__(self, name, summary, walk):
+    def __init__(self, name: str, summary: str, walk: Callable[[], tuple[int, list[str]]]) -> None:
         self.name = name
         self.summary = summary
         self.walk = walk
 
-    def run(self):
+    def run(self) -> "Result":
         cases, failures = self.walk()
         return Result(self.name, cases, failures)
 
 
-def _every_two_bit_tile():
+def _every_two_bit_tile() -> tuple[int, list[str]]:
     """Every two bit tile that can exist, round tripped."""
     failures = []
     cases = 0
@@ -88,7 +91,7 @@ def _every_two_bit_tile():
     return cases, failures
 
 
-def _every_plane_reaches_its_own_bit():
+def _every_plane_reaches_its_own_bit() -> tuple[int, list[str]]:
     """Each plane of each depth, against each pixel, in isolation."""
     failures = []
     cases = 0
@@ -110,7 +113,7 @@ def _every_plane_reaches_its_own_bit():
     return cases, failures
 
 
-def _every_colour():
+def _every_colour() -> tuple[int, list[str]]:
     """Every colour the hardware can name, widened to bytes and narrowed back."""
     failures = []
     cases = 0
@@ -123,7 +126,7 @@ def _every_colour():
     return cases, failures
 
 
-def _every_map_entry():
+def _every_map_entry() -> tuple[int, list[str]]:
     """Every map entry word, decoded and re-encoded."""
     failures = []
     cases = 0
@@ -136,7 +139,7 @@ def _every_map_entry():
     return cases, failures
 
 
-def _every_sprite_slot():
+def _every_sprite_slot() -> tuple[int, list[str]]:
     """Each sprite's two bits in the second table, in isolation from its neighbours."""
     failures = []
     cases = 0
@@ -189,7 +192,7 @@ CHECKS = (
 )
 
 
-def options(argv):
+def options(argv: Sequence[str]) -> "Options":
     chosen = Options()
     rest = list(argv)
     while rest:
@@ -202,7 +205,7 @@ def options(argv):
     return chosen
 
 
-def run(argv):
+def run(argv: Sequence[str]) -> int:
     chosen = options(argv)
     wanted = [check for check in CHECKS if chosen.only in (None, check.name)]
     if not wanted:
@@ -224,7 +227,7 @@ def run(argv):
     return 1 if failed else 0
 
 
-def main(argv):
+def main(argv: Sequence[str]) -> int:
     try:
         return run(argv)
     except Usage as error:

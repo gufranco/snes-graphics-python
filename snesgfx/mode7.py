@@ -24,6 +24,8 @@ applies is the caller's to decide, because it is a setting rather than a propert
 of the arithmetic.
 """
 
+from typing import override
+
 FIELD_TILES = 128
 
 TILE_WIDTH = 8
@@ -47,13 +49,13 @@ class Truncated(Exception):
     pass
 
 
-def signed13(value):
+def signed13(value: int) -> int:
     """A thirteen bit register value read as signed, which is how the hardware reads it."""
     value &= RANGE13 - 1
     return value - RANGE13 if value & SIGN13 else value
 
 
-def signed16(value):
+def signed16(value: int) -> int:
     """A sixteen bit matrix entry read as signed."""
     value &= RANGE16 - 1
     return value - RANGE16 if value & SIGN16 else value
@@ -64,38 +66,44 @@ class Matrix:
 
     __slots__ = ("_a", "_b", "_c", "_d")
 
-    def __init__(self, a, b, c, d):
+    def __init__(self, a: int, b: int, c: int, d: int) -> None:
         self._a, self._b, self._c, self._d = a, b, c, d
 
     @property
-    def a(self):
+    def a(self) -> int:
         return signed16(self._a)
 
     @property
-    def b(self):
+    def b(self) -> int:
         return signed16(self._b)
 
     @property
-    def c(self):
+    def c(self) -> int:
         return signed16(self._c)
 
     @property
-    def d(self):
+    def d(self) -> int:
         return signed16(self._d)
 
-    def __repr__(self):
+    @override
+    def __repr__(self) -> str:
         return f"<Matrix a={self.a} b={self.b} c={self.c} d={self.d}>"
 
 
 class Field:
     """One Mode 7 background, and where a screen position lands in it."""
 
-    def __init__(self, matrix, centre=(0, 0), scroll=(0, 0)):
+    def __init__(
+        self,
+        matrix: "Matrix",
+        centre: tuple[int, int] = (0, 0),
+        scroll: tuple[int, int] = (0, 0),
+    ) -> None:
         self.matrix = matrix
         self.centre = centre
         self.scroll = scroll
 
-    def at(self, x, y):
+    def at(self, x: int, y: int) -> tuple[int, int]:
         """Where a screen position lands in the field, in whole pixels.
 
         Each term is truncated to a multiple of sixty four before being added,
@@ -123,28 +131,29 @@ class Field:
         )
         return field_x >> FRACTION_BITS, field_y >> FRACTION_BITS
 
-    def __repr__(self):
+    @override
+    def __repr__(self) -> str:
         return f"<Field centre={self.centre} scroll={self.scroll}>"
 
 
-def wrap(x, y):
+def wrap(x: int, y: int) -> tuple[int, int]:
     """A field position brought back inside the field, which is one of two settings."""
     return x % FIELD_PIXELS, y % FIELD_PIXELS
 
 
-def outside(x, y):
+def outside(x: int, y: int) -> bool:
     """Whether a field position is off the field, which is the other setting."""
     return not (0 <= x < FIELD_PIXELS and 0 <= y < FIELD_PIXELS)
 
 
-def deinterleave(vram):
+def deinterleave(vram: bytes | bytearray) -> tuple[bytes, bytes]:
     """The tilemap and the pixels, which share the same words in memory."""
     if len(vram) % 2:
         raise Truncated(f"{len(vram)} bytes is not a whole number of words")
     return bytes(vram[0::2]), bytes(vram[1::2])
 
 
-def interleave(names, pixels):
+def interleave(names: bytes | bytearray, pixels: bytes | bytearray) -> bytes:
     """The two halves put back into the words they share."""
     if len(names) != len(pixels):
         raise Truncated(f"{len(names)} names and {len(pixels)} pixels are not the same length")
@@ -154,7 +163,7 @@ def interleave(names, pixels):
     return bytes(out)
 
 
-def tile(pixels, index):
+def tile(pixels: bytes | bytearray, index: int) -> list[int]:
     """One Mode 7 tile, which is stored a pixel to a byte rather than in planes."""
     at = index * TILE_WIDTH * TILE_WIDTH
     end = at + TILE_WIDTH * TILE_WIDTH
@@ -163,7 +172,7 @@ def tile(pixels, index):
     return list(pixels[at:end])
 
 
-def name_at(names, x, y):
+def name_at(names: bytes | bytearray, x: int, y: int) -> int:
     """Which tile the map puts at a field position."""
     column = (x // TILE_WIDTH) % FIELD_TILES
     row = (y // TILE_WIDTH) % FIELD_TILES

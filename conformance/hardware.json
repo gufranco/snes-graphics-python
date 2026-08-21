@@ -1,0 +1,103 @@
+{
+  "note": "The layouts this package reads and writes, pinned to the figures Nintendo printed. An exhaustive walk of a format proves the package round-trips itself; it cannot prove the format is the one the hardware uses. These figures are what makes the difference, and every one was read off a rendered page rather than out of the scan's text layer.",
+  "document": {
+    "publisher": "Nintendo of America Inc.",
+    "title": "SNES Development Manual, Book 1",
+    "section": "Appendix A, PPU Registers: CHR DATA CONSTRUCTION and BG SC DATA",
+    "readOn": "2026-08-21",
+    "retrievedFrom": "archive.org/details/SNESDevManual, book1_text.pdf",
+    "sha256": "f1405241000046abba7849376d2ec53cf85f1ad2e9950d69a7c2cf1f3ff6b791",
+    "pages": 240
+  },
+  "characterData": {
+    "manualPage": "A-12",
+    "pdfPage": 207,
+    "title": "CHR DATA CONSTRUCTION",
+    "note": "A character is eight rows of eight dots. Each row contributes one byte to each bit plane, and the planes are stored in pairs: the two bytes of a row's first pair sit in one sixteen bit word, and each further pair starts eight words later.",
+    "rows": 8,
+    "columns": 8,
+    "depths": [
+      {
+        "bitsPerDot": 2,
+        "words": 8,
+        "bytes": 16,
+        "planePairs": 1,
+        "pairOffsets": [0],
+        "quote": "V-RAM address for a CHR data (8 word) is as follows: n+N(Name)x8~n+Nx8+7"
+      },
+      {
+        "bitsPerDot": 4,
+        "words": 16,
+        "bytes": 32,
+        "planePairs": 2,
+        "pairOffsets": [0, 8],
+        "quote": "V-RAM address for a CHR data (16 word) is as follows: n+N(Name)x16~n+Nx16+15"
+      },
+      {
+        "bitsPerDot": 8,
+        "words": 32,
+        "bytes": 64,
+        "planePairs": 4,
+        "pairOffsets": [0, 8, 16, 24],
+        "quote": "V-RAM address for a CHR data (32 word) is as follows: n+N(Name)x 32~n+Nx32+31"
+      }
+    ]
+  },
+  "tilemapEntry": {
+    "manualPage": "A-10",
+    "pdfPage": 205,
+    "title": "BG SC DATA (MODE 0 ~ 6)",
+    "bytes": 2,
+    "fields": [
+      {
+        "name": "NAME",
+        "bits": "D0 to D9",
+        "mask": "0x03FF",
+        "range": "000H~3FFH",
+        "meaning": "CHARACTER CODE NUMBER"
+      },
+      {
+        "name": "COLOR",
+        "bits": "D10 to D12",
+        "shift": 10,
+        "mask": "0x07",
+        "meaning": "COLOR PALETTE SELECT: Palette designation per character <8-Palettes>"
+      },
+      {
+        "name": "BG Pri.",
+        "bits": "D13",
+        "mask": "0x2000",
+        "meaning": "BG PRIORITY: Determine the display priority per character in case OBJ and BG1 ~ BG4 are combined on the same screen."
+      },
+      {
+        "name": "H",
+        "bits": "D14",
+        "mask": "0x4000",
+        "meaning": "H/V FLIP: X-Directional Flip (H-FLIP)"
+      },
+      {
+        "name": "V",
+        "bits": "D15",
+        "mask": "0x8000",
+        "meaning": "H/V FLIP: Y-Directional Flip (V-FLIP)"
+      }
+    ]
+  },
+  "colour": {
+    "manualPage": "3-24-6 and B-5",
+    "pdfPage": 189,
+    "bytesPerColour": 2,
+    "channelOrder": ["blue", "green", "red"],
+    "channelOrderQuote": "Blue Green Red, the field order of register 2132H, Color Brilliance Data",
+    "transparent": {
+      "index": 0,
+      "quote": "The top color data of each CG color data palette is transparent. Because transparent is a color which is not displayed, any color can be set. The color data of CG address (00H) is normally black (background)."
+    }
+  },
+  "notStated": [
+    "The width of a colour channel. Fifteen bits over three channels gives five each and leaves the top bit of the word unused, which is arithmetic rather than a figure Nintendo prints.",
+    "Anything about timing. These are layouts in memory; when the PPU reads them is a different question and not one this package asks.",
+    "The Mode 7 tilemap, which the manual gives its own figure for on the following page and which this package treats separately.",
+    "What the hardware does with a character code above the range the field can hold, since the field cannot hold one."
+  ]
+}

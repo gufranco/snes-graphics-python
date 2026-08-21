@@ -18,6 +18,9 @@ Positions past the edge wrap, and they wrap at the size the background is set to
 rather than at sixty four, so a narrow map repeats twice across a wide screen.
 """
 
+from collections.abc import Sequence
+from typing import override
+
 QUADRANT_TILES = 32
 
 QUADRANT_ENTRIES = QUADRANT_TILES * QUADRANT_TILES
@@ -52,7 +55,14 @@ class Entry:
 
     __slots__ = ("block", "horizontal_flip", "priority", "tile", "vertical_flip")
 
-    def __init__(self, tile=0, block=0, priority=False, horizontal_flip=False, vertical_flip=False):
+    def __init__(
+        self,
+        tile: int = 0,
+        block: int = 0,
+        priority: bool = False,
+        horizontal_flip: bool = False,
+        vertical_flip: bool = False,
+    ) -> None:
         self.tile = tile
         self.block = block
         self.priority = priority
@@ -60,7 +70,7 @@ class Entry:
         self.vertical_flip = vertical_flip
 
     @classmethod
-    def from_word(cls, word):
+    def from_word(cls, word: int) -> "Entry":
         return cls(
             tile=word & TILE_MASK,
             block=(word >> BLOCK_SHIFT) & BLOCK_MASK,
@@ -70,7 +80,7 @@ class Entry:
         )
 
     @property
-    def word(self):
+    def word(self) -> int:
         if not 0 <= self.tile <= TILE_MASK:
             raise OutOfRange(f"{self.tile} does not fit in a map entry's ten bit tile number")
         if not 0 <= self.block <= BLOCK_MASK:
@@ -83,24 +93,27 @@ class Entry:
             | (VERTICAL_BIT if self.vertical_flip else 0)
         )
 
-    def __eq__(self, other):
+    @override
+    def __eq__(self, other: object) -> bool:
         return all(getattr(self, name) == getattr(other, name) for name in self.__slots__)
 
-    def __hash__(self):
+    @override
+    def __hash__(self) -> int:
         return hash(tuple(getattr(self, name) for name in self.__slots__))
 
-    def __repr__(self):
+    @override
+    def __repr__(self) -> str:
         return f"<Entry tile {self.tile} block {self.block}>"
 
 
-def screen_size(size):
+def screen_size(size: int) -> tuple[int, int]:
     """How many tiles across and down a background of that setting is."""
     if not 0 <= size < len(SCREEN_SIZES):
         raise OutOfRange(f"{size} is not a screen size; there are {len(SCREEN_SIZES)}")
     return SCREEN_SIZES[size]
 
 
-def offset_of(x, y, size):
+def offset_of(x: int, y: int, size: int) -> int:
     """Which entry a tile position is, counting quadrants rather than rows.
 
     The quadrants are stored one after another rather than as a rectangle, so a
@@ -121,7 +134,7 @@ def offset_of(x, y, size):
     return quadrant * QUADRANT_ENTRIES + y * QUADRANT_TILES + x
 
 
-def decode(data):
+def decode(data: bytes | bytearray) -> list["Entry"]:
     """Every entry in a run of bytes, two bytes each, low byte first."""
     if len(data) % BYTES_PER_ENTRY:
         raise Truncated(f"{len(data)} bytes is not a whole number of entries")
@@ -131,7 +144,7 @@ def decode(data):
     ]
 
 
-def encode(entries):
+def encode(entries: Sequence["Entry"]) -> bytes:
     """The bytes a run of entries occupies."""
     data = bytearray()
     for found in entries:
@@ -141,6 +154,6 @@ def encode(entries):
     return bytes(data)
 
 
-def entry_at(entries, x, y, size):
+def entry_at(entries: Sequence["Entry"], x: int, y: int, size: int) -> "Entry":
     """The entry the hardware would read for a tile position."""
     return entries[offset_of(x, y, size)]

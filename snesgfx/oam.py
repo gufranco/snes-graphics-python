@@ -22,6 +22,9 @@ from a register that applies to every sprite at once, so a sprite is never simpl
 large: it is the larger of whichever pair is in force.
 """
 
+from collections.abc import Sequence
+from typing import override
+
 SPRITES = 128
 
 LOW_ENTRY_BYTES = 4
@@ -71,16 +74,16 @@ class Sprite:
 
     def __init__(
         self,
-        x=0,
-        y=0,
-        tile=0,
-        block=0,
-        priority=0,
-        table=0,
-        horizontal_flip=False,
-        vertical_flip=False,
-        large=False,
-    ):
+        x: int = 0,
+        y: int = 0,
+        tile: int = 0,
+        block: int = 0,
+        priority: int = 0,
+        table: int = 0,
+        horizontal_flip: bool = False,
+        vertical_flip: bool = False,
+        large: bool = False,
+    ) -> None:
         self.x = x
         self.y = y
         self.tile = tile
@@ -92,26 +95,29 @@ class Sprite:
         self.large = large
 
     @property
-    def screen_x(self):
+    def screen_x(self) -> int:
         """Where the sprite actually sits, with the ninth bit read as a sign."""
-        return self.x - 0x200 if self.x >= SCREEN_WIDTH else self.x
+        return int(self.x) - 0x200 if self.x >= SCREEN_WIDTH else int(self.x)
 
-    def __eq__(self, other):
+    @override
+    def __eq__(self, other: object) -> bool:
         return all(getattr(self, name) == getattr(other, name) for name in self.__slots__)
 
-    def __hash__(self):
+    @override
+    def __hash__(self) -> int:
         return hash(tuple(getattr(self, name) for name in self.__slots__))
 
-    def __repr__(self):
+    @override
+    def __repr__(self) -> str:
         return f"<Sprite at {self.x},{self.y} tile {self.tile} block {self.block}>"
 
 
-def _high_bits(data, index):
+def _high_bits(data: bytes | bytearray, index: int) -> int:
     byte = data[LOW_TABLE_BYTES + index // 4]
     return (byte >> ((index % 4) * 2)) & 0x03
 
 
-def decode(data):
+def decode(data: bytes | bytearray) -> list["Sprite"]:
     """Every sprite in a table, with its two bits from the second table folded in."""
     if len(data) != TABLE_BYTES:
         raise Truncated(f"a sprite table is {TABLE_BYTES} bytes, not {len(data)}")
@@ -137,13 +143,13 @@ def decode(data):
     return found
 
 
-def _checked(value, limit, what):
+def _checked(value: int, limit: int, what: str) -> int:
     if not 0 <= value < limit:
         raise OutOfRange(f"{value} does not fit in a sprite's {what}")
     return value
 
 
-def encode(sprites):
+def encode(sprites: Sequence["Sprite"]) -> bytes:
     """The bytes a full table of sprites occupies."""
     if len(sprites) != SPRITES:
         raise Truncated(f"a sprite table holds {SPRITES} sprites, not {len(sprites)}")
@@ -166,14 +172,14 @@ def encode(sprites):
     return bytes(data)
 
 
-def sizes(setting):
+def sizes(setting: int) -> tuple[tuple[int, int], tuple[int, int]]:
     """The two sizes a setting chooses between, small first."""
     if not 0 <= setting < len(SIZES):
         raise OutOfRange(f"{setting} is not a size setting; there are {len(SIZES)}")
     return SIZES[setting]
 
 
-def size_of(sprite, setting):
+def size_of(sprite: "Sprite", setting: int) -> tuple[int, int]:
     """How large a sprite actually is, which needs the setting as well as the flag."""
     small, large = sizes(setting)
     return large if sprite.large else small

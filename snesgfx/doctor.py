@@ -21,7 +21,9 @@ including a tile actually decoded and encoded back to see whether it survives.
 
 import platform
 import sys
+from collections.abc import Callable, Sequence
 from pathlib import Path
+from typing import Any, override
 
 from . import models
 from .version import VERSION
@@ -49,29 +51,30 @@ WITNESS = "4bpp"
 class Finding:
     """One thing that was looked at, and what was there."""
 
-    def __init__(self, name, ok, detail, advice=None):
+    def __init__(self, name: str, ok: bool, detail: str, advice: str | None = None) -> None:
         self.name = name
         self.ok = ok
         self.detail = detail
         self.advice = advice
 
     @property
-    def line(self):
+    def line(self) -> str:
         """The one-line form, which is what a reader scans."""
         return f"  {'ok  ' if self.ok else '   !'}  {self.name}: {self.detail}"
 
     @property
-    def report(self):
+    def report(self) -> str:
         """The same, with what to do about it when there is something to do."""
         if self.ok or not self.advice:
             return self.line
         return f"{self.line}\n         {self.advice}"
 
-    def __repr__(self):
+    @override
+    def __repr__(self) -> str:
         return f"<Finding {self.name} {'ok' if self.ok else 'not ok'}>"
 
 
-def _python():
+def _python() -> "Finding":
     return Finding(
         "python",
         sys.version_info[:2] >= OLDEST_PYTHON,
@@ -80,23 +83,23 @@ def _python():
     )
 
 
-def _package():
+def _package() -> "Finding":
     return Finding("snesgfx", True, f"version {VERSION}")
 
 
-def _default_decode(name, data):
+def _default_decode(name: str, data: bytes | bytearray) -> Any:
     return models.describe(name).decode(data)
 
 
-def _default_encode(name, decoded):
+def _default_encode(name: str, decoded: Any) -> bytes:
     return models.describe(name).encode(decoded)
 
 
-def _counting(size):
+def _counting(size: int) -> bytes:
     return bytes(one % 256 for one in range(size))
 
 
-def _layout(name, decode):
+def _layout(name: str, decode: Callable[..., Any]) -> "Finding":
     """The smallest input that layout accepts, and how much came out of it."""
     refused = None
     for size in SIZES:
@@ -115,7 +118,7 @@ def _layout(name, decode):
     )
 
 
-def _round_trip(decode, encode):
+def _round_trip(decode: Callable[..., Any], encode: Callable[..., bytes]) -> "Finding":
     """That what goes in comes back out, which is the property worth the most here.
 
     A decoder can be wrong in a way no eye catches and no exception marks: a
@@ -142,14 +145,14 @@ def _round_trip(decode, encode):
     )
 
 
-def _default_checks():
+def _default_checks() -> Any:
     sys.path.insert(0, str(ROOT / "conformance"))
     import exhaustive
 
     return exhaustive.CHECKS
 
 
-def _exhaustive(checks):
+def _exhaustive(checks: Callable[[], Any]) -> "Finding":
     """What this package settles by walking every case rather than by sampling.
 
     The input space of a tile decoder is small enough to walk in full, which is
@@ -180,7 +183,11 @@ def _exhaustive(checks):
     )
 
 
-def examine(decode=_default_decode, encode=_default_encode, checks=_default_checks):
+def examine(
+    decode: Callable[..., Any] = _default_decode,
+    encode: Callable[..., bytes] = _default_encode,
+    checks: Callable[[], Any] = _default_checks,
+) -> list["Finding"]:
     """Everything worth looking at on this machine, in the order a reader wants it."""
     found = [_python(), _package()]
     found.extend(_layout(name, decode) for name in sorted(models.FORMATS))
@@ -189,7 +196,7 @@ def examine(decode=_default_decode, encode=_default_encode, checks=_default_chec
     return found
 
 
-def report(found):
+def report(found: list["Finding"]) -> list[str]:
     """The lines a person pastes into an issue."""
     unwell = [one for one in found if not one.ok]
     lines = [f"snesgfx {VERSION} on {platform.python_version()}, {platform.system()}", ""]
@@ -202,7 +209,11 @@ def report(found):
     return lines
 
 
-def main(argv=(), examine=examine, say=print):
+def main(
+    argv: Sequence[str] = (),
+    examine: Callable[..., list["Finding"]] = examine,
+    say: Callable[[str], None] = print,
+) -> int:
     found = examine()
     for line in report(found):
         say(line)
