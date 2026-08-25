@@ -24,7 +24,7 @@
   <a href="https://github.com/gufranco/snes-graphics-python/issues">Issues</a>
 </p>
 
-**7** formats · **165,248** cases settled by walking their whole input space, **0** failures · **581** tests · **100%** statement and branch coverage · no dependencies
+**7** formats · **165,248** cases settled by walking their whole input space, **0** failures · **640** tests · **100%** statement and branch coverage · no dependencies
 
 ```python
 from snesgfx import tiles
@@ -193,10 +193,15 @@ looks broken on a model that keeps the full product.
 
 ## Is it right
 
-There is no chip to compare against and there does not need to be. These are
-layouts, and several of them have input spaces small enough to walk from end to
-end. The claim is therefore not that this agrees with a reference on the cases
-somebody thought to try; it is that there is no case left.
+These are layouts, and several of them have input spaces small enough to walk
+from end to end. So the first claim is not that this agrees with a reference on
+the cases somebody thought to try; it is that there is no case left.
+
+That settles whether the code does what this repository says. It cannot settle
+whether this repository read Nintendo's figures right, because a decoder that is
+consistently wrong round-trips just as perfectly as one that is right. Swapping
+the two flip bits in the record and in the code together passes every check
+below. So there is a second claim, and it needs somebody else's eyes.
 
 | Check | Cases | What it settles |
 |:------|------:|:----------------|
@@ -209,6 +214,29 @@ somebody thought to try; it is that there is no case left.
 ```bash
 python3 -m conformance.exhaustive
 ```
+
+### Against somebody else's reading of the same figures
+
+The reference is [SuperFamiconv](https://github.com/Optiroc/SuperFamiconv), a
+converter whose whole job is these formats, pinned by commit in
+[`conformance/pinned.json`](conformance/pinned.json). It is not carried here:
+three functions are lifted from it at build time and compiled behind a harness
+this repository owns.
+
+| Figure | Cases | How the space is chosen |
+|:-------|------:|:------------------------|
+| Bitplane layout | 896 | One bit set at a time, at every depth. A bit-to-pixel map is pinned exactly by asking where each bit lands |
+| Colour packing | 32,768 | Every colour the hardware can name |
+| Map entry | 32,768 | Every tile, block and pair of flips |
+
+```bash
+python3 -m conformance.build              # fetches the reference at its pinned commit
+python3 -m conformance.against_reference
+```
+
+The two sides take their channels in different units, which is worth knowing
+before reading the code: this package narrows eight-bit channels itself, and the
+reference is handed the five bits the console stores.
 
 ```
   tiles-2bpp: 65,536 cases settled

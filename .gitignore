@@ -16,6 +16,9 @@ uv.lock
 docs/
 specs/
 
+conformance/ref/driver
+conformance/ref/bodies.inc
+
 *.rom
 *.bin
 *.sfc

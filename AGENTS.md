@@ -85,6 +85,19 @@ the badge counted 165,248 cases of self-consistency and said nothing else.
 Adding a format whose layout is not pinned to a printed figure reopens that, so a
 new format needs an entry in the record before it needs a walk.
 
+The comparison against the figures closes half of it. What it cannot close is
+whether the figures were read right, because the record and the code are both
+written from the same reading. Swap the two flip bits in `hardware.json` and in
+`tilemap.py` together: the walk passes, `hardware.test.py` passes, the family
+checks pass, and every tilemap decodes wrong.
+
+That is what [`conformance/against_reference.py`](conformance/against_reference.py)
+is for. It holds each figure to an independent reading, pinned by commit, and it
+is the only check here that tells a correct reading of the manual from a
+plausible one. Never change a constant in the record and its twin in the code
+without running it, and if it starts disagreeing after a pin bump, read the
+upstream commit that moved before touching anything here.
+
 ## Every gate, in the order to run them
 
 ```bash
@@ -99,10 +112,12 @@ done
 python3 -m coverage report
 ```
 
-Then the two that are not part of the coverage step:
+Then the ones that are not part of the coverage step:
 
 ```bash
 python3 -m conformance.exhaustive
+python3 -m conformance.build
+python3 -m conformance.against_reference
 python3 -m conformance.speed
 ```
 

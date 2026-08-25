@@ -156,3 +156,35 @@ jobs:
       # so there is no suite to fetch and nothing to pin. The formats are exact.
       - name: Settle every format
         run: python -m conformance.exhaustive
+
+  reference:
+    name: Against an independent reading of the figures
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Read the pinned reference commit
+        id: pin
+        run: |
+          commit=$(python -c "import json,pathlib;print(json.loads(pathlib.Path('conformance/pinned.json').read_text())['reference']['commit'])")
+          echo "commit=${commit}" >> "${GITHUB_OUTPUT}"
+
+      - name: Cache the reference sources
+        id: cache
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/snes-graphics-reference
+          key: reference-${{ steps.pin.outputs.commit }}
+
+      - name: Build the driver around them
+        run: python -m conformance.build
+
+      # Every figure this package read, against somebody else's reading of the
+      # same one. The exhaustive walk beside it proves this package agrees with
+      # itself over the whole space, which a misreading does too.
+      - name: Hold every figure to the reference
+        run: python -m conformance.against_reference

@@ -1,0 +1,36 @@
+{
+  "comment": "The independent reading of Nintendo's figures this package is held to. Pinned by commit so a build is reproducible, and lifted function by function so only the three that decide a format are compiled.",
+  "why": "Every figure in this package's record was read off a rendered page by one person. Nothing checked that reading. A misreading present in both the record and the code agrees with itself, round-trips perfectly through the exhaustive walk, and passes every gate here. What catches it is somebody else's reading of the same figures, which is what this is.",
+  "reference": {
+    "name": "SuperFamiconv",
+    "author": "David Lindecrantz",
+    "licence": "MIT",
+    "repository": "https://github.com/Optiroc/SuperFamiconv.git",
+    "commit": "d903daf1b74c9ec6db7949fe62af2f0b58bdc23b",
+    "why": "A converter whose whole job is these formats, rather than an emulator that decodes them on the way to a screen. Its bitplane, colour and map-entry code is separable and reads the same figures this package does.",
+    "sparse": ["src"],
+    "extracts": [
+      {
+        "source": "src/Mode.h",
+        "from": "inline index_vec_t unpack_native_tile",
+        "until": "} /* namespace sfc */",
+        "gives": "unpack_native_tile",
+        "note": "The last function in its namespace, so the closing brace is the marker."
+      },
+      {
+        "source": "src/Mode.h",
+        "from": "inline byte_vec_t pack_native_color",
+        "until": "inline byte_vec_t pack_native_colors",
+        "gives": "pack_native_color"
+      },
+      {
+        "source": "src/Map.h",
+        "from": "inline byte_vec_t pack_native_mapentry",
+        "until": "} /* namespace sfc */",
+        "gives": "pack_native_mapentry",
+        "note": "The last function in its namespace, so the closing brace is the marker."
+      }
+    ],
+    "path": "."
+  }
+}
