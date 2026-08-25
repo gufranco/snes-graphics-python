@@ -25,6 +25,8 @@ large: it is the larger of whichever pair is in force.
 from collections.abc import Sequence
 from typing import override
 
+from .errors import OutOfRange, Truncated
+
 SPRITES = 128
 
 LOW_ENTRY_BYTES = 4
@@ -47,14 +49,6 @@ SIZES = (
     ((16, 32), (32, 64)),
     ((32, 32), (64, 64)),
 )
-
-
-class Truncated(Exception):
-    pass
-
-
-class OutOfRange(Exception):
-    pass
 
 
 class Sprite:

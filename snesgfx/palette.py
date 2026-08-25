@@ -22,6 +22,8 @@ layer behind shows through.
 
 from collections.abc import Sequence
 
+from .errors import OutOfRange, Truncated
+
 COLOURS = 256
 
 BYTES_PER_COLOUR = 2
@@ -35,14 +37,6 @@ CHANNEL_MASK = 0x1F
 BLOCKS = {2: 4, 4: 16, 8: 256}
 
 TRANSPARENT = 0
-
-
-class OutOfRange(Exception):
-    pass
-
-
-class Truncated(Exception):
-    pass
 
 
 def _narrow(channel: int) -> int:

@@ -30,6 +30,8 @@ at all, so neither is here. Mode 7 is in its own module.
 
 from collections.abc import Sequence
 
+from .errors import OutOfRange, Truncated, UnknownDepth
+
 TILE_PIXELS = 64
 
 TILE_WIDTH = 8
@@ -46,18 +48,6 @@ NAMES = {
     "16-colour": 4,
     "256-colour": 8,
 }
-
-
-class UnknownDepth(Exception):
-    pass
-
-
-class Truncated(Exception):
-    pass
-
-
-class OutOfRange(Exception):
-    pass
 
 
 def _listed() -> str:

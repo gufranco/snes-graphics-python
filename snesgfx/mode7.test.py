@@ -6,6 +6,7 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from snesgfx import mode7
+from snesgfx.errors import Truncated
 
 IDENTITY = mode7.Matrix(a=0x0100, b=0x0000, c=0x0000, d=0x0100)
 
@@ -126,11 +127,11 @@ class LayoutTest(unittest.TestCase):
         self.assertEqual(mode7.interleave(names, pixels), vram)
 
     def test_data_of_odd_length_is_refused(self) -> None:
-        with self.assertRaises(mode7.Truncated):
+        with self.assertRaises(Truncated):
             mode7.deinterleave(bytes(3))
 
     def test_halves_of_different_lengths_are_refused(self) -> None:
-        with self.assertRaises(mode7.Truncated):
+        with self.assertRaises(Truncated):
             mode7.interleave(bytes(2), bytes(3))
 
     def test_a_mode_seven_tile_is_stored_pixel_by_pixel(self) -> None:
@@ -139,7 +140,7 @@ class LayoutTest(unittest.TestCase):
         self.assertEqual(mode7.tile(pixels, 0), list(range(64)))
 
     def test_a_tile_past_the_end_of_the_data_is_refused(self) -> None:
-        with self.assertRaises(mode7.Truncated):
+        with self.assertRaises(Truncated):
             mode7.tile(bytes(64), 1)
 
     def test_the_tile_a_field_position_lands_in_is_the_one_the_map_names(self) -> None:

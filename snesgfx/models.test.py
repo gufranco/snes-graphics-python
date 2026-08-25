@@ -5,6 +5,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from snesgfx import models
+from snesgfx.errors import UnknownFormat
 
 
 class CatalogueTest(unittest.TestCase):
@@ -39,11 +40,11 @@ class NameTest(unittest.TestCase):
         self.assertEqual(models.describe("sprites").name, "oam")
 
     def test_a_name_no_format_answers_to_is_refused(self) -> None:
-        with self.assertRaises(models.UnknownFormat):
+        with self.assertRaises(UnknownFormat):
             models.describe("6bpp")
 
     def test_and_the_refusal_lists_what_there_is(self) -> None:
-        with self.assertRaises(models.UnknownFormat) as caught:
+        with self.assertRaises(UnknownFormat) as caught:
             models.describe("nothing")
 
         self.assertIn("4bpp", str(caught.exception))

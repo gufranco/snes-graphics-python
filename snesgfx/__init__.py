@@ -12,8 +12,15 @@ colours the hardware can name is shown to survive the conversion to bytes and
 back, and every sixteen bit map entry is shown to survive its own.
 """
 
-from . import mode7, models, oam, palette, tilemap, tiles
-from .models import FORMATS, Format, UnknownFormat, describe
+from . import errors as errors
+from . import mode7 as mode7
+from . import models as models
+from . import oam as oam
+from . import palette as palette
+from . import tilemap as tilemap
+from . import tiles as tiles
+from .errors import OutOfRange, Truncated, UnknownDepth, UnknownFormat
+from .models import FORMATS, Format, describe
 from .version import VERSION
 
 __version__ = VERSION
@@ -21,13 +28,10 @@ __version__ = VERSION
 __all__ = [
     "FORMATS",
     "Format",
+    "OutOfRange",
+    "Truncated",
+    "UnknownDepth",
     "UnknownFormat",
     "__version__",
     "describe",
-    "mode7",
-    "models",
-    "oam",
-    "palette",
-    "tilemap",
-    "tiles",
 ]

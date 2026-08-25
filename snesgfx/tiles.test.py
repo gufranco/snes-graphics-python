@@ -7,6 +7,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from snesgfx import tiles
+from snesgfx.errors import OutOfRange, Truncated, UnknownDepth
 
 
 def rows(pixels: Sequence[int]) -> list[Sequence[int]]:
@@ -22,21 +23,21 @@ class ShapeTest(unittest.TestCase):
         self.assertEqual([tiles.tile_bytes(depth) for depth in tiles.DEPTHS], [16, 32, 64])
 
     def test_a_depth_the_hardware_does_not_have_is_refused(self) -> None:
-        with self.assertRaises(tiles.UnknownDepth):
+        with self.assertRaises(UnknownDepth):
             tiles.tile_bytes(3)
 
     def test_six_bits_a_pixel_is_not_a_depth_this_hardware_has(self) -> None:
-        with self.assertRaises(tiles.UnknownDepth):
+        with self.assertRaises(UnknownDepth):
             tiles.depth_of("6bpp")
 
     def test_and_the_refusal_lists_the_ones_it_does(self) -> None:
-        with self.assertRaises(tiles.UnknownDepth) as caught:
+        with self.assertRaises(UnknownDepth) as caught:
             tiles.decode(b"", 5)
 
         self.assertIn("2", str(caught.exception))
 
     def test_data_of_the_wrong_length_is_refused_rather_than_padded(self) -> None:
-        with self.assertRaises(tiles.Truncated):
+        with self.assertRaises(Truncated):
             tiles.decode(bytes(15), 2)
 
 
@@ -118,11 +119,11 @@ class RoundTripTest(unittest.TestCase):
                 self.assertEqual(tiles.decode(tiles.encode(pixels, depth), depth), pixels)
 
     def test_a_pixel_too_large_for_the_depth_is_refused(self) -> None:
-        with self.assertRaises(tiles.OutOfRange):
+        with self.assertRaises(OutOfRange):
             tiles.encode([4] + [0] * 63, 2)
 
     def test_a_run_of_pixels_that_is_not_a_tile_is_refused(self) -> None:
-        with self.assertRaises(tiles.Truncated):
+        with self.assertRaises(Truncated):
             tiles.encode([0] * 63, 2)
 
 
@@ -133,7 +134,7 @@ class SheetTest(unittest.TestCase):
         self.assertEqual(len(sheet), 4)
 
     def test_a_sheet_that_stops_mid_tile_is_refused(self) -> None:
-        with self.assertRaises(tiles.Truncated):
+        with self.assertRaises(Truncated):
             tiles.decode_sheet(bytes(24), 2)
 
     def test_a_sheet_survives_a_round_trip(self) -> None:
@@ -190,11 +191,11 @@ class NameTest(unittest.TestCase):
         self.assertEqual(tiles.depth_of("16-colour"), 4)
 
     def test_a_name_no_depth_answers_to_is_refused(self) -> None:
-        with self.assertRaises(tiles.UnknownDepth):
+        with self.assertRaises(UnknownDepth):
             tiles.depth_of("3bpp")
 
     def test_a_depth_given_as_a_number_outside_the_set_is_refused(self) -> None:
-        with self.assertRaises(tiles.UnknownDepth):
+        with self.assertRaises(UnknownDepth):
             tiles.depth_of(6)
 
 

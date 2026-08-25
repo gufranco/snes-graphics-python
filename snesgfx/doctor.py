@@ -146,8 +146,15 @@ def _round_trip(decode: Callable[..., Any], encode: Callable[..., bytes]) -> "Fi
 
 
 def _default_checks() -> Any:
-    sys.path.insert(0, str(ROOT / "conformance"))
-    import exhaustive
+    """The exhaustive walks, reached through the package rather than as a script.
+
+    Put the repository root on the path rather than the conformance directory
+    itself. A directory on the path shadows any standard library module of the
+    same name, and there is more than one plausible collision in a package whose
+    modules are called things like `palette` and `tiles`.
+    """
+    sys.path.insert(0, str(ROOT))
+    from conformance import exhaustive
 
     return exhaustive.CHECKS
 

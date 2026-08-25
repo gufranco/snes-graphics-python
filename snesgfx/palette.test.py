@@ -6,6 +6,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from snesgfx import palette
+from snesgfx.errors import OutOfRange, Truncated
 
 
 class WordTest(unittest.TestCase):
@@ -28,11 +29,11 @@ class WordTest(unittest.TestCase):
         self.assertEqual(palette.to_word(0xFF, 0, 0), palette.to_word(0xF8, 0, 0))
 
     def test_a_channel_outside_a_byte_is_refused(self) -> None:
-        with self.assertRaises(palette.OutOfRange):
+        with self.assertRaises(OutOfRange):
             palette.to_word(0x100, 0, 0)
 
     def test_a_negative_channel_is_refused_too(self) -> None:
-        with self.assertRaises(palette.OutOfRange):
+        with self.assertRaises(OutOfRange):
             palette.to_word(-1, 0, 0)
 
 
@@ -56,7 +57,7 @@ class ColourTest(unittest.TestCase):
             self.assertEqual(palette.to_word(red, green, blue), word)
 
     def test_a_word_wider_than_sixteen_bits_is_refused(self) -> None:
-        with self.assertRaises(palette.OutOfRange):
+        with self.assertRaises(OutOfRange):
             palette.to_rgb(0x1_0000)
 
 
@@ -70,7 +71,7 @@ class TableTest(unittest.TestCase):
         self.assertEqual(found[0], (0xFF, 0xFF, 0xFF))
 
     def test_a_table_of_odd_length_is_refused(self) -> None:
-        with self.assertRaises(palette.Truncated):
+        with self.assertRaises(Truncated):
             palette.decode(bytes(3))
 
     def test_a_table_survives_a_round_trip(self) -> None:
@@ -86,7 +87,7 @@ class TableTest(unittest.TestCase):
         self.assertEqual(palette.decode(b""), [])
 
     def test_clearing_the_unused_bit_refuses_a_table_of_odd_length(self) -> None:
-        with self.assertRaises(palette.Truncated):
+        with self.assertRaises(Truncated):
             palette.normalise(bytes(3))
 
 
@@ -107,15 +108,15 @@ class BlockTest(unittest.TestCase):
         self.assertEqual(palette.block_start(2, 0), 0)
 
     def test_a_depth_with_no_palette_block_is_refused(self) -> None:
-        with self.assertRaises(palette.OutOfRange):
+        with self.assertRaises(OutOfRange):
             palette.block_size(3)
 
     def test_a_block_number_past_the_end_of_the_table_is_refused(self) -> None:
-        with self.assertRaises(palette.OutOfRange):
+        with self.assertRaises(OutOfRange):
             palette.block_start(4, 16)
 
     def test_a_depth_with_only_one_block_refuses_a_second(self) -> None:
-        with self.assertRaises(palette.OutOfRange):
+        with self.assertRaises(OutOfRange):
             palette.block_start(8, 1)
 
     def test_resolving_a_pixel_gives_the_colour_the_hardware_would_show(self) -> None:
@@ -125,7 +126,7 @@ class BlockTest(unittest.TestCase):
         self.assertEqual(palette.resolve(table, 5, depth=4, block=3), (0x10, 0x20, 0x30))
 
     def test_a_pixel_too_large_for_its_depth_is_refused(self) -> None:
-        with self.assertRaises(palette.OutOfRange):
+        with self.assertRaises(OutOfRange):
             palette.resolve([(0, 0, 0)] * 256, 16, depth=4, block=0)
 
 

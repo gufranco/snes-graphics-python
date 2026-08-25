@@ -21,6 +21,8 @@ rather than at sixty four, so a narrow map repeats twice across a wide screen.
 from collections.abc import Sequence
 from typing import override
 
+from .errors import OutOfRange, Truncated
+
 QUADRANT_TILES = 32
 
 QUADRANT_ENTRIES = QUADRANT_TILES * QUADRANT_TILES
@@ -40,14 +42,6 @@ PRIORITY_BIT = 0x2000
 HORIZONTAL_BIT = 0x4000
 
 VERTICAL_BIT = 0x8000
-
-
-class OutOfRange(Exception):
-    pass
-
-
-class Truncated(Exception):
-    pass
 
 
 class Entry:

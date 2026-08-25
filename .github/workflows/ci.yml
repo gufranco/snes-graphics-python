@@ -116,6 +116,19 @@ jobs:
       - name: Coverage must be total
         run: python -m coverage report
 
+  speed:
+    name: Throughput
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: A tile must still decode faster than the floor
+        run: python -m conformance.speed
+
   conformance:
     name: Exhaustive checks
     runs-on: ubuntu-latest
@@ -129,4 +142,4 @@ jobs:
       # These walk their input spaces from end to end rather than sampling them,
       # so there is no suite to fetch and nothing to pin. The formats are exact.
       - name: Settle every format
-        run: python conformance/exhaustive.py
+        run: python -m conformance.exhaustive

@@ -14,14 +14,13 @@ from collections.abc import Callable, Sequence
 from typing import Any, override
 
 from . import mode7, oam, palette, tilemap, tiles
-
-
-class UnknownFormat(Exception):
-    pass
+from .errors import UnknownFormat
 
 
 class Format:
     """One layout: what it is, and how to read and write it."""
+
+    __slots__ = ("aliases", "decode", "encode", "name", "summary")
 
     def __init__(
         self,

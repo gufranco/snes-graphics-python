@@ -26,6 +26,8 @@ of the arithmetic.
 
 from typing import override
 
+from .errors import Truncated
+
 FIELD_TILES = 128
 
 TILE_WIDTH = 8
@@ -43,10 +45,6 @@ RANGE13 = 0x2000
 SIGN16 = 0x8000
 
 RANGE16 = 0x10000
-
-
-class Truncated(Exception):
-    pass
 
 
 def signed13(value: int) -> int:
@@ -92,6 +90,8 @@ class Matrix:
 
 class Field:
     """One Mode 7 background, and where a screen position lands in it."""
+
+    __slots__ = ("centre", "matrix", "scroll")
 
     def __init__(
         self,

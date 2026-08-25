@@ -7,6 +7,7 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from snesgfx import tilemap
+from snesgfx.errors import OutOfRange, Truncated
 
 
 def word_of(entry: Any) -> Any:
@@ -42,13 +43,13 @@ class EntryTest(unittest.TestCase):
     def test_a_tile_number_too_large_for_ten_bits_is_refused(self) -> None:
         entry = tilemap.Entry(tile=0x400)
 
-        with self.assertRaises(tilemap.OutOfRange):
+        with self.assertRaises(OutOfRange):
             word_of(entry)
 
     def test_a_palette_block_too_large_for_three_bits_is_refused(self) -> None:
         entry = tilemap.Entry(block=8)
 
-        with self.assertRaises(tilemap.OutOfRange):
+        with self.assertRaises(OutOfRange):
             word_of(entry)
 
 
@@ -66,7 +67,7 @@ class ScreenTest(unittest.TestCase):
         self.assertEqual(tilemap.screen_size(3), (64, 64))
 
     def test_a_size_the_hardware_does_not_have_is_refused(self) -> None:
-        with self.assertRaises(tilemap.OutOfRange):
+        with self.assertRaises(OutOfRange):
             tilemap.screen_size(4)
 
 
@@ -101,7 +102,7 @@ class MapTest(unittest.TestCase):
         self.assertEqual(tilemap.decode(bytes([0x34, 0x12]))[0].word, 0x1234)
 
     def test_a_map_of_odd_length_is_refused(self) -> None:
-        with self.assertRaises(tilemap.Truncated):
+        with self.assertRaises(Truncated):
             tilemap.decode(bytes(3))
 
     def test_a_map_survives_a_round_trip(self) -> None:

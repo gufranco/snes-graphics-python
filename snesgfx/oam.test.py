@@ -6,6 +6,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from snesgfx import oam
+from snesgfx.errors import OutOfRange, Truncated
 
 
 def blank() -> bytearray:
@@ -20,7 +21,7 @@ class ShapeTest(unittest.TestCase):
         self.assertEqual(oam.TABLE_BYTES, 544)
 
     def test_a_table_of_the_wrong_size_is_refused(self) -> None:
-        with self.assertRaises(oam.Truncated):
+        with self.assertRaises(Truncated):
             oam.decode(bytes(512))
 
 
@@ -118,15 +119,15 @@ class RoundTripTest(unittest.TestCase):
         self.assertEqual(oam.encode([oam.Sprite() for _ in range(oam.SPRITES)]), bytes(544))
 
     def test_a_run_that_is_not_a_full_table_is_refused(self) -> None:
-        with self.assertRaises(oam.Truncated):
+        with self.assertRaises(Truncated):
             oam.encode([oam.Sprite()])
 
     def test_a_field_too_large_for_its_bits_is_refused(self) -> None:
-        with self.assertRaises(oam.OutOfRange):
+        with self.assertRaises(OutOfRange):
             oam.encode([oam.Sprite(tile=0x200)] + [oam.Sprite()] * 127)
 
     def test_a_priority_outside_the_two_bits_it_has_is_refused(self) -> None:
-        with self.assertRaises(oam.OutOfRange):
+        with self.assertRaises(OutOfRange):
             oam.encode([oam.Sprite(priority=4)] + [oam.Sprite()] * 127)
 
 
@@ -138,7 +139,7 @@ class SizeTest(unittest.TestCase):
         self.assertEqual(oam.sizes(7), ((32, 32), (64, 64)))
 
     def test_a_setting_the_hardware_does_not_have_is_refused(self) -> None:
-        with self.assertRaises(oam.OutOfRange):
+        with self.assertRaises(OutOfRange):
             oam.sizes(8)
 
     def test_a_small_sprite_takes_the_first_of_the_pair(self) -> None:
