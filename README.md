@@ -24,7 +24,7 @@
   <a href="https://github.com/gufranco/snes-graphics-python/issues">Issues</a>
 </p>
 
-**7** formats · **165,248** cases settled by walking their whole input space, **0** failures · **662** tests · **100%** statement and branch coverage · no dependencies
+**7** formats · **165,248** cases settled by walking their whole input space, **0** failures · **663** tests · **100%** statement and branch coverage · no dependencies
 
 ```python
 from snesgfx import tiles
