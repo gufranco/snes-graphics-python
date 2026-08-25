@@ -1,5 +1,14 @@
 {
   "note": "The layouts this package reads and writes, pinned to the figures Nintendo printed. An exhaustive walk of a format proves the package round-trips itself; it cannot prove the format is the one the hardware uses. These figures are what makes the difference, and every one was read off a rendered page rather than out of the scan's text layer.",
+  "authority": {
+    "order": [
+      "hardware.json, for anything Nintendo printed: which byte holds which plane, which bits hold a character code, how a colour is packed",
+      "an exhaustive walk of the format, for anything that follows from those figures by enumeration rather than by judgement",
+      "nothing else, because there is no rung below that this package reaches for"
+    ],
+    "why": "These are layouts rather than silicon, and the input spaces are small enough to walk from end to end, so the second rung is enumeration rather than a recording. Every two-bit tile that can exist is decoded and re-encoded, which leaves no case untried. What that cannot do is say the layout is the one the console reads: it proves the package agrees with itself over the whole space, and the figures are what make it agree with Nintendo.",
+    "whatIsMissing": "The artifact. A sibling holds its claims to 2,781 retail cartridges; nothing here is checked against cartridge data at all, so the rung that would separate a correct reading of the manual from a plausible one is empty. Recorded here rather than left implied."
+  },
   "characterData": {
     "manualPage": "A-12",
     "pdfPage": 207,
