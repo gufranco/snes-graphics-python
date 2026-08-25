@@ -1,14 +1,5 @@
 {
   "note": "The layouts this package reads and writes, pinned to the figures Nintendo printed. An exhaustive walk of a format proves the package round-trips itself; it cannot prove the format is the one the hardware uses. These figures are what makes the difference, and every one was read off a rendered page rather than out of the scan's text layer.",
-  "document": {
-    "publisher": "Nintendo of America Inc.",
-    "title": "SNES Development Manual, Book 1",
-    "section": "Appendix A, PPU Registers: CHR DATA CONSTRUCTION and BG SC DATA",
-    "readOn": "2026-08-21",
-    "retrievedFrom": "archive.org/details/SNESDevManual, book1_text.pdf",
-    "sha256": "f1405241000046abba7849376d2ec53cf85f1ad2e9950d69a7c2cf1f3ff6b791",
-    "pages": 240
-  },
   "characterData": {
     "manualPage": "A-12",
     "pdfPage": 207,
@@ -41,7 +32,8 @@
         "pairOffsets": [0, 8, 16, 24],
         "quote": "V-RAM address for a CHR data (32 word) is as follows: n+N(Name)x 32~n+Nx32+31"
       }
-    ]
+    ],
+    "document": "developmentManual"
   },
   "tilemapEntry": {
     "manualPage": "A-10",
@@ -81,7 +73,8 @@
         "mask": "0x8000",
         "meaning": "H/V FLIP: Y-Directional Flip (V-FLIP)"
       }
-    ]
+    ],
+    "document": "developmentManual"
   },
   "colour": {
     "manualPage": "3-24-6 and B-5",
@@ -92,12 +85,25 @@
     "transparent": {
       "index": 0,
       "quote": "The top color data of each CG color data palette is transparent. Because transparent is a color which is not displayed, any color can be set. The color data of CG address (00H) is normally black (background)."
-    }
+    },
+    "document": "developmentManual"
   },
   "notStated": [
     "The width of a colour channel. Fifteen bits over three channels gives five each and leaves the top bit of the word unused, which is arithmetic rather than a figure Nintendo prints.",
     "Anything about timing. These are layouts in memory; when the PPU reads them is a different question and not one this package asks.",
     "The Mode 7 tilemap, which the manual gives its own figure for on the following page and which this package treats separately.",
     "What the hardware does with a character code above the range the field can hold, since the field cannot hold one."
-  ]
+  ],
+  "documents": {
+    "developmentManual": {
+      "publisher": "Nintendo of America Inc.",
+      "title": "SNES Development Manual, Book 1",
+      "section": "Appendix A, PPU Registers: CHR DATA CONSTRUCTION and BG SC DATA",
+      "readOn": "2026-08-21",
+      "retrievedFrom": "archive.org/details/SNESDevManual, book1_text.pdf",
+      "sha256": "f1405241000046abba7849376d2ec53cf85f1ad2e9950d69a7c2cf1f3ff6b791",
+      "pages": 240,
+      "file": "book1_text.pdf"
+    }
+  }
 }

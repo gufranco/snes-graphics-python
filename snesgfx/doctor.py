@@ -20,15 +20,36 @@ including a tile actually decoded and encoded back to see whether it survives.
 """
 
 import platform
+import re
 import sys
 from collections.abc import Callable, Sequence
 from pathlib import Path
 from typing import Any, override
 
-from . import models
-from .version import VERSION
+
+def _version(where: Path | None = None) -> str:
+    """The package version, read out of the file beside this one.
+
+    Read rather than imported. Importing it would go through the package, and a
+    package that will not import is one of the things this exists to report.
+    """
+    found = re.search(
+        r"""VERSION\s*[:=][^"']*["']([^"']+)["']""",
+        (where or Path(__file__).resolve().parent / "version.py").read_text(),
+    )
+    return found.group(1) if found else "unknown"
+
 
 ROOT = Path(__file__).resolve().parent.parent
+
+
+VERSION = _version()
+
+
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from snesgfx import models  # noqa: E402
 
 OLDEST_PYTHON = (3, 12)
 

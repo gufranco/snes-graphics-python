@@ -36,7 +36,7 @@ class DocumentTest(unittest.TestCase):
         self.declared = declared("hardware.json")
 
     def test_the_document_is_pinned_by_digest(self) -> None:
-        document = self.declared["document"]
+        document = self.declared["documents"]["developmentManual"]
 
         self.assertEqual(len(document["sha256"]), 64)
 

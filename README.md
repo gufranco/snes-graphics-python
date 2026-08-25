@@ -24,7 +24,7 @@
   <a href="https://github.com/gufranco/snes-graphics-python/issues">Issues</a>
 </p>
 
-**7** formats · **165,248** cases settled by walking their whole input space, **0** failures · **415** tests · **100%** statement and branch coverage · no dependencies
+**7** formats · **165,248** cases settled by walking their whole input space, **0** failures · **434** tests · **100%** statement and branch coverage · no dependencies
 
 ```python
 from snesgfx import tiles
@@ -230,7 +230,7 @@ tests break each format deliberately and confirm the walk catches it.
 ### When something is wrong
 
 ```bash
-python3 -m snesgfx.doctor
+python3 snesgfx/doctor.py
 ```
 
 It looks at this machine and prints what is actually there, and every line is
@@ -242,6 +242,8 @@ issue.
 ## Working on it
 
 ### Running the tests
+
+`python3 snesgfx/doctor.py` says what is actually on this machine: every format, a tile decoded on the spot, and whether the reference this repository cannot carry is built. It is run as a file rather than with `-m` so that it still runs when the package itself will not import, which is the case it exists for. Its report is what an issue asks for, because a report is only as good as what it says about the machine that produced it.
 
 Each module has its test file beside it, named after it.
 
