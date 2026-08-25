@@ -7,7 +7,11 @@
       "an independent reading of the same figures, pinned in pinned.json, for whether the figures were read correctly here at all"
     ],
     "why": "These are layouts rather than silicon, and the input spaces are small enough to walk from end to end, so the second rung is enumeration rather than a recording. Every two-bit tile that can exist is decoded and re-encoded, which leaves no case untried.\n\nWhat that cannot do is catch a misreading. Every figure here was read off a rendered page by one person and written into this file; the code is held to this file, and the walk proves the code agrees with itself. Swap the two flip bits here and in the code together and all of it still passes, because a consistently wrong decoder round-trips perfectly. So the third rung is somebody else's reading of the same figures, and it sits below the figures because it cannot overrule them: it answers whether they were read right, not what they say.",
-    "whatIsMissing": "The artifact. A sibling holds its claims to 2,781 retail cartridges; nothing here is checked against cartridge data, and the rung that would separate a correct reading of the manual from a plausible one by measurement rather than by second opinion is empty. Closing it needs a console or a cartridge library with known-correct graphics, neither of which is reachable from here. Recorded rather than left implied."
+    "whatIsMissing": "The artifact. A sibling holds its claims to 2,781 retail cartridges; nothing here is checked against cartridge data, and the rung that would separate a correct reading of the manual from a plausible one by measurement rather than by second opinion is empty. Closing it needs a console or a cartridge library with known-correct graphics, neither of which is reachable from here. Recorded rather than left implied.",
+    "comparedAgainst": {
+      "runner": "conformance/against_reference.py",
+      "what": "An independent reading of the same figures, lifted from a pinned commit. The exhaustive walk beside it proves this package agrees with itself, which a consistent misreading does too."
+    }
   },
   "characterData": {
     "manualPage": "A-12",
