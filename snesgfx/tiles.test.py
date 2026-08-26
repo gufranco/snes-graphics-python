@@ -1,8 +1,10 @@
+import os
 import random
 import sys
 import unittest
 from collections.abc import Sequence
 from pathlib import Path
+from typing import override
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
@@ -197,6 +199,47 @@ class NameTest(unittest.TestCase):
     def test_a_depth_given_as_a_number_outside_the_set_is_refused(self) -> None:
         with self.assertRaises(UnknownDepth):
             tiles.depth_of(6)
+
+
+class HandedInTest(unittest.TestCase):
+    """That a caller with bytes needs no file, no directory and no variable.
+
+    Every layout here is reached by handing the bytes over. `SNES_CARTRIDGE_DIR`
+    exists for the corpus runner under `conformance/` and never reaches this
+    package, so it is set to a directory that does not exist for the whole of
+    this class: if any of these calls had grown a file read, it would fail here
+    rather than quietly reading whatever that machine happened to have.
+    """
+
+    @override
+    def setUp(self) -> None:
+        held = os.environ.get("SNES_CARTRIDGE_DIR")
+        self.addCleanup(os.environ.__setitem__, "SNES_CARTRIDGE_DIR", held or "")
+        os.environ["SNES_CARTRIDGE_DIR"] = "/nowhere-at-all"
+
+    def test_a_tile_is_decoded_from_bytes_alone(self) -> None:
+        data = bytes.fromhex("3c00423cbd7ea566a566bd7e423c3c00")
+
+        found = tiles.decode(data, 2)
+
+        self.assertEqual(len(found), 64)
+
+    def test_and_encoded_back_to_the_same_bytes(self) -> None:
+        data = bytes.fromhex("3c00423cbd7ea566a566bd7e423c3c00")
+
+        found = tiles.encode(tiles.decode(data, 2), 2)
+
+        self.assertEqual(found, data)
+
+    def test_no_file_under_the_package_names_that_variable(self) -> None:
+        package = Path(__file__).resolve().parent
+        naming = [
+            one.name
+            for one in sorted(package.glob("*.py"))
+            if "SNES_CARTRIDGE_DIR" in one.read_text()
+        ]
+
+        self.assertEqual(naming, [Path(__file__).name])
 
 
 if __name__ == "__main__":
