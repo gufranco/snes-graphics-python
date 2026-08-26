@@ -2,7 +2,7 @@
 
     from snesgfx import describe
 
-    sheet = describe("4bpp").decode(data)
+    sheet = models.format_named("4bpp").decode(data)
 
 These are layouts rather than parts, so there is no silicon to be faithful to and
 nothing to measure. A layout is right or wrong, so the checks are exhaustive
@@ -20,7 +20,7 @@ from . import palette as palette
 from . import tilemap as tilemap
 from . import tiles as tiles
 from .errors import OutOfRange, Truncated, UnknownDepth, UnknownFormat
-from .models import FORMATS, Format, describe
+from .models import FORMATS, Format, format_named
 from .version import VERSION
 
 __version__ = VERSION
@@ -33,5 +33,5 @@ __all__ = [
     "UnknownDepth",
     "UnknownFormat",
     "__version__",
-    "describe",
+    "format_named",
 ]

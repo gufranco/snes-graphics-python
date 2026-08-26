@@ -109,11 +109,11 @@ def _package() -> "Finding":
 
 
 def _default_decode(name: str, data: bytes | bytearray) -> Any:
-    return models.describe(name).decode(data)
+    return models.format_named(name).decode(data)
 
 
 def _default_encode(name: str, decoded: Any) -> bytes:
-    return models.describe(name).encode(decoded)
+    return models.format_named(name).encode(decoded)
 
 
 def _counting(size: int) -> bytes:

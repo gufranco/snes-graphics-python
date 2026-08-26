@@ -43,7 +43,8 @@ Reaching for a module directly is equally supported and often clearer.
 
 | Call | Does | Returns |
 |:--|:--|:--|
-| `describe(name)` | The layout behind a name or an alias | a `Format` |
+| `FORMATS` | Every layout this package covers, one key each | a mapping |
+| `format_named(name)` | The layout a name or an alias means | a `Format` |
 | `format.decode(data)` / `format.encode(...)` | The layout's own reading, whichever it is | per format |
 | `tiles.decode(data, depth)` / `tiles.encode(pixels, depth)` | Bit plane tiles at two, four or eight bits | pixels / bytes |
 | `palette.decode(data)` / `palette.encode(colours)` | Fifteen bit colour words | triples / bytes |
@@ -109,18 +110,18 @@ block is part of the question.
 Each is reached by its name or by any of those:
 
 ```python
-from snesgfx import describe
+from snesgfx import format_named
 
-print(describe("2bpp").name)
-print(describe("4bpp").name)
-print(describe("8bpp").name)
-print(describe("mode7").name)
-print(describe("palette").name)
-print(describe("tilemap").name)
-print(describe("oam").name)
+print(format_named("2bpp").name)
+print(format_named("4bpp").name)
+print(format_named("8bpp").name)
+print(format_named("mode7").name)
+print(format_named("palette").name)
+print(format_named("tilemap").name)
+print(format_named("oam").name)
 
-print(describe("16-colour").name)
-print(describe("Mode-7").name)
+print(format_named("16-colour").name)
+print(format_named("Mode-7").name)
 ```
 
 ```

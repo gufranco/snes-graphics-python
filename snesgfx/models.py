@@ -125,8 +125,17 @@ def _normalise(name: str) -> str:
     return str(name).strip().lower().replace("-", "").replace("_", "").replace(" ", "")
 
 
-def describe(name: str) -> "Format":
-    """The format of that name, however it happens to be written."""
+def format_named(name: str) -> "Format":
+    """The format of that name, however it happens to be written.
+
+    FORMATS is the catalogue and holds one key per format. This is what
+    resolves the names people actually write, which include aliases FORMATS
+    does not carry as keys, and it refuses a name nothing answers to.
+
+    Named for what it hands back rather than for the act of looking, because
+    this package has no constructor to fold it into: a format is what
+    a caller comes here for.
+    """
     found = _BY_ALIAS.get(_normalise(name))
     if found is None:
         raise UnknownFormat(
