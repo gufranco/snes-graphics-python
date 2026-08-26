@@ -1,30 +1,10 @@
-<div align="center">
+# SNES Graphics Formats
 
-<h1>SNES Graphics Formats</h1>
-
-<strong>The Super Nintendo graphics formats, encoded and decoded exactly, settled rather than sampled.</strong>
-
-<br>
-<br>
+The Super Nintendo graphics formats, encoded and decoded exactly, settled rather than sampled.
 
 [![CI](https://github.com/gufranco/snes-graphics-python/actions/workflows/ci.yml/badge.svg)](https://github.com/gufranco/snes-graphics-python/actions/workflows/ci.yml)
-[![Exhaustive](https://img.shields.io/badge/exhaustive-165%2C248%20cases-brightgreen)](#how-this-is-settled)
-[![Coverage](https://img.shields.io/badge/coverage-100%25%20statement%20%2B%20branch-brightgreen)](#tests)
-[![Python](https://img.shields.io/badge/python-3.12%20%7C%203.13%20%7C%203.14-blue)](pyproject.toml)
-[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-</div>
-
-<p align="center">
-  <a href="#install">Install</a> &nbsp;|&nbsp;
-  <a href="#the-interface">The interface</a> &nbsp;|&nbsp;
-  <a href="#the-formats">The formats</a> &nbsp;|&nbsp;
-  <a href="#the-parts-people-get-wrong">The parts people get wrong</a> &nbsp;|&nbsp;
-  <a href="#is-it-right">Is it right</a> &nbsp;|&nbsp;
-  <a href="https://github.com/gufranco/snes-graphics-python/issues">Issues</a>
-</p>
-
-**7** formats · **165,248** cases settled by walking their whole input space, **0** failures · **663** tests · **100%** statement and branch coverage · no dependencies
+**7** formats, **165,248** cases settled by walking their whole input space, **0** failures, **663** tests, **100%** statement and branch coverage, no dependencies
 
 ```python
 from snesgfx import tiles
