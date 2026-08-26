@@ -13,7 +13,7 @@
       "documentSays": "The figures in Appendix A give the layout of a character, a tilemap entry and a colour.",
       "referenceDoes": "The exhaustive walks decode and re-encode every value each space can hold and check that nothing changes.",
       "packageFollows": "document",
-      "reasoning": "A complete round trip over a whole space is strong and it is not a claim about the hardware: a decoder and an encoder that were wrong in exactly opposite ways would pass every one of those cases. Until conformance/hardware.test.py existed, nothing here compared a layout against a figure Nintendo printed, and the package's own badge counted 165,248 cases of self-consistency.",
+      "reasoning": "A complete round trip over a whole space is strong and it is not a claim about the hardware: a decoder and an encoder that were wrong in exactly opposite ways would pass every one of those cases. Until conformance/hardware.test.py existed, nothing here compared a layout against a figure Nintendo printed, and the package's own badge counted 165,248 cases of self-consistency. This is now partly closed from the other side: the layout is measured against real cartridge bytes rather than only agreed upon. Reading 11,765 regions three ways, the published grouping wins 52.5% against a floor of 33.3%, with contiguous planes on 31.7% and two pixels to a byte on 15.7%.",
       "wouldReopenIt": "Removing the comparison against the pinned figures, or adding a format whose layout is not pinned to one.",
       "wouldSettleIt": "Already settled: every field of the tilemap entry and every word count of the character formats is now held to the manual."
     },
@@ -39,5 +39,6 @@
       "reasoning": "When the PPU reads one of these, and what happens if the console writes while it does, is a different question. This package converts between a layout and pixels and asks nothing about time.",
       "wouldSettleIt": "n/a. This is a scope boundary rather than an unknown."
     }
-  ]
+  ],
+  "readOn": "2026-08-26"
 }

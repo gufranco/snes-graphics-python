@@ -92,11 +92,27 @@ written from the same reading. Swap the two flip bits in `hardware.json` and in
 checks pass, and every tilemap decodes wrong.
 
 That is what [`conformance/against_reference.py`](conformance/against_reference.py)
-is for. It holds each figure to an independent reading, pinned by commit, and it
-is the only check here that tells a correct reading of the manual from a
-plausible one. Never change a constant in the record and its twin in the code
-without running it, and if it starts disagreeing after a pin bump, read the
-upstream commit that moved before touching anything here.
+is for. It holds each figure to an independent reading, pinned by commit. Never
+change a constant in the record and its twin in the code without running it, and
+if it starts disagreeing after a pin bump, read the upstream commit that moved
+before touching anything here.
+
+Agreement still has a limit: two readers who make the same mistake agree
+perfectly. [`conformance/against_cartridges.py`](conformance/against_cartridges.py)
+is the one check here that does not rest on agreement at all. It reads real
+cartridge bytes three ways and asks which reading finds the most structure, and
+the grouping published here wins 52.5% of 11,765 regions against a floor of
+33.3%. Run it before and after any change to the tile layout. It needs images,
+which are not carried; name a directory in `SNES_CARTRIDGE_DIR`.
+
+Two things about it are load-bearing and easy to break. Regions are chosen by
+where they sit, never by what is in them, because selecting on the statistic
+under test is how a check starts agreeing with itself. And the statistic looks
+only at whether neighbouring pixels are equal, never at which colour they are, so
+a grouping difference that renames colours scores identically. That is correct
+rather than a shortcoming: the first version of this check swapped the plane
+pairs as its control and reported no separation, which is the right answer to the
+wrong question.
 
 ## Every gate, in the order to run them
 

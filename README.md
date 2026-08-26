@@ -4,7 +4,7 @@ The Super Nintendo graphics formats, encoded and decoded exactly, settled rather
 
 [![CI](https://github.com/gufranco/snes-graphics-python/actions/workflows/ci.yml/badge.svg)](https://github.com/gufranco/snes-graphics-python/actions/workflows/ci.yml)
 
-**7** formats, **165,248** cases settled by walking their whole input space, **0** failures, **663** tests, **100%** statement and branch coverage, no dependencies
+**7** formats, **165,248** cases settled by walking their whole input space, **11,765** regions of real cartridge data read three ways, **0** failures, **705** tests, **100%** statement and branch coverage, no dependencies
 
 ```python
 from snesgfx import tiles
@@ -212,6 +212,40 @@ this repository owns.
 ```bash
 python3 -m conformance.build              # fetches the reference at its pinned commit
 python3 -m conformance.against_reference
+```
+
+### Against what cartridges actually contain
+
+Both claims above are about agreement. Neither can tell a correct reading of the
+manual from a plausible one, because two readers who make the same mistake agree
+perfectly and a wrong decoder round-trips as neatly as a right one.
+
+Cartridge bytes can tell them apart. A picture read with the right grouping has
+neighbours that match; read with the wrong one it does not. So the same regions
+are read three ways and the one that finds the most structure wins each region.
+The alternatives are not strawmen: contiguous planes is how other consoles of
+the period stored the same kind of tile, and two pixels to a byte is the obvious
+way to hold sixteen colours.
+
+| Reading | Regions won |
+|:--------|------------:|
+| the grouping published here | 6,178 of 11,765, 52.5% |
+| contiguous planes | 3,735, 31.7% |
+| two pixels to a byte | 1,852, 15.7% |
+| a reading with nothing in it | 33.3% |
+
+Regions are chosen by where they sit rather than by what is in them, and all
+three readings see the same regions, so the reading under test gets no help from
+selection. The statistic counts whether neighbouring pixels are equal and never
+looks at which colour they are, which is why swapping the plane pairs scores
+identically: that difference only renames colours, and it is not one anybody can
+see.
+
+No cartridge is carried here. 300 of the 7,578 on the machine this ran on were
+read, drawn by a fixed seed so the same library gives the same 300 anywhere.
+
+```bash
+SNES_CARTRIDGE_DIR=/path/to/your/images python3 -m conformance.against_cartridges
 ```
 
 The two sides take their channels in different units, which is worth knowing

@@ -188,3 +188,33 @@ jobs:
       # itself over the whole space, which a misreading does too.
       - name: Hold every figure to the reference
         run: python -m conformance.against_reference
+
+  cartridges:
+    name: The layout, held to real cartridges
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      # Cartridge images belong to whoever made them and are not here, so this
+      # run checks nothing on a runner and says so. Exit two means nothing was
+      # checked, which is not the same as the layout having been confirmed.
+      - name: Read whatever cartridges are on this machine
+        run: |
+          set +e
+          python3 -m conformance.against_cartridges > said.txt
+          status=$?
+          set -e
+          cat said.txt
+          if [ "${status}" -eq 2 ]; then
+            echo "::notice title=Nothing was checked::$(head -1 said.txt)"
+            exit 0
+          fi
+          if [ "${status}" -eq 0 ]; then
+            echo "::notice title=Held to cartridges::$(tail -1 said.txt)"
+          fi
+          exit "${status}"
+        shell: bash

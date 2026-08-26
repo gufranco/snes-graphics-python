@@ -1,0 +1,23 @@
+{
+  "what": "The tile layout this package publishes, held to bytes out of real cartridges rather than to a second reading of the same manual.",
+  "why": "A decoder that misread the manual agrees with a record written from the same misreading, and agrees with itself over the whole input space. What separates a correct reading from a plausible one is data nobody here wrote: a picture read with the right layout has neighbours that match, and read with the wrong one it does not.",
+  "carried": false,
+  "cartridgesOnThisMachine": 7578,
+  "cartridgesJudged": 300,
+  "seed": 11,
+  "regions": 11765,
+  "regionBytes": 2048,
+  "depth": 4,
+  "readings": ["documented", "contiguous planes", "two pixels per byte"],
+  "wins": {
+    "documented": 6178,
+    "contiguous planes": 3735,
+    "two pixels per byte": 1852
+  },
+  "documentedShare": 0.5251,
+  "floor": 0.3333,
+  "corpusDigest": "7437d0fb7a049717853ea27954fe89b6a0466bf215286fab79c473004737be1c",
+  "verified": true,
+  "evidence": "11765 regions from 300 cartridges, chosen by where they sit rather than by what is in them, each read three ways. The published layout won 52.5% against a floor of 33.3%.",
+  "howToSettleIt": "Settled for the tile layout at this depth. The other two depths, the palette and the map entry are still held to a second reading and to the whole input space rather than to cartridges."
+}
