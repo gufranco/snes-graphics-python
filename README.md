@@ -4,7 +4,7 @@ The Super Nintendo graphics formats, encoded and decoded exactly, settled rather
 
 [![CI](https://github.com/gufranco/snes-graphics-python/actions/workflows/ci.yml/badge.svg)](https://github.com/gufranco/snes-graphics-python/actions/workflows/ci.yml)
 
-**7** formats, **165,248** cases settled by walking their whole input space, **11,765** regions of real cartridge data read three ways, **0** failures, **709** tests, **100%** statement and branch coverage, no dependencies
+**7** formats, **165,248** cases settled by walking their whole input space, **11,765** regions of real cartridge data read three ways, **0** failures, **741** tests, **100%** statement and branch coverage, no dependencies
 
 ```python
 from snesgfx import tiles
@@ -358,6 +358,13 @@ format, so it is a claim about hardware in a package that otherwise makes none:
 came from, and [`conformance/divergences.json`](conformance/divergences.json)
 holds what a model that kept the full product would get wrong.
 
+
+Fetching it is a command rather than an exercise. [`conformance/documents.json`](conformance/documents.json) carries the full digest, the byte count and a fetchable address, and [`conformance/documents.py`](conformance/documents.py) brings it down into `docs/`, which git ignores, and refuses anything whose digest does not match.
+
+```bash
+python3 -m conformance.documents          # fetch and verify the digest
+python3 -m conformance.documents --check  # verify what is already here
+```
 ## Citing this
 
 [CITATION.cff](CITATION.cff) is kept in step with the released version by the
