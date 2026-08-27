@@ -7,6 +7,7 @@ was decided before the code ran.
 """
 
 import json
+import os
 import sys
 import tempfile
 import unittest
@@ -143,7 +144,7 @@ class WhereTest(unittest.TestCase):
     def test_naming_nothing_still_leaves_the_two_this_project_knows(self) -> None:
         held = check.directories({})
 
-        self.assertEqual(held, (check.DEFAULT_DIRECTORY, check.ALONGSIDE))
+        self.assertEqual(held, (check.ALONGSIDE, check.DEFAULT_DIRECTORY))
 
     def test_images_are_found_in_the_named_directory(self) -> None:
         where = Path(self.enterContext(tempfile.TemporaryDirectory()))
@@ -316,6 +317,40 @@ class RunTest(unittest.TestCase):
         check.main(say=said.append, find=lambda: [Path("a.sfc")], look=self._look(33, 100))
 
         self.assertIn("no better than chance", said[-1])
+
+
+class SharedDirectoryRuleTest(unittest.TestCase):
+    """The rule every member of this family uses to find a file it does not carry.
+
+    Byte-identical in all of them, so these check the behaviour that identity is
+    supposed to guarantee rather than the text of one copy.
+    """
+
+    def test_the_project_above_is_looked_at_before_the_package_itself(self) -> None:
+        """Vendored, the parent owns the library, which is what ALONGSIDE is for."""
+        found = check.directories({})
+
+        self.assertLess(found.index(check.ALONGSIDE), found.index(check.DEFAULT_DIRECTORY))
+
+    def test_a_named_directory_is_looked_at_before_either(self) -> None:
+        found = check.directories({check.DIRECTORY_VARIABLE: "/x"})
+
+        self.assertEqual(found[0], Path("/x"))
+
+    def test_more_than_one_can_be_named_at_once(self) -> None:
+        found = check.directories({check.DIRECTORY_VARIABLE: f"/x{os.pathsep}/y"})
+
+        self.assertEqual(found[:2], (Path("/x"), Path("/y")))
+
+    def test_an_empty_entry_between_two_names_is_passed_over(self) -> None:
+        found = check.directories({check.DIRECTORY_VARIABLE: f"/x{os.pathsep}{os.pathsep}/y"})
+
+        self.assertEqual(found[:2], (Path("/x"), Path("/y")))
+
+    def test_no_directory_appears_twice(self) -> None:
+        found = check.directories({check.DIRECTORY_VARIABLE: str(check.DEFAULT_DIRECTORY)})
+
+        self.assertEqual(len(found), len(set(found)))
 
 
 if __name__ == "__main__":
