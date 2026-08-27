@@ -65,10 +65,9 @@ against every pixel, and every sprite's two bits in the second table.
 [`conformance/hardware.test.py`](conformance/hardware.test.py) holds the model's
 own constants against the manual's figures.
 
-**Not settled: 3 things**, each in [OPEN-QUESTIONS.md](OPEN-QUESTIONS.md) with
-what would close it. One is a figure that follows by arithmetic rather than being
-printed, one is a value that cannot reach the hardware through this layout, and
-one is a scope boundary listed so nobody mistakes it for a gap.
+**Not settled: 2 things**, each in [OPEN-QUESTIONS.md](OPEN-QUESTIONS.md) with
+what would close it. One is a value that cannot reach the hardware through this
+layout, and one is a scope boundary listed so nobody mistakes it for a gap.
 
 ## An exhaustive walk proves a round trip, not a layout
 

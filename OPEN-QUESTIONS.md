@@ -34,24 +34,6 @@ either prints on a page not yet read or does not print at all.
 
 ## Where a figure follows by arithmetic rather than being printed
 
-### The width of a colour channel.
-
-**The document says.** That a colour is two bytes, and that the register ordering
-its fields runs blue, green, red. It does not print the channel width.
-
-Source: Nintendo of America Inc., *SNES Development Manual, Book 1*, Appendix A.
-
-**What this project follows.** Five bits per channel, with the top bit of the
-word unused.
-
-**Why.** Fifteen bits over three channels gives five each. That follows from the
-two figures rather than being one of them, so it is named here rather than sitting
-in [`conformance/hardware.json`](conformance/hardware.json) as though Nintendo
-had written it down.
-
-**What would settle or reopen it.** The CGRAM figure at page A-17, or any passage
-giving the channel width outright.
-
 ### What the hardware does with a character code above the range the field holds.
 
 **The document says.** Nothing, and it has no reason to: the field cannot hold
@@ -83,6 +65,15 @@ and the second would have nothing behind it.
 gap, and it is listed so a reader does not mistake the first for the second.
 
 ## What was open and is now measured
+
+**The width of a colour channel.** Five bits each, printed rather than inferred.
+The record used to carry it as arithmetic: a colour is two bytes, the register
+orders its fields blue, green, red, and fifteen bits over three channels gives
+five. The figure at appendix page A-17 prints the word outright, as fifteen cells
+under three labels with D15 outside them, and prints the direct colour packing
+beneath it. That page is a picture with nothing in its text layer, which is why
+it stayed unread while the manual sat one link away.
+
 
 **Whether the published grouping is the one cartridges actually use.** It is, by
 a margin nobody has to take on trust. Every other check here proves the code

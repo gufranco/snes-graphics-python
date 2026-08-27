@@ -102,7 +102,18 @@
       "quote": "The top color data of each CG color data palette is transparent. Because transparent is a color which is not displayed, any color can be set. The color data of CG address (00H) is normally black (background)."
     },
     "document": "developmentManual",
-    "assembled": true
+    "assembled": true,
+    "bitsPerChannel": 5,
+    "channelBits": {
+      "blue": "d14 to d10",
+      "green": "d9 to d5",
+      "red": "d4 to d0",
+      "unused": "d15"
+    },
+    "channelBitsQuote": "CG-RAM COLOR DATA. BLUE GREEN RED. D15 | d14 | d13 | d12 | d11 | d10 | d9 | d8 | d7 | d6 | d5 | d4 | d3 | d2 | d1 | d0",
+    "channelBitsPage": "A-17",
+    "channelBitsFilePage": 212,
+    "howTheWidthWasSettled": "By the figure rather than by arithmetic. The appendix prints the colour word as fifteen cells under three labels, five cells to each of BLUE, GREEN and RED, with D15 outside them. That page is a picture with nothing in the text layer, so it was rendered and read; the same figure prints DIRECT SELECT COLOR DATA beneath it, which is how the direct colour packing is laid out."
   },
   "notStated": [
     "The width of a colour channel. Fifteen bits over three channels gives five each and leaves the top bit of the word unused, which is arithmetic rather than a figure Nintendo prints.",
