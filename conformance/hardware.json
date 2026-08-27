@@ -61,32 +61,32 @@
         "bits": "D0 to D9",
         "mask": "0x03FF",
         "range": "000H~3FFH",
-        "meaning": "CHARACTER CODE NUMBER"
+        "meaningQuote": "CHARACTER CODE NUMBER"
       },
       {
         "name": "COLOR",
         "bits": "D10 to D12",
         "shift": 10,
         "mask": "0x07",
-        "meaning": "COLOR PALETTE SELECT: Palette designation per character <8-Palettes>"
+        "meaningQuote": "COLOR PALETTE <8-Palettes> SELECT: Palette designation per character"
       },
       {
         "name": "BG Pri.",
         "bits": "D13",
         "mask": "0x2000",
-        "meaning": "BG PRIORITY: Determine the display priority per character in case OBJ and BG1 ~ BG4 are combined on the same screen."
+        "meaningQuote": "BG PRIORITY: Determine the display priority per character in case OBJ and BG1 ~ BG4 are combined on the same screen."
       },
       {
         "name": "H",
         "bits": "D14",
         "mask": "0x4000",
-        "meaning": "H/V FLIP: X-Directional Flip (H-FLIP)"
+        "meaningQuote": "H/V FLIP: X-Directional Flip (H-FLIP)"
       },
       {
         "name": "V",
         "bits": "D15",
         "mask": "0x8000",
-        "meaning": "H/V FLIP: Y-Directional Flip (V-FLIP)"
+        "meaningQuote": "Y-Directional Flip (V-FLIP)"
       }
     ],
     "document": "developmentManual"
@@ -101,7 +101,8 @@
       "index": 0,
       "quote": "The top color data of each CG color data palette is transparent. Because transparent is a color which is not displayed, any color can be set. The color data of CG address (00H) is normally black (background)."
     },
-    "document": "developmentManual"
+    "document": "developmentManual",
+    "assembled": true
   },
   "notStated": [
     "The width of a colour channel. Fifteen bits over three channels gives five each and leaves the top bit of the word unused, which is arithmetic rather than a figure Nintendo prints.",

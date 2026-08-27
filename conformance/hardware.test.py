@@ -143,7 +143,7 @@ class TilemapTest(unittest.TestCase):
     def test_and_the_figure_says_eight_palettes_which_is_what_it_holds(self) -> None:
         colour = self.fields["COLOR"]
 
-        self.assertEqual(("8-Palettes" in colour["meaning"], tilemap.BLOCK_MASK + 1), (True, 8))
+        self.assertEqual(("8-Palettes" in colour["meaningQuote"], tilemap.BLOCK_MASK + 1), (True, 8))
 
     def test_the_priority_bit_is_the_one_the_figure_names(self) -> None:
         priority = self.fields["BG Pri."]
