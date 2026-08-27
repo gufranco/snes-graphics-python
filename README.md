@@ -4,7 +4,7 @@ The Super Nintendo graphics formats, encoded and decoded exactly, settled rather
 
 [![CI](https://github.com/gufranco/snes-graphics-python/actions/workflows/ci.yml/badge.svg)](https://github.com/gufranco/snes-graphics-python/actions/workflows/ci.yml)
 
-**7** formats, **165,248** cases settled by walking their whole input space, **11,765** regions of real cartridge data read three ways, **0** failures, **754** tests, **100%** statement and branch coverage, no dependencies
+**7** formats, **165,248** cases settled by walking their whole input space, **11,765** regions of real cartridge data read three ways, **0** failures, **757** tests, **100%** statement and branch coverage, no dependencies
 
 ```python
 from snesgfx import tiles
