@@ -1,29 +1,3 @@
-"""Mode 7, which is a matrix multiply the hardware performs slightly wrong.
-
-The transform itself is ordinary. A screen position has the centre subtracted,
-is multiplied by a two by two matrix of eight point eight fixed point numbers,
-and has the centre added back. What makes it worth writing down is that the
-multiplier does not keep the whole product: the low six bits of each term are
-discarded before the terms are added.
-
-That truncation is not a rounding mode anyone would choose. It means a matrix
-entry small enough that its product falls under sixty four contributes nothing at
-all, so a very slow rotation does not creep, it stays exactly still until the
-product crosses the threshold and then jumps. Software that scales by fractions
-this small looks broken on a model that keeps the full product and correct on
-hardware.
-
-The layout is the other half. Mode 7 does not store its tilemap and its pixels in
-separate places: they share the same words, the map in the low byte and the
-pixels in the high byte, so a dump of that memory is the two interleaved and
-neither is readable until they are separated.
-
-The field is a hundred and twenty eight tiles square and coordinates outside it
-either wrap or fall off, depending on a register. Both are here; which one
-applies is the caller's to decide, because it is a setting rather than a property
-of the arithmetic.
-"""
-
 from typing import override
 
 from .errors import Truncated
@@ -48,20 +22,16 @@ RANGE16 = 0x10000
 
 
 def signed13(value: int) -> int:
-    """A thirteen bit register value read as signed, which is how the hardware reads it."""
     value &= RANGE13 - 1
     return value - RANGE13 if value & SIGN13 else value
 
 
 def signed16(value: int) -> int:
-    """A sixteen bit matrix entry read as signed."""
     value &= RANGE16 - 1
     return value - RANGE16 if value & SIGN16 else value
 
 
 class Matrix:
-    """The four eight point eight entries, held as the hardware holds them."""
-
     __slots__ = ("_a", "_b", "_c", "_d")
 
     def __init__(self, a: int, b: int, c: int, d: int) -> None:
@@ -89,8 +59,6 @@ class Matrix:
 
 
 class Field:
-    """One Mode 7 background, and where a screen position lands in it."""
-
     __slots__ = ("centre", "matrix", "scroll")
 
     def __init__(
@@ -104,12 +72,6 @@ class Field:
         self.scroll = scroll
 
     def at(self, x: int, y: int) -> tuple[int, int]:
-        """Where a screen position lands in the field, in whole pixels.
-
-        Each term is truncated to a multiple of sixty four before being added,
-        which is what the hardware's multiplier does and the reason a matrix entry
-        below a certain size has no effect at all.
-        """
         centre_x, centre_y = (signed13(value) for value in self.centre)
         scroll_x, scroll_y = (signed13(value) for value in self.scroll)
         origin_x = scroll_x - centre_x
@@ -137,24 +99,20 @@ class Field:
 
 
 def wrap(x: int, y: int) -> tuple[int, int]:
-    """A field position brought back inside the field, which is one of two settings."""
     return x % FIELD_PIXELS, y % FIELD_PIXELS
 
 
 def outside(x: int, y: int) -> bool:
-    """Whether a field position is off the field, which is the other setting."""
     return not (0 <= x < FIELD_PIXELS and 0 <= y < FIELD_PIXELS)
 
 
 def deinterleave(vram: bytes | bytearray) -> tuple[bytes, bytes]:
-    """The tilemap and the pixels, which share the same words in memory."""
     if len(vram) % 2:
         raise Truncated(f"{len(vram)} bytes is not a whole number of words")
     return bytes(vram[0::2]), bytes(vram[1::2])
 
 
 def interleave(names: bytes | bytearray, pixels: bytes | bytearray) -> bytes:
-    """The two halves put back into the words they share."""
     if len(names) != len(pixels):
         raise Truncated(f"{len(names)} names and {len(pixels)} pixels are not the same length")
     out = bytearray(len(names) * 2)
@@ -164,7 +122,6 @@ def interleave(names: bytes | bytearray, pixels: bytes | bytearray) -> bytes:
 
 
 def tile(pixels: bytes | bytearray, index: int) -> list[int]:
-    """One Mode 7 tile, which is stored a pixel to a byte rather than in planes."""
     at = index * TILE_WIDTH * TILE_WIDTH
     end = at + TILE_WIDTH * TILE_WIDTH
     if end > len(pixels):
@@ -173,7 +130,6 @@ def tile(pixels: bytes | bytearray, index: int) -> list[int]:
 
 
 def name_at(names: bytes | bytearray, x: int, y: int) -> int:
-    """Which tile the map puts at a field position."""
     column = (x // TILE_WIDTH) % FIELD_TILES
     row = (y // TILE_WIDTH) % FIELD_TILES
     return names[row * FIELD_TILES + column]

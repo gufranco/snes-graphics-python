@@ -1,23 +1,3 @@
-"""The background map, which is a grid of sixteen bit entries in up to four pieces.
-
-An entry is one word: ten bits of tile number, three of palette block, one of
-priority, and two of mirroring. That much is unremarkable. What catches people is
-the shape of the grid.
-
-A background can be one, two or four blocks of thirty two by thirty two tiles,
-and the blocks are not laid out as a rectangle. They are stored one after the
-other in memory, so a sixty four tile wide map is two blocks side by side and a
-position in the right half is a whole block further along than its column
-suggests. A sixty four by sixty four map is four blocks in reading order, so
-moving down thirty two rows skips two blocks rather than one.
-
-Getting that wrong does not corrupt anything. It draws the correct tiles in the
-wrong quadrant, which reads as a scrolling bug rather than an addressing one.
-
-Positions past the edge wrap, and they wrap at the size the background is set to
-rather than at sixty four, so a narrow map repeats twice across a wide screen.
-"""
-
 from collections.abc import Sequence
 from typing import override
 
@@ -45,8 +25,6 @@ VERTICAL_BIT = 0x8000
 
 
 class Entry:
-    """One map entry: which tile, which colours, and how it is drawn."""
-
     __slots__ = ("block", "horizontal_flip", "priority", "tile", "vertical_flip")
 
     def __init__(
@@ -101,19 +79,12 @@ class Entry:
 
 
 def screen_size(size: int) -> tuple[int, int]:
-    """How many tiles across and down a background of that setting is."""
     if not 0 <= size < len(SCREEN_SIZES):
         raise OutOfRange(f"{size} is not a screen size; there are {len(SCREEN_SIZES)}")
     return SCREEN_SIZES[size]
 
 
 def offset_of(x: int, y: int, size: int) -> int:
-    """Which entry a tile position is, counting quadrants rather than rows.
-
-    The quadrants are stored one after another rather than as a rectangle, so a
-    position in the right half is a whole quadrant further on than its column
-    suggests, and one in the bottom half of a full sized map is two.
-    """
     width, height = screen_size(size)
     x %= width
     y %= height
@@ -129,7 +100,6 @@ def offset_of(x: int, y: int, size: int) -> int:
 
 
 def decode(data: bytes | bytearray) -> list["Entry"]:
-    """Every entry in a run of bytes, two bytes each, low byte first."""
     if len(data) % BYTES_PER_ENTRY:
         raise Truncated(f"{len(data)} bytes is not a whole number of entries")
     return [
@@ -139,7 +109,6 @@ def decode(data: bytes | bytearray) -> list["Entry"]:
 
 
 def encode(entries: Sequence["Entry"]) -> bytes:
-    """The bytes a run of entries occupies."""
     data = bytearray()
     for found in entries:
         word = found.word
@@ -149,5 +118,4 @@ def encode(entries: Sequence["Entry"]) -> bytes:
 
 
 def entry_at(entries: Sequence["Entry"], x: int, y: int, size: int) -> "Entry":
-    """The entry the hardware would read for a tile position."""
     return entries[offset_of(x, y, size)]

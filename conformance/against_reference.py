@@ -1,29 +1,3 @@
-"""Hold every figure this package read to somebody else's reading of the same one.
-
-The gap this closes is narrow and was invisible. Every layout here was read off a
-rendered page of Nintendo's manual by one person and written into
-`hardware.json`. `hardware.test.py` holds the code to that record, and
-`exhaustive.py` walks the whole input space and proves the code round-trips. None
-of that can see a misreading: swap the two flip bits in the record and in the
-code together and all of it still passes, because a consistently wrong decoder
-agrees with itself perfectly.
-
-What catches that is a second reading, and this is one. The reference is a
-converter whose whole job is these formats, pinned by commit in `pinned.json` and
-built by `build.py`. It is not carried here: only the harness in `ref/` belongs
-to this repository.
-
-The spaces below are chosen to pin a layout exactly rather than to sample it.
-
-For a tile, one bit at a time. A bitplane layout is a map from a bit in the bytes
-to a bit in a pixel, so setting exactly one byte-bit and asking where it lands
-determines the whole map with no case left over. Every bit of every depth is
-tried, which is 128, 256 and 512 cases.
-
-For a colour and for a map entry, the whole space. Thirty-two thousand each,
-which is small enough to walk and leaves nothing to argue about.
-"""
-
 from __future__ import annotations
 
 import subprocess
@@ -54,24 +28,13 @@ BLOCKS = 8
 
 
 class Asks(Protocol):
-    """Anything that answers a question, which is all the comparison needs.
-
-    Written out so the walks below can be handed something other than a process.
-    Their own tests drive them against an implementation that answers from this
-    package, which is how a walk is shown to report a disagreement that is really
-    there and to stay quiet when there is none.
-    """
-
     def ask(self, question: str) -> str: ...
 
 
-class Missing(Exception):
-    """The reference is not built, which is not the same as a disagreement."""
+class Missing(Exception): ...
 
 
 class Reference:
-    """The other implementation, kept open and asked one question at a time."""
-
     __slots__ = ("process",)
 
     def __init__(self, where: Path | str = DRIVER) -> None:
@@ -108,7 +71,6 @@ class Reference:
 
 
 def one_bit_tiles(depth: int) -> Iterator[tuple[int, bytes]]:
-    """Every tile with exactly one bit set, which pins the whole layout."""
     width = BYTES_FOR_DEPTH[depth]
     for at in range(width * 8):
         held = bytearray(width)
@@ -117,7 +79,6 @@ def one_bit_tiles(depth: int) -> Iterator[tuple[int, bytes]]:
 
 
 def tile_disagreements(reference: Asks) -> list[str]:
-    """Where the two readings of the bitplane figure differ."""
     found = []
     for depth in DEPTHS:
         for at, data in one_bit_tiles(depth):
@@ -129,19 +90,6 @@ def tile_disagreements(reference: Asks) -> list[str]:
 
 
 def colour_disagreements(reference: Asks) -> list[str]:
-    """Where the two readings of the colour figure differ, over every colour.
-
-    The two sides take their channels in different units, and the walk has to
-    speak each one's. This package takes the eight bits an image carries and
-    narrows them itself, refusing anything above 255. The reference takes the
-    five the console stores, one channel per byte, and packs from there. Handing
-    either one the other's units makes them disagree about almost every colour,
-    which is a fault in the question rather than in either answer. Two earlier
-    versions of this file did exactly that, in opposite directions.
-
-    So the walk is over the five-bit space the hardware actually has, and each
-    side is asked in the units it documents.
-    """
     found = []
     for red in range(CHANNELS):
         for green in range(CHANNELS):
@@ -158,7 +106,6 @@ def colour_disagreements(reference: Asks) -> list[str]:
 
 
 def entry_disagreements(reference: Asks) -> list[str]:
-    """Where the two readings of the map entry figure differ, over every entry."""
     found = []
     for tile in range(TILES):
         for block in range(BLOCKS):
@@ -189,7 +136,6 @@ def entry_disagreements(reference: Asks) -> list[str]:
 
 
 def compare(reference: Asks) -> tuple[int, list[str]]:
-    """Every space, walked, with what disagreed and how much was asked."""
     found: list[str] = []
     found += tile_disagreements(reference)
     found += colour_disagreements(reference)

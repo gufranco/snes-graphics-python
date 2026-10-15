@@ -1,17 +1,3 @@
-"""Fetch the reference implementation and build the driver that wraps it.
-
-The reference implementations are a separate work under their own licence, so
-they are fetched rather than carried here. Only the driver in `ref/` belongs to
-this repository, and it is the only file that is compiled from this side.
-
-The sources are pinned by commit. A build that resolves whatever upstream holds
-today is not reproducible, and a change made upstream would turn this repository
-red with no commit of its own to explain it.
-
-Usage:
-    python3 conformance/build.py [--sources DIR] [--output PATH]
-"""
-
 import json
 import os
 import subprocess
@@ -56,14 +42,12 @@ class Options:
 
 
 def reference(path: Path | str | None = None) -> dict[str, Any]:
-    """The reference this driver is built against, as written down."""
     with Path(path or DEFINITION).open() as handle:
         pinned: dict[str, Any] = json.load(handle)["reference"]
     return pinned
 
 
 def checkout_command(pinned: Mapping[str, Any], directory: Path | str) -> list[list[str]]:
-    """The git steps that bring the sources down, without history or blobs."""
     where = str(directory)
     return [
         ["git", "init", "-q", where],
@@ -86,18 +70,6 @@ def checkout_command(pinned: Mapping[str, Any], directory: Path | str) -> list[l
 
 
 def extract(sources: Path | str, pinned: Mapping[str, Any], into: Path | str) -> Path:
-    """Lift the reference's own function bodies out of the files they live in.
-
-    Three of them, from two headers, because what this package needs checking is
-    three separate readings of three separate figures: how a tile's bitplanes are
-    laid out, how a colour is packed into two bytes, and which bits of a map
-    entry hold the flips. Everything else in those headers belongs to formats
-    this package does not model.
-
-    The markers come from the pin rather than from here, so a file whose text has
-    moved fails loudly instead of yielding something that compiles and means
-    something else.
-    """
     held = []
     for one in pinned["extracts"]:
         where = Path(sources) / one["source"]
@@ -119,7 +91,6 @@ def extract(sources: Path | str, pinned: Mapping[str, Any], into: Path | str) ->
 def compile_command(
     sources: Path | str, output: Path | str, driver: Path | str | None = None
 ) -> list[str]:
-    """The one compile, of the one file this repository owns."""
     return [
         COMPILER,
         f"-std={STANDARD}",

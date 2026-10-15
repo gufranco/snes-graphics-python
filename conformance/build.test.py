@@ -102,8 +102,6 @@ class OptionTest(unittest.TestCase):
 
 
 class LocalUpstream:
-    """A git repository on disk, so the fetch path can be exercised offline."""
-
     def __init__(self) -> None:
         self.where = Path(tempfile.mkdtemp()) / "upstream"
         self.where.mkdir(parents=True)
@@ -247,7 +245,6 @@ class ExtractTest(unittest.TestCase):
             build.extract(upstream.where, upstream.pinned(), Path("/tmp/x.inc"))
 
     def test_and_one_whose_closing_marker_has_moved_is_reported_too(self) -> None:
-        """A slice that runs to the end of a file is worse than one that fails."""
         upstream = LocalUpstream()
         (upstream.where / "second.h").write_text("before\ninline int three (void) { return 3; }\n")
 

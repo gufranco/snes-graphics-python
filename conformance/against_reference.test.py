@@ -14,8 +14,6 @@ from snesgfx import palette, tilemap, tiles  # noqa: E402
 
 
 class Answering:
-    """A reference that answers whatever it is told to, without a process."""
-
     def __init__(self, answers: dict[str, str] | None = None, wrong: bool = False) -> None:
         self.answers = answers or {}
         self.wrong = wrong
@@ -252,8 +250,6 @@ class MainTest(unittest.TestCase):
 
 
 class _Held:
-    """A stand-in that satisfies the context manager without a process."""
-
     def __init__(self, answering: Answering) -> None:
         self.answering = answering
 

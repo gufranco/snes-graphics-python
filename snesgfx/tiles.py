@@ -1,33 +1,3 @@
-"""Tiles, which the hardware stores as bit planes rather than as pixels.
-
-A pixel's colour number is not held in one place. Each bit of it lives in a
-separate plane, and a plane holds that one bit for all sixty four pixels of the
-tile. Reading a pixel means gathering one bit from each plane and stacking them.
-
-The planes are not laid out the way that description suggests either. The first
-two are interleaved by row: two bytes for row zero, two for row one, and so on to
-the end of the tile. Only then does the third plane begin, again interleaved with
-the fourth. So a four bit tile is two of those interleaved pairs, one after the
-other, and an eight bit tile is four.
-
-Every consequence people find surprising follows from that layout. Changing a
-tile from four bits to eight is not a conversion of each pixel; it is appending
-two more plane pairs. Reading the first sixteen bytes of a four bit tile gives a
-complete two bit tile, so the smaller depths are not a different format so much
-as a prefix of the larger ones.
-
-Within a row the leftmost pixel comes from the highest bit, which is the opposite
-of the order the bytes are numbered in and the source of most mirroring bugs.
-
-There is nothing to measure here. The format is exact, so the checks are exact
-too: every two bit tile that can exist is round tripped, and every plane of every
-depth is shown to reach its own bit and no other.
-
-Three depths exist and no others. Six bits per pixel appears in some tools and in
-no Super Nintendo background mode, and Mode 7 does not store its tiles this way
-at all, so neither is here. Mode 7 is in its own module.
-"""
-
 from collections.abc import Sequence
 
 from .errors import OutOfRange, Truncated, UnknownDepth
@@ -55,7 +25,6 @@ def _listed() -> str:
 
 
 def depth_of(name: str | int) -> int:
-    """The bit depth something is called, however it happens to be written."""
     if isinstance(name, int):
         if name in DEPTHS:
             return name
@@ -73,22 +42,14 @@ def _checked(depth: int) -> int:
 
 
 def tile_bytes(depth: int) -> int:
-    """How many bytes one tile of that depth occupies."""
     return _checked(depth) * TILE_WIDTH
 
 
 def _plane_offset(plane: int) -> int:
-    """Where a plane's first byte sits, which is the whole of the layout.
-
-    Planes are paired and each pair is interleaved by row, so the pair a plane
-    belongs to decides which sixteen byte block it is in and its parity within
-    the pair decides which byte of each row it takes.
-    """
     return (plane // 2) * PLANE_PAIR_BYTES + (plane % 2)
 
 
 def decode(data: bytes | bytearray, depth: int) -> list[int]:
-    """One tile, as sixty four colour numbers read left to right, top to bottom."""
     depth = _checked(depth)
     size = tile_bytes(depth)
     if len(data) != size:
@@ -110,7 +71,6 @@ def decode(data: bytes | bytearray, depth: int) -> list[int]:
 
 
 def encode(pixels: Sequence[int], depth: int) -> bytes:
-    """The bytes a tile of those colour numbers occupies."""
     depth = _checked(depth)
     if len(pixels) != TILE_PIXELS:
         raise Truncated(f"a tile is {TILE_PIXELS} pixels, not {len(pixels)}")
@@ -131,7 +91,6 @@ def encode(pixels: Sequence[int], depth: int) -> bytes:
 
 
 def decode_sheet(data: bytes | bytearray, depth: int) -> list[list[int]]:
-    """Every tile in a run of bytes, refusing a run that stops mid tile."""
     size = tile_bytes(depth)
     if len(data) % size:
         raise Truncated(f"{len(data)} bytes is not a whole number of {depth} bit tiles")
@@ -139,12 +98,10 @@ def decode_sheet(data: bytes | bytearray, depth: int) -> list[list[int]]:
 
 
 def encode_sheet(sheet: Sequence[Sequence[int]], depth: int) -> bytes:
-    """The bytes a run of tiles occupies."""
     return b"".join(encode(pixels, depth) for pixels in sheet)
 
 
 def flip(pixels: Sequence[int], horizontal: bool = False, vertical: bool = False) -> list[int]:
-    """A tile mirrored the way a background or sprite entry can ask for."""
     out = list(pixels)
     if horizontal:
         out = [

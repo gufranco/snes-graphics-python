@@ -1,15 +1,3 @@
-"""Which formats this package covers, named the way people name them.
-
-These are not models of a part, so there is no silicon to be faithful to. They
-are layouts, and a layout is either right or wrong with nothing in between. What
-the catalogue buys is one way in: a tool that reads a cartridge does not want to
-know that four bit tiles and the sprite table need different call shapes, only
-that it has bytes and a name for what they are.
-
-Every entry decodes and encodes, and the pair is a round trip on every input the
-format accepts. That is the whole contract.
-"""
-
 from collections.abc import Callable, Sequence
 from typing import Any, override
 
@@ -18,8 +6,6 @@ from .errors import UnknownFormat
 
 
 class Format:
-    """One layout: what it is, and how to read and write it."""
-
     __slots__ = ("aliases", "decode", "encode", "name", "summary")
 
     def __init__(
@@ -126,16 +112,6 @@ def _normalise(name: str) -> str:
 
 
 def format_named(name: str) -> "Format":
-    """The format of that name, however it happens to be written.
-
-    FORMATS is the catalogue and holds one key per format. This is what
-    resolves the names people actually write, which include aliases FORMATS
-    does not carry as keys, and it refuses a name nothing answers to.
-
-    Named for what it hands back rather than for the act of looking, because
-    this package has no constructor to fold it into: a format is what
-    a caller comes here for.
-    """
     found = _BY_ALIAS.get(_normalise(name))
     if found is None:
         raise UnknownFormat(

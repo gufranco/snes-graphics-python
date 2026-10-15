@@ -1,33 +1,3 @@
-"""Hold the tile layout to what cartridges actually contain.
-
-Everything else in this directory proves the code agrees with a record, with a
-second reading of the same manual, and with itself over the whole input space.
-None of that can tell a correct reading of the manual from a plausible one,
-because a decoder that is consistently wrong agrees with itself perfectly and
-with a record written from the same misreading.
-
-What separates them is data nobody here wrote. A cartridge holds pictures, and a
-picture read with the right layout looks like a picture: pixels next to each
-other are usually the same colour. Read with the wrong layout it looks like
-noise. So the layout can be measured rather than agreed upon, by reading the same
-bytes three ways and asking which reading finds the most structure.
-
-The two other readings are not strawmen. Contiguous planes is how several other
-consoles of the period store the same kind of tile, and two pixels to a byte is
-the obvious way to store sixteen colours. Both are what somebody misreading the
-manual would plausibly build.
-
-Two things make the answer mean something. The regions are chosen without
-consulting the statistic, so the reading under test gets no help from selection.
-And all three readings see exactly the same regions, so the only thing that
-varies is the layout. A reading with no information in it would win a third of
-the regions, and that floor is published beside the result rather than left for a
-reader to work out.
-
-Nothing here is carried. Cartridge images belong to whoever made them, and this
-reads whatever is on the machine it runs on.
-"""
-
 from __future__ import annotations
 
 import hashlib
@@ -72,7 +42,6 @@ FIRST = 0x8000
 LIMIT = 0x200000
 
 DISTINCT_BYTES = 8
-"""A region with fewer distinct bytes than this is padding, not a picture."""
 
 CARTRIDGES = 300
 
@@ -82,34 +51,9 @@ NOTHING_CHECKED = 2
 
 
 DIRECTORY_VARIABLES = (DIRECTORY_VARIABLE,)
-"""Every variable naming a directory, most specific first.
-
-One here, and a tuple anyway, because this is the shared rule below and a member
-that grows a second variable should not have to change the rule to get it.
-"""
 
 
 def directories(environment: Mapping[str, str] | None = None) -> tuple[Path, ...]:
-    """Every place an image is looked for, in the order they are looked at.
-
-    Whatever was named comes first, then the project this package sits inside if
-    it is a submodule of one, then this package itself. More than one can be
-    named at once, separated the way the operating system separates a path.
-
-    `DIRECTORY_VARIABLES` is read in order, so a member that shares a variable
-    with a sibling reads its own name first and the shared one after it. A
-    caller who has set only the shared name keeps working; a caller who sets
-    both points the two members at different directories, which is the whole
-    reason the member's own name exists.
-
-    This function is one rule with a copy in every member that reads a file it
-    does not carry, because no package is a dependency of all of them. The
-    copies are byte-identical below the constants and are meant to stay that
-    way, so a diff against a sibling is the check:
-
-        cut='/^def directories/,/^    return tuple(seen)/p'
-        diff <(sed -n "$cut" mine/thing.py) <(sed -n "$cut" theirs/thing.py)
-    """
     held = environment if environment is not None else os.environ
     wanted = [
         Path(where)
@@ -128,13 +72,6 @@ def directories(environment: Mapping[str, str] | None = None) -> tuple[Path, ...
 def where_to_look(
     environment: Mapping[str, str] | None = None, places: Iterable[Path] | None = None
 ) -> Path | None:
-    """The one directory to read, or nothing when there is none.
-
-    A named directory wins even when it is empty or missing. Falling back from a
-    path somebody typed turns their typo into a run that reads a different
-    library and reports success, which is the failure this whole file exists to
-    avoid.
-    """
     named = (environment if environment is not None else os.environ).get(DIRECTORY_VARIABLE)
     if named:
         return Path(named)
@@ -145,7 +82,6 @@ def where_to_look(
 
 
 def every(environment: Mapping[str, str] | None = None) -> list[Path]:
-    """Every image in that directory, in one order whatever the filesystem says."""
     where = where_to_look(environment)
     if where is None or not where.is_dir():
         return []
@@ -155,19 +91,16 @@ def every(environment: Mapping[str, str] | None = None) -> list[Path]:
 
 
 def chosen(found: Sequence[Path], how_many: int = CARTRIDGES, seed: int = SEED) -> list[Path]:
-    """A sample drawn the same way on every machine that holds the same library."""
     if len(found) <= how_many:
         return list(found)
     return sorted(random.Random(seed).sample(list(found), how_many))
 
 
 def documented(raw: bytes) -> list[int]:
-    """The layout this package publishes, which is the reading under test."""
     return tiles.decode(raw, DEPTH)
 
 
 def contiguous_planes(raw: bytes) -> list[int]:
-    """Four planes of eight bytes each, the way other consoles of the day stored them."""
     return [
         sum(((raw[plane * 8 + row] >> (7 - column)) & 1) << plane for plane in range(4))
         for row in range(8)
@@ -176,7 +109,6 @@ def contiguous_planes(raw: bytes) -> list[int]:
 
 
 def two_pixels_per_byte(raw: bytes) -> list[int]:
-    """Sixteen colours packed two to a byte, read straight through."""
     out: list[int] = []
     for byte in raw[:TILE_BYTES]:
         out.append(byte >> 4)
@@ -192,14 +124,6 @@ READINGS: tuple[tuple[str, Callable[[bytes], list[int]]], ...] = (
 
 
 def structure(pixels: Sequence[int]) -> float:
-    """How long a run of one colour lasts across a row, summed over the tile.
-
-    A picture has neighbours that match. Noise does not. Nothing about this
-    favours one layout: it counts whether adjacent pixels are equal and never
-    looks at which colour they are, so relabelling the colours cannot move it.
-    That is deliberate, because a layout difference that only relabels colours is
-    not a layout difference anybody can see.
-    """
     total = 0.0
     for row in range(8):
         line = pixels[row * 8 : row * 8 + 8]
@@ -209,7 +133,6 @@ def structure(pixels: Sequence[int]) -> float:
 
 
 def regions(image: bytes) -> Iterable[bytes]:
-    """Blocks to judge, picked by where they sit rather than by what is in them."""
     for at in range(FIRST, min(len(image), LIMIT), STRIDE):
         block = image[at : at + REGION_BYTES]
         if len(block) < REGION_BYTES:
@@ -220,7 +143,6 @@ def regions(image: bytes) -> Iterable[bytes]:
 
 
 def wins(block: bytes) -> str:
-    """Which reading finds the most structure in one region."""
     scored = [
         (
             sum(
@@ -235,7 +157,6 @@ def wins(block: bytes) -> str:
 
 
 def judge(images: Iterable[Path]) -> dict[str, Any]:
-    """Every region of every image, and which reading won each."""
     tally = {name: 0 for name, _ in READINGS}
     seen = 0
     digest = hashlib.sha256()

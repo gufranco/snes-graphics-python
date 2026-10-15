@@ -1,28 +1,3 @@
-"""Settle the formats rather than sample them.
-
-There is no chip here to compare against, and there does not need to be. These
-are layouts with input spaces small enough to walk from end to end, so the claim
-this package makes is not that it agrees with a reference on the cases someone
-thought to try. It is that there is no case left.
-
-Four spaces are walked completely. Every two bit tile that can exist, which is
-sixty five thousand five hundred and thirty six of them. Every colour the
-hardware can name, which is thirty two thousand seven hundred and sixty eight.
-Every map entry, which is sixty five thousand five hundred and thirty six. And
-every position in a sprite table, which settles the two bit slots in the second
-table for all hundred and twenty eight sprites at once.
-
-The depths above two bits cannot be walked; a four bit tile has more states than
-there are atoms worth counting. What can be walked for those is each plane
-separately, which is the property that actually matters: a plane must reach its
-own bit of every pixel and no other bit of anything. Every plane of every depth
-is checked against every one of the sixty four pixels, which settles the layout
-even though it does not settle every tile.
-
-Usage:
-    python3 conformance/exhaustive.py [--only NAME]
-"""
-
 import sys
 from collections.abc import Callable, Sequence
 from pathlib import Path
@@ -47,8 +22,6 @@ class Options:
 
 
 class Result:
-    """What one check settled, and anything it found."""
-
     def __init__(self, name: str, cases: int, failures: Sequence[str]) -> None:
         self.name = name
         self.cases = cases
@@ -64,8 +37,6 @@ class Result:
 
 
 class Check:
-    """One space, and the walk that settles it."""
-
     def __init__(self, name: str, summary: str, walk: Callable[[], tuple[int, list[str]]]) -> None:
         self.name = name
         self.summary = summary
@@ -77,7 +48,6 @@ class Check:
 
 
 def _every_two_bit_tile() -> tuple[int, list[str]]:
-    """Every two bit tile that can exist, round tripped."""
     failures = []
     cases = 0
     for low in range(256):
@@ -92,7 +62,6 @@ def _every_two_bit_tile() -> tuple[int, list[str]]:
 
 
 def _every_plane_reaches_its_own_bit() -> tuple[int, list[str]]:
-    """Each plane of each depth, against each pixel, in isolation."""
     failures = []
     cases = 0
     for depth in tiles.DEPTHS:
@@ -114,7 +83,6 @@ def _every_plane_reaches_its_own_bit() -> tuple[int, list[str]]:
 
 
 def _every_colour() -> tuple[int, list[str]]:
-    """Every colour the hardware can name, widened to bytes and narrowed back."""
     failures = []
     cases = 0
     for word in range(0x8000):
@@ -127,7 +95,6 @@ def _every_colour() -> tuple[int, list[str]]:
 
 
 def _every_map_entry() -> tuple[int, list[str]]:
-    """Every map entry word, decoded and re-encoded."""
     failures = []
     cases = 0
     for word in range(0x10000):
@@ -140,7 +107,6 @@ def _every_map_entry() -> tuple[int, list[str]]:
 
 
 def _every_sprite_slot() -> tuple[int, list[str]]:
-    """Each sprite's two bits in the second table, in isolation from its neighbours."""
     failures = []
     cases = 0
     for index in range(oam.SPRITES):

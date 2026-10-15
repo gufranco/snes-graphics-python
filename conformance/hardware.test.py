@@ -1,16 +1,3 @@
-"""Hold every layout to the figure Nintendo printed for it.
-
-The exhaustive walks beside this one decode and re-encode every value each format
-can hold and check that nothing changes. That is a strong claim about this
-package and not a claim about the hardware: a decoder and an encoder wrong in
-exactly opposite ways would pass all 165,248 of those cases.
-
-This is the check that closes that gap. Every word count, every field position
-and every mask is compared against the figures in Appendix A of the development
-manual, which were read off rendered pages because the scan's text layer
-interleaves the columns of a table.
-"""
-
 import json
 import sys
 import unittest
@@ -54,8 +41,6 @@ class DocumentTest(unittest.TestCase):
 
 
 class CharacterTest(unittest.TestCase):
-    """The CHR DATA CONSTRUCTION figure, against this package's tile layout."""
-
     @override
     def setUp(self) -> None:
         self.figure: dict[str, Any] = declared("hardware.json")["characterData"]
@@ -112,8 +97,6 @@ class CharacterTest(unittest.TestCase):
 
 
 class TilemapTest(unittest.TestCase):
-    """The BG SC DATA figure, against this package's entry."""
-
     @override
     def setUp(self) -> None:
         figure: dict[str, Any] = declared("hardware.json")["tilemapEntry"]

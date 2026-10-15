@@ -68,8 +68,6 @@ class RunTest(unittest.TestCase):
 
 
 class CatchesDefectsTest(unittest.TestCase):
-    """A check that cannot fail proves nothing, so each one is shown to fail."""
-
     def broken(self, name: str, module: Any, attribute: str, replacement: Any) -> Any:
         original = getattr(module, attribute)
         setattr(module, attribute, replacement)

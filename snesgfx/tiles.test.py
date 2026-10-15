@@ -202,15 +202,6 @@ class NameTest(unittest.TestCase):
 
 
 class HandedInTest(unittest.TestCase):
-    """That a caller with bytes needs no file, no directory and no variable.
-
-    Every layout here is reached by handing the bytes over. `SNES_CARTRIDGE_DIR`
-    exists for the corpus runner under `conformance/` and never reaches this
-    package, so it is set to a directory that does not exist for the whole of
-    this class: if any of these calls had grown a file read, it would fail here
-    rather than quietly reading whatever that machine happened to have.
-    """
-
     @override
     def setUp(self) -> None:
         held = os.environ.get("SNES_CARTRIDGE_DIR")

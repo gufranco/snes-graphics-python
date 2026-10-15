@@ -1,11 +1,3 @@
-"""The cartridge check, held to inputs whose answer is known in advance.
-
-Every decision it makes is taken as an argument, so a machine with a library of
-cartridge images and a machine with none both exercise every path. The readings
-themselves are checked against tiles built here, where what the right answer is
-was decided before the code ran.
-"""
-
 import json
 import os
 import sys
@@ -26,18 +18,9 @@ def _stripes() -> bytes:
 
 
 PICTURE = bytes.fromhex("ff0f00ff00ffc3333ccc0f00000f3300f00fff0000ff0ff0c3f033cc3cc3f033")
-"""A tile the published layout reads as more structured than the other two.
-
-Searched for rather than reasoned out, because a tile that is perfectly flat
-under the right layout can only be built from two byte values and a region of
-those reads as padding. This one scores thirty against sixteen and thirteen, and
-sixty four of it hold exactly the eight distinct bytes a region needs to be
-judged at all.
-"""
 
 
 def _pictures() -> bytes:
-    """A region of that tile."""
     return PICTURE * check.TILES_PER_REGION
 
 
@@ -129,7 +112,6 @@ class WinsTest(unittest.TestCase):
         )
 
     def test_a_region_built_for_another_reading_does_not(self) -> None:
-        """Bytes laid out two pixels to a byte, which is one of the other two."""
         block = bytes([0x11] * check.TILE_BYTES) * check.TILES_PER_REGION
 
         self.assertNotEqual(check.wins(block), "contiguous planes")
@@ -304,7 +286,6 @@ class RunTest(unittest.TestCase):
         self.assertIn("60.0% against a floor of 33.3%", said[-1])
 
     def test_a_layout_that_does_no_better_than_chance_fails(self) -> None:
-        """The check has been watched failing, on the only input that should fail it."""
         said: list[str] = []
 
         code = check.main(say=said.append, find=lambda: [Path("a.sfc")], look=self._look(33, 100))
@@ -320,14 +301,7 @@ class RunTest(unittest.TestCase):
 
 
 class SharedDirectoryRuleTest(unittest.TestCase):
-    """The rule every member of this family uses to find a file it does not carry.
-
-    Byte-identical in all of them, so these check the behaviour that identity is
-    supposed to guarantee rather than the text of one copy.
-    """
-
     def test_the_project_above_is_looked_at_before_the_package_itself(self) -> None:
-        """Vendored, the parent owns the library, which is what ALONGSIDE is for."""
         found = check.directories({})
 
         self.assertLess(found.index(check.ALONGSIDE), found.index(check.DEFAULT_DIRECTORY))
