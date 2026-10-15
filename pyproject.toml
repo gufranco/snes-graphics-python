@@ -35,9 +35,6 @@ packages = ["snesgfx"]
 [tool.setuptools.dynamic]
 version = { attr = "snesgfx.version.VERSION" }
 
-[tool.setuptools.exclude-package-data]
-snesgfx = ["*.test.py"]
-
 [tool.ruff]
 target-version = "py312"
 line-length = 100
