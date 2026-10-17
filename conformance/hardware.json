@@ -29,7 +29,11 @@
         "bytes": 16,
         "planePairs": 1,
         "pairOffsets": [0],
-        "quote": "V-RAM address for a CHR data (8 word) is as follows: n+N(Name)x8~n+Nx8+7"
+        "quote": "V-RAM address for a CHR data (8 word) is as follows: n+N(Name)x8~n+Nx8+7",
+        "heldBy": [
+          "conformance/hardware.test.py::PrintedBehaviourTest.test_each_character_takes_the_printed_number_of_words_in_a_sheet",
+          "conformance/hardware.test.py::PrintedBehaviourTest.test_each_plane_pair_is_written_at_the_word_the_figure_puts_it"
+        ]
       },
       {
         "bitsPerDot": 4,
@@ -37,7 +41,11 @@
         "bytes": 32,
         "planePairs": 2,
         "pairOffsets": [0, 8],
-        "quote": "V-RAM address for a CHR data (16 word) is as follows: n+N(Name)x16~n+Nx16+15"
+        "quote": "V-RAM address for a CHR data (16 word) is as follows: n+N(Name)x16~n+Nx16+15",
+        "heldBy": [
+          "conformance/hardware.test.py::PrintedBehaviourTest.test_each_character_takes_the_printed_number_of_words_in_a_sheet",
+          "conformance/hardware.test.py::PrintedBehaviourTest.test_each_plane_pair_is_written_at_the_word_the_figure_puts_it"
+        ]
       },
       {
         "bitsPerDot": 8,
@@ -45,7 +53,11 @@
         "bytes": 64,
         "planePairs": 4,
         "pairOffsets": [0, 8, 16, 24],
-        "quote": "V-RAM address for a CHR data (32 word) is as follows: n+N(Name)x 32~n+Nx32+31"
+        "quote": "V-RAM address for a CHR data (32 word) is as follows: n+N(Name)x 32~n+Nx32+31",
+        "heldBy": [
+          "conformance/hardware.test.py::PrintedBehaviourTest.test_each_character_takes_the_printed_number_of_words_in_a_sheet",
+          "conformance/hardware.test.py::PrintedBehaviourTest.test_each_plane_pair_is_written_at_the_word_the_figure_puts_it"
+        ]
       }
     ],
     "document": "developmentManual"
@@ -61,32 +73,52 @@
         "bits": "D0 to D9",
         "mask": "0x03FF",
         "range": "000H~3FFH",
-        "meaningQuote": "CHARACTER CODE NUMBER"
+        "meaningQuote": "CHARACTER CODE NUMBER",
+        "heldBy": [
+          "conformance/hardware.test.py::PrintedBehaviourTest.test_a_map_entry_reads_each_printed_field_from_its_own_bits",
+          "conformance/hardware.test.py::PrintedBehaviourTest.test_a_map_entry_writes_each_printed_field_into_its_own_bits"
+        ]
       },
       {
         "name": "COLOR",
         "bits": "D10 to D12",
         "shift": 10,
         "mask": "0x07",
-        "meaningQuote": "COLOR PALETTE <8-Palettes> SELECT: Palette designation per character"
+        "meaningQuote": "COLOR PALETTE <8-Palettes> SELECT: Palette designation per character",
+        "heldBy": [
+          "conformance/hardware.test.py::PrintedBehaviourTest.test_a_map_entry_reads_each_printed_field_from_its_own_bits",
+          "conformance/hardware.test.py::PrintedBehaviourTest.test_a_map_entry_writes_each_printed_field_into_its_own_bits"
+        ]
       },
       {
         "name": "BG Pri.",
         "bits": "D13",
         "mask": "0x2000",
-        "meaningQuote": "BG PRIORITY: Determine the display priority per character in case OBJ and BG1 ~ BG4 are combined on the same screen."
+        "meaningQuote": "BG PRIORITY: Determine the display priority per character in case OBJ and BG1 ~ BG4 are combined on the same screen.",
+        "heldBy": [
+          "conformance/hardware.test.py::PrintedBehaviourTest.test_a_map_entry_reads_each_printed_field_from_its_own_bits",
+          "conformance/hardware.test.py::PrintedBehaviourTest.test_a_map_entry_writes_each_printed_field_into_its_own_bits"
+        ]
       },
       {
         "name": "H",
         "bits": "D14",
         "mask": "0x4000",
-        "meaningQuote": "H/V FLIP: X-Directional Flip (H-FLIP)"
+        "meaningQuote": "H/V FLIP: X-Directional Flip (H-FLIP)",
+        "heldBy": [
+          "conformance/hardware.test.py::PrintedBehaviourTest.test_a_map_entry_reads_each_printed_field_from_its_own_bits",
+          "conformance/hardware.test.py::PrintedBehaviourTest.test_a_map_entry_writes_each_printed_field_into_its_own_bits"
+        ]
       },
       {
         "name": "V",
         "bits": "D15",
         "mask": "0x8000",
-        "meaningQuote": "Y-Directional Flip (V-FLIP)"
+        "meaningQuote": "Y-Directional Flip (V-FLIP)",
+        "heldBy": [
+          "conformance/hardware.test.py::PrintedBehaviourTest.test_a_map_entry_reads_each_printed_field_from_its_own_bits",
+          "conformance/hardware.test.py::PrintedBehaviourTest.test_a_map_entry_writes_each_printed_field_into_its_own_bits"
+        ]
       }
     ],
     "document": "developmentManual"
@@ -99,7 +131,11 @@
     "channelOrderQuote": "Blue Green Red, the field order of register 2132H, Color Brilliance Data",
     "transparent": {
       "index": 0,
-      "quote": "The top color data of each CG color data palette is transparent. Because transparent is a color which is not displayed, any color can be set. The color data of CG address (00H) is normally black (background)."
+      "quote": "The top color data of each CG color data palette is transparent. Because transparent is a color which is not displayed, any color can be set. The color data of CG address (00H) is normally black (background).",
+      "heldBy": [
+        "conformance/hardware.test.py::ColourTest.test_the_first_colour_of_a_palette_is_the_transparent_one",
+        "conformance/hardware.test.py::PrintedBehaviourTest.test_the_printed_transparent_colour_is_the_one_the_package_treats_so"
+      ]
     },
     "document": "developmentManual",
     "assembled": true,
@@ -113,7 +149,10 @@
     "channelBitsQuote": "CG-RAM COLOR DATA. BLUE GREEN RED. D15 | d14 | d13 | d12 | d11 | d10 | d9 | d8 | d7 | d6 | d5 | d4 | d3 | d2 | d1 | d0",
     "channelBitsPage": "A-17",
     "channelBitsFilePage": 212,
-    "howTheWidthWasSettled": "By the figure rather than by arithmetic. The appendix prints the colour word as fifteen cells under three labels, five cells to each of BLUE, GREEN and RED, with D15 outside them. That page is a picture with nothing in the text layer, so it was rendered and read; the same figure prints DIRECT SELECT COLOR DATA beneath it, which is how the direct colour packing is laid out."
+    "howTheWidthWasSettled": "By the figure rather than by arithmetic. The appendix prints the colour word as fifteen cells under three labels, five cells to each of BLUE, GREEN and RED, with D15 outside them. That page is a picture with nothing in the text layer, so it was rendered and read; the same figure prints DIRECT SELECT COLOR DATA beneath it, which is how the direct colour packing is laid out.",
+    "heldBy": [
+      "conformance/hardware.test.py::PrintedBehaviourTest.test_each_colour_channel_is_read_from_the_bits_the_figure_gives_it"
+    ]
   },
   "notStated": [
     "The width of a colour channel. Fifteen bits over three channels gives five each and leaves the top bit of the word unused, which is arithmetic rather than a figure Nintendo prints.",

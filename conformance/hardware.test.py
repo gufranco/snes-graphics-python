@@ -17,6 +17,66 @@ def declared(name: str) -> dict[str, Any]:
     return held
 
 
+FIGURES = declared("hardware.json")
+
+FULL = 0xFF
+
+FULL_CHANNEL = 0xFF
+
+ROWS = range(8)
+
+RGB = ("red", "green", "blue")
+
+ENTRY_ATTRIBUTES = {
+    "NAME": "tile",
+    "COLOR": "block",
+    "BG Pri.": "priority",
+    "H": "horizontal_flip",
+    "V": "vertical_flip",
+}
+
+
+def two_characters(depth: dict[str, Any]) -> bytes:
+    size: int = depth["bytes"]
+    return bytes(size) + bytes([FULL]) * size
+
+
+def all_in_plane(plane: int) -> list[int]:
+    return [1 << plane] * (len(ROWS) * len(ROWS))
+
+
+def written_bytes(data: bytes) -> list[int]:
+    return [at for at, byte in enumerate(data) if byte]
+
+
+def field_value(field: dict[str, Any]) -> int:
+    shift: int = field.get("shift", 0)
+    return int(field["mask"], 16) << shift
+
+
+def full(field: dict[str, Any]) -> int | bool:
+    mask = int(field["mask"], 16)
+    return mask if mask & 1 else True
+
+
+def empty(field: dict[str, Any]) -> int | bool:
+    return 0 if int(field["mask"], 16) & 1 else False
+
+
+def entry_with(field: dict[str, Any]) -> tilemap.Entry:
+    options: dict[str, Any] = {ENTRY_ATTRIBUTES[field["name"]]: full(field)}
+    return tilemap.Entry(**options)
+
+
+def entry_fields(entry: tilemap.Entry) -> dict[str, Any]:
+    return {name: getattr(entry, attribute) for name, attribute in ENTRY_ATTRIBUTES.items()}
+
+
+def bits_named(span: str) -> int:
+    high, low = sorted((int(word[1:]) for word in span.split() if word[1:].isdigit()), reverse=True)
+    return ((1 << (high - low + 1)) - 1) << low
+
+
 class DocumentTest(unittest.TestCase):
     @override
     def setUp(self) -> None:
@@ -186,6 +246,98 @@ class ColourTest(unittest.TestCase):
 
     def test_and_a_channel_holds_what_its_width_allows(self) -> None:
         self.assertEqual(palette.CHANNEL_MASK, (1 << palette.CHANNEL_BITS) - 1)
+
+
+class PrintedBehaviourTest(unittest.TestCase):
+    def test_each_character_takes_the_printed_number_of_words_in_a_sheet(self) -> None:
+        # Arrange
+        depths = FIGURES["characterData"]["depths"]
+
+        # Act
+        decoded = [tiles.decode_sheet(two_characters(row), row["bitsPerDot"]) for row in depths]
+
+        # Assert
+        self.assertEqual(
+            decoded,
+            [[[0] * 64, [(1 << row["bitsPerDot"]) - 1] * 64] for row in depths],
+        )
+
+    def test_each_plane_pair_is_written_at_the_word_the_figure_puts_it(self) -> None:
+        # Arrange
+        depths = FIGURES["characterData"]["depths"]
+
+        # Act
+        written = [
+            [
+                written_bytes(tiles.encode(all_in_plane(pair * 2), row["bitsPerDot"]))
+                for pair in range(row["planePairs"])
+            ]
+            for row in depths
+        ]
+
+        # Assert
+        self.assertEqual(
+            written,
+            [
+                [[(offset + line) * 2 for line in ROWS] for offset in row["pairOffsets"]]
+                for row in depths
+            ],
+        )
+
+    def test_a_map_entry_reads_each_printed_field_from_its_own_bits(self) -> None:
+        # Arrange
+        fields = FIGURES["tilemapEntry"]["fields"]
+
+        # Act
+        read = [entry_fields(tilemap.Entry.from_word(field_value(field))) for field in fields]
+
+        # Assert
+        self.assertEqual(
+            read,
+            [
+                {other["name"]: full(other) if other is field else empty(other) for other in fields}
+                for field in fields
+            ],
+        )
+
+    def test_a_map_entry_writes_each_printed_field_into_its_own_bits(self) -> None:
+        # Arrange
+        fields = FIGURES["tilemapEntry"]["fields"]
+
+        # Act
+        words = [entry_with(field).word for field in fields]
+
+        # Assert
+        self.assertEqual(words, [field_value(field) for field in fields])
+
+    def test_each_colour_channel_is_read_from_the_bits_the_figure_gives_it(self) -> None:
+        # Arrange
+        colour = FIGURES["colour"]
+
+        # Act
+        read = [
+            palette.to_rgb(bits_named(colour["channelBits"][name]))
+            for name in colour["channelOrder"]
+        ]
+
+        # Assert
+        self.assertEqual(
+            read,
+            [
+                tuple(FULL_CHANNEL if channel == name else 0 for channel in RGB)
+                for name in colour["channelOrder"]
+            ],
+        )
+
+    def test_the_printed_transparent_colour_is_the_one_the_package_treats_so(self) -> None:
+        # Arrange
+        transparent = FIGURES["colour"]["transparent"]
+
+        # Act
+        found = [pixel for pixel in range(16) if palette.is_transparent(pixel)]
+
+        # Assert
+        self.assertEqual(found, [transparent["index"]])
 
 
 class DivergenceTest(unittest.TestCase):
