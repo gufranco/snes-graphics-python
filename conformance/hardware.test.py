@@ -36,6 +36,11 @@ ENTRY_ATTRIBUTES = {
 }
 
 
+def first_byte_of_plane(depth: int, plane: int) -> int:
+    encoded = tiles.encode([1 << plane] * 64, depth)
+    return next(at for at, byte in enumerate(encoded) if byte)
+
+
 def two_characters(depth: dict[str, Any]) -> bytes:
     size: int = depth["bytes"]
     return bytes(size) + bytes([FULL]) * size
@@ -134,14 +139,19 @@ class CharacterTest(unittest.TestCase):
         self.assertEqual(wrong, [])
 
     def test_the_pairs_start_where_the_figure_puts_them(self) -> None:
-        wrong = [
-            (row["bitsPerDot"], row["pairOffsets"])
-            for row in self.depths
-            if [offset * 2 for offset in row["pairOffsets"]]
-            != [tiles._plane_offset(plane * 2) for plane in range(row["planePairs"])]
-        ]
+        # Arrange
+        printed = {
+            row["bitsPerDot"]: [offset * 2 for offset in row["pairOffsets"]] for row in self.depths
+        }
 
-        self.assertEqual(wrong, [])
+        # Act
+        found = {
+            depth: [first_byte_of_plane(depth, pair * 2) for pair in range(len(starts))]
+            for depth, starts in printed.items()
+        }
+
+        # Assert
+        self.assertEqual(found, printed)
 
     def test_each_depth_has_half_as_many_pairs_as_planes(self) -> None:
         wrong = [
@@ -151,9 +161,14 @@ class CharacterTest(unittest.TestCase):
         self.assertEqual(wrong, [])
 
     def test_the_two_bytes_of_a_pair_are_adjacent(self) -> None:
-        first, second = tiles._plane_offset(0), tiles._plane_offset(1)
+        # Arrange
+        depth = 2
 
-        self.assertEqual(second - first, 1)
+        # Act
+        first, second = first_byte_of_plane(depth, 0), first_byte_of_plane(depth, 1)
+
+        # Assert
+        self.assertEqual((first, second), (0, 1))
 
 
 class TilemapTest(unittest.TestCase):

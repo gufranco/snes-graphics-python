@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any, override
 
 
-def _version(where: Path | None = None) -> str:
+def read_version(where: Path | None = None) -> str:
     found = re.search(
         r"""VERSION\s*[:=][^"']*["']([^"']+)["']""",
         (where or Path(__file__).resolve().parent / "version.py").read_text(),
@@ -17,7 +17,7 @@ def _version(where: Path | None = None) -> str:
 ROOT = Path(__file__).resolve().parent.parent
 
 
-def _reachable(root: Path = ROOT, path: list[str] | None = None) -> bool:
+def make_reachable(root: Path = ROOT, path: list[str] | None = None) -> bool:
     where = sys.path if path is None else path
     if str(root) in where:
         return False
@@ -25,11 +25,11 @@ def _reachable(root: Path = ROOT, path: list[str] | None = None) -> bool:
     return True
 
 
-_reachable()
+make_reachable()
 
 from snesgfx import environment, models  # noqa: E402
 
-VERSION = _version()
+VERSION = read_version()
 
 OLDEST_PYTHON = (3, 12)
 
@@ -105,7 +105,7 @@ def _layout(name: str, decode: Callable[..., Any]) -> "Finding":
     )
 
 
-def _round_trip(decode: Callable[..., Any], encode: Callable[..., bytes]) -> "Finding":
+def round_trip(decode: Callable[..., Any], encode: Callable[..., bytes]) -> "Finding":
     try:
         back = encode(WITNESS, decode(WITNESS, TILE))
     except Exception as trouble:
@@ -132,7 +132,7 @@ def _default_checks() -> Any:
     return exhaustive.CHECKS
 
 
-def _exhaustive(checks: Callable[[], Any]) -> "Finding":
+def settled_exhaustively(checks: Callable[[], Any]) -> "Finding":
     try:
         found = tuple(checks())
     except Exception as trouble:
@@ -163,8 +163,8 @@ def examine(
 ) -> list["Finding"]:
     found = [_python(), _package()]
     found.extend(_layout(name, decode) for name in sorted(models.FORMATS))
-    found.append(_round_trip(decode, encode))
-    found.append(_exhaustive(checks))
+    found.append(round_trip(decode, encode))
+    found.append(settled_exhaustively(checks))
     return found
 
 

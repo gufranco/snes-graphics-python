@@ -8,7 +8,7 @@ Super Nintendoのタイル、カラー、背景マップ、スプライト、Mod
 [![Release](https://img.shields.io/github/v/release/gufranco/snes-graphics-python)](https://github.com/gufranco/snes-graphics-python/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-**7**種類のフォーマット、入力空間全体の走査で確定した**165,248**ケース、SuperFamiconvと比較した**66,432**ケース、3通りに読んだ実カートリッジデータの**11,765**領域、失敗**0**件、テスト**883**件、ステートメントとブランチのカバレッジ**100%**、依存関係なし
+**7**種類のフォーマット、入力空間全体の走査で確定した**165,248**ケース、SuperFamiconvと比較した**66,432**ケース、3通りに読んだ実カートリッジデータの**11,765**領域、失敗**0**件、テスト**903**件、ステートメントとブランチのカバレッジ**100%**、依存関係なし
 
 ```python
 from snesgfx import tiles
@@ -512,13 +512,14 @@ the published layout won 52.5% against a floor of 33.3%
 ```bash
 uvx ruff@0.16.3 format --check .
 uvx ruff@0.16.3 check .
-uvx --python 3.12 mypy==1.14.1
+uvx --python 3.12 --with types-setuptools==84.0.0.20260812 mypy==1.14.1
 pnpm install --frozen-lockfile && pnpm run format:check
-python3 -m coverage erase
+cov=(uvx --python 3.12 --from coverage==7.6.10 --with setuptools==84.0.0 coverage)
+"${cov[@]}" erase
 for file in $(find snesgfx conformance -name '*.test.py' | sort); do
-  python3 -m coverage run -a "$file"
+  "${cov[@]}" run -a "$file"
 done
-python3 -m coverage report
+"${cov[@]}" report
 ```
 
 各モジュールには、そのモジュールにちなんだ名前のテストファイルが隣にあり、`python3 snesgfx/tiles.test.py`のようにそれぞれ単独で実行できます。カバレッジはステートメントとブランチで100%を必須のゲートとしています。

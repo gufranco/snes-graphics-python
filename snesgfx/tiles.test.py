@@ -8,8 +8,7 @@ from typing import override
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from snesgfx import tiles
-from snesgfx.errors import OutOfRange, Truncated, UnknownDepth
+from snesgfx import OutOfRange, Truncated, UnknownDepth, tiles
 
 
 def rows(pixels: Sequence[int]) -> list[Sequence[int]]:

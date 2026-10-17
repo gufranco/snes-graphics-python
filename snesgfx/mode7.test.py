@@ -5,8 +5,7 @@ from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from snesgfx import mode7
-from snesgfx.errors import Truncated
+from snesgfx import Truncated, mode7
 
 IDENTITY = mode7.Matrix(a=0x0100, b=0x0000, c=0x0000, d=0x0100)
 

@@ -8,7 +8,7 @@
 [![Release](https://img.shields.io/github/v/release/gufranco/snes-graphics-python)](https://github.com/gufranco/snes-graphics-python/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-**7** 种格式，**165,248** 个用例通过遍历完整输入空间得到确认，**66,432** 个用例与 SuperFamiconv 比对，**11,765** 个真实卡带数据区域按三种方式读取，**0** 个失败，**883** 个测试，**100%** 语句和分支覆盖率，无依赖
+**7** 种格式，**165,248** 个用例通过遍历完整输入空间得到确认，**66,432** 个用例与 SuperFamiconv 比对，**11,765** 个真实卡带数据区域按三种方式读取，**0** 个失败，**903** 个测试，**100%** 语句和分支覆盖率，无依赖
 
 ```python
 from snesgfx import tiles
@@ -512,13 +512,14 @@ the published layout won 52.5% against a floor of 33.3%
 ```bash
 uvx ruff@0.16.3 format --check .
 uvx ruff@0.16.3 check .
-uvx --python 3.12 mypy==1.14.1
+uvx --python 3.12 --with types-setuptools==84.0.0.20260812 mypy==1.14.1
 pnpm install --frozen-lockfile && pnpm run format:check
-python3 -m coverage erase
+cov=(uvx --python 3.12 --from coverage==7.6.10 --with setuptools==84.0.0 coverage)
+"${cov[@]}" erase
 for file in $(find snesgfx conformance -name '*.test.py' | sort); do
-  python3 -m coverage run -a "$file"
+  "${cov[@]}" run -a "$file"
 done
-python3 -m coverage report
+"${cov[@]}" report
 ```
 
 每个模块旁边都有一个以它命名的测试文件，每个测试文件都可以单独运行，例如 `python3 snesgfx/tiles.test.py`。覆盖率是一道硬性门禁检查，要求语句和分支覆盖率达到 100%。

@@ -5,8 +5,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from snesgfx import oam
-from snesgfx.errors import OutOfRange, Truncated
+from snesgfx import OutOfRange, Truncated, oam
 
 
 def blank() -> bytearray:

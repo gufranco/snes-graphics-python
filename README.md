@@ -8,7 +8,7 @@ English | [日本語](README.ja.md) | [简体中文](README.zh-Hans.md) | [繁�
 [![Release](https://img.shields.io/github/v/release/gufranco/snes-graphics-python)](https://github.com/gufranco/snes-graphics-python/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-**7** formats, **165,248** cases settled by walking their whole input space, **66,432** cases compared against SuperFamiconv, **11,765** regions of real cartridge data read three ways, **0** failures, **883** tests, **100%** statement and branch coverage, no dependencies
+**7** formats, **165,248** cases settled by walking their whole input space, **66,432** cases compared against SuperFamiconv, **11,765** regions of real cartridge data read three ways, **0** failures, **903** tests, **100%** statement and branch coverage, no dependencies
 
 ```python
 from snesgfx import tiles
@@ -512,13 +512,14 @@ What the manual does not settle is in [OPEN-QUESTIONS.md](OPEN-QUESTIONS.md), an
 ```bash
 uvx ruff@0.16.3 format --check .
 uvx ruff@0.16.3 check .
-uvx --python 3.12 mypy==1.14.1
+uvx --python 3.12 --with types-setuptools==84.0.0.20260812 mypy==1.14.1
 pnpm install --frozen-lockfile && pnpm run format:check
-python3 -m coverage erase
+cov=(uvx --python 3.12 --from coverage==7.6.10 --with setuptools==84.0.0 coverage)
+"${cov[@]}" erase
 for file in $(find snesgfx conformance -name '*.test.py' | sort); do
-  python3 -m coverage run -a "$file"
+  "${cov[@]}" run -a "$file"
 done
-python3 -m coverage report
+"${cov[@]}" report
 ```
 
 Each module has a test file beside it, named after it, and each runs on its own, such as `python3 snesgfx/tiles.test.py`. Coverage is a hard gate at 100% statement and branch.

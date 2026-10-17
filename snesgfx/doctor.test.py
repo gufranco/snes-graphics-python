@@ -106,23 +106,34 @@ class RoundTripTest(unittest.TestCase):
                 self.assertTrue(one.ok)
 
     def test_one_that_comes_back_different_is_a_failure(self) -> None:
-        found = doctor._round_trip(
-            lambda _name, data: data, lambda _name, _sheet: b"something else"
-        )
+        # Arrange
+        changed = b"something else"
 
+        # Act
+        found = doctor.round_trip(lambda _name, data: data, lambda _name, _sheet: changed)
+
+        # Assert
         self.assertFalse(found.ok)
 
     def test_and_the_report_says_how_many_bytes_came_back(self) -> None:
-        found = doctor._round_trip(lambda _name, data: data, lambda _name, _sheet: b"\x00")
+        # Arrange
+        one_byte = b"\x00"
 
+        # Act
+        found = doctor.round_trip(lambda _name, data: data, lambda _name, _sheet: one_byte)
+
+        # Assert
         self.assertIn("1 byte", found.detail)
 
     def test_a_round_trip_that_throws_is_reported_rather_than_swallowed(self) -> None:
+        # Arrange
         def boom(_name: str, _data: Any) -> Any:
             raise Complaint("nothing encodes")
 
-        found = doctor._round_trip(lambda _name, data: data, boom)
+        # Act
+        found = doctor.round_trip(lambda _name, data: data, boom)
 
+        # Assert
         self.assertFalse(found.ok)
         self.assertIn("nothing encodes", found.detail)
 
@@ -137,17 +148,25 @@ class ExhaustiveTest(unittest.TestCase):
         self.assertIn("palette", " ".join(one.detail for one in found))
 
     def test_a_conformance_module_that_cannot_be_read_is_reported(self) -> None:
+        # Arrange
         def boom() -> Any:
             raise Complaint("no checks at all")
 
-        found = doctor._exhaustive(boom)
+        # Act
+        found = doctor.settled_exhaustively(boom)
 
+        # Assert
         self.assertFalse(found.ok)
         self.assertIn("no checks at all", found.detail)
 
     def test_and_one_that_lists_nothing_is_a_failure(self) -> None:
-        found = doctor._exhaustive(tuple)
+        # Arrange
+        nothing = tuple
 
+        # Act
+        found = doctor.settled_exhaustively(nothing)
+
+        # Assert
         self.assertFalse(found.ok)
 
 
@@ -211,10 +230,15 @@ class PathTest(unittest.TestCase):
         self.assertEqual(doctor.VERSION, found.group(1))
 
     def test_a_version_file_naming_nothing_reads_as_unknown(self) -> None:
+        # Arrange
         where = Path(tempfile.mkdtemp()) / "version.py"
         where.write_text("NOTHING = 1\n")
 
-        self.assertEqual(doctor._version(where), "unknown")
+        # Act
+        found = doctor.read_version(where)
+
+        # Assert
+        self.assertEqual(found, "unknown")
 
 
 class TheDoctorReachesItsOwnPackageTest(unittest.TestCase):
@@ -223,7 +247,7 @@ class TheDoctorReachesItsOwnPackageTest(unittest.TestCase):
         path: list[str] = []
 
         # Act
-        added = doctor._reachable(Path("/somewhere"), path)
+        added = doctor.make_reachable(Path("/somewhere"), path)
 
         # Assert
         self.assertEqual((added, path), (True, ["/somewhere"]))
@@ -233,7 +257,7 @@ class TheDoctorReachesItsOwnPackageTest(unittest.TestCase):
         path = ["/somewhere"]
 
         # Act
-        added = doctor._reachable(Path("/somewhere"), path)
+        added = doctor.make_reachable(Path("/somewhere"), path)
 
         # Assert
         self.assertEqual((added, path), (False, ["/somewhere"]))

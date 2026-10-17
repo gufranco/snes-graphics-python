@@ -4,8 +4,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from snesgfx import models
-from snesgfx.errors import UnknownFormat
+from snesgfx import UnknownFormat, models
 
 
 class CatalogueTest(unittest.TestCase):
