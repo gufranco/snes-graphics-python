@@ -1,3 +1,4 @@
+---
 name: Something is wrong
 description: Something decodes to the wrong pixels, or nothing works at all
 labels: ["bug"]
