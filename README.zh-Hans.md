@@ -1,8 +1,8 @@
-[English](README.md) | [日本語](README.ja.md) | 简体中文 | [繁體中文（香港）](README.zh-HK.md)
-
 # SNES 图形格式
 
 用 Python 实现的 Super Nintendo 图块、颜色、背景地图、精灵和 Mode 7 格式。图块、地图条目和颜色的布局以 Nintendo 的开发手册为准，凡是小到可以遍历的输入空间，都从头到尾遍历过。
+
+[English](README.md) &nbsp;|&nbsp; [日本語](README.ja.md) &nbsp;|&nbsp; 简体中文 &nbsp;|&nbsp; [繁體中文（香港）](README.zh-HK.md)
 
 [![CI](https://github.com/gufranco/snes-graphics-python/actions/workflows/ci.yml/badge.svg)](https://github.com/gufranco/snes-graphics-python/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/gufranco/snes-graphics-python)](https://github.com/gufranco/snes-graphics-python/releases)
