@@ -1,6 +1,6 @@
 # SNES 图形格式
 
-用 Python 实现的 Super Nintendo 图块、颜色、背景地图、精灵和 Mode 7 格式。图块、地图条目和颜色的布局以 Nintendo 的开发手册为准，凡是小到可以遍历的输入空间，都从头到尾遍历过。
+用 Python 实现的 Super Nintendo 图块、颜色、背景地图、精灵和 Mode 7 格式。图块、地图条目、颜色、精灵表和 Mode 7 的布局以 Nintendo 的开发手册为准，凡是小到可以遍历的输入空间，都从头到尾遍历过。
 
 [English](README.md) | [日本語](README.ja.md) | 简体中文 | [繁體中文（香港）](README.zh-HK.md)
 
@@ -8,7 +8,7 @@
 [![Release](https://img.shields.io/github/v/release/gufranco/snes-graphics-python)](https://github.com/gufranco/snes-graphics-python/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-**7** 种格式，**165,248** 个用例通过遍历完整输入空间得到确认，**66,432** 个用例与 SuperFamiconv 比对，**11,765** 个真实卡带数据区域按三种方式读取，**0** 个失败，**910** 个测试，**100%** 语句和分支覆盖率，无依赖
+**7** 种格式，**165,248** 个用例通过遍历完整输入空间得到确认，**66,432** 个用例与 SuperFamiconv 比对，**11,765** 个真实卡带数据区域按三种方式读取，**0** 个失败，**924** 个测试，**100%** 语句和分支覆盖率，无依赖
 
 ```python
 from snesgfx import tiles
@@ -417,7 +417,7 @@ print(mode7.signed13(0x1FFF), mode7.wrap(-1, 1024), mode7.outside(1024, 0))
 
 ## 是否正确
 
-有三项数据以手册为准：图块布局、地图条目和颜色字。[`conformance/hardware.json`](conformance/hardware.json) 为每一项记录了原文句子、手册页码和文件页码，[`conformance/hardware.test.py`](conformance/hardware.test.py) 把它们与包中的常量进行比较。手册在磁盘上时，`python3 -m conformance.quotes` 会在手册中定位全部 9 条引用的句子。
+有六项数据以手册为准：图块布局、地图条目、颜色字、精灵表、对象尺寸，以及 Mode 7 的矩阵、中心和地图。[`conformance/hardware.json`](conformance/hardware.json) 为每一项记录了原文句子、手册页码和文件页码，[`conformance/hardware.test.py`](conformance/hardware.test.py)、[`conformance/hardware_sprites.test.py`](conformance/hardware_sprites.test.py) 和 [`conformance/hardware_mode7.test.py`](conformance/hardware_mode7.test.py) 把它们与包进行比较。手册在磁盘上时，`python3 -m conformance.quotes` 会在手册中定位全部 25 条引用的句子。手册没有印出的三点依从固定提交的 ares：Mode 7 滚动偏移在相乘时的宽度、哪些 Mode 7 乘积丢弃低六位，以及对象尺寸设置 6 和 7。[`conformance/divergences.json`](conformance/divergences.json) 记下每一点的文件和行号。
 
 完整的往返转换只能说明解码器和编码器彼此一致。如果在记录和代码中同时交换两个翻转位，每次遍历和每项记录检查都会通过，但每张地图都会解码错误。下面有两项检查依赖于不是本仓库编写的东西：对同一组数据的第二种解读，以及卡带字节。
 
@@ -528,8 +528,9 @@ done
 
 ## 参考资料
 
-- _SNES Development Manual, Book I_，Nintendo of America Inc.，未注明日期。附录 A，第 A-10、A-12 和 A-17 页。共 240 页，21,022,582 字节，SHA-256 `f1405241000046abba7849376d2ec53cf85f1ad2e9950d69a7c2cf1f3ff6b791`。该手册不可再分发，不包含在本仓库中。`python3 -m conformance.documents` 从 https://archive.org/download/SNESDevManual/book1_text.pdf 下载它到 git 忽略的 `docs/manufacturer/` 中，并拒绝任何其他文件。`python3 -m conformance.documents --check` 验证已在该位置的副本。
+- _SNES Development Manual, Book I_，Nintendo of America Inc.，未注明日期。附录 A，第 A-3、A-4、A-10、A-11、A-12 和 A-17 页，以及第 27 章第 2-27-1、2-27-9 和 2-27-10 页。共 240 页，21,022,582 字节，SHA-256 `f1405241000046abba7849376d2ec53cf85f1ad2e9950d69a7c2cf1f3ff6b791`。该手册不可再分发，不包含在本仓库中。`python3 -m conformance.documents` 从 https://archive.org/download/SNESDevManual/book1_text.pdf 下载它到 git 忽略的 `docs/manufacturer/` 中，并拒绝任何其他文件。`python3 -m conformance.documents --check` 验证已在该位置的副本。
 - SuperFamiconv，作者 David Lindecrantz，MIT 许可，提交 `d903daf1b74c9ec6db7949fe62af2f0b58bdc23b`，https://github.com/Optiroc/SuperFamiconv ，用于对位平面、颜色和地图条目数据进行独立解读。`unpack_native_tile`、`pack_native_color` 和 `pack_native_mapentry` 在构建时编译，从不提交。
+- ares，ISC 许可，提交 `9408cb43d4948fc3ea6e152a307a34348df3fe04`，https://github.com/ares-emulator/ares ，用于手册没有印出的部分：`ares/sfc/ppu/mode7.cpp` 第 27 至 32 行和 `ares/sfc/ppu/oam.cpp` 第 57 至 71 行。不编译也不携带其中任何内容。
 
 ## 引用本项目
 

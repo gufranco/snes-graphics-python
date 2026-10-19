@@ -1,6 +1,6 @@
 # SNESグラフィックフォーマット
 
-Super Nintendoのタイル、カラー、背景マップ、スプライト、Mode 7の各フォーマットをPythonで実装したものです。タイル、マップエントリ、カラーのレイアウトはNintendoの開発マニュアルに合わせてあり、端から端まで走査できるほど小さな入力空間はすべて走査しています。
+Super Nintendoのタイル、カラー、背景マップ、スプライト、Mode 7の各フォーマットをPythonで実装したものです。タイル、マップエントリ、カラー、スプライトテーブル、Mode 7のレイアウトはNintendoの開発マニュアルに合わせてあり、端から端まで走査できるほど小さな入力空間はすべて走査しています。
 
 [English](README.md) | 日本語 | [简体中文](README.zh-Hans.md) | [繁體中文（香港）](README.zh-HK.md)
 
@@ -8,7 +8,7 @@ Super Nintendoのタイル、カラー、背景マップ、スプライト、Mod
 [![Release](https://img.shields.io/github/v/release/gufranco/snes-graphics-python)](https://github.com/gufranco/snes-graphics-python/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-**7**種類のフォーマット、入力空間全体の走査で確定した**165,248**ケース、SuperFamiconvと比較した**66,432**ケース、3通りに読んだ実カートリッジデータの**11,765**領域、失敗**0**件、テスト**910**件、ステートメントとブランチのカバレッジ**100%**、依存関係なし
+**7**種類のフォーマット、入力空間全体の走査で確定した**165,248**ケース、SuperFamiconvと比較した**66,432**ケース、3通りに読んだ実カートリッジデータの**11,765**領域、失敗**0**件、テスト**924**件、ステートメントとブランチのカバレッジ**100%**、依存関係なし
 
 ```python
 from snesgfx import tiles
@@ -417,7 +417,7 @@ print(mode7.signed13(0x1FFF), mode7.wrap(-1, 1024), mode7.outside(1024, 0))
 
 ## 正しいか
 
-マニュアルに照らしているのは3つの図表、タイルレイアウト、マップエントリ、カラーワードです。[`conformance/hardware.json`](conformance/hardware.json)はそれぞれについて、該当する文、マニュアルのページ、ファイルのページを保持し、[`conformance/hardware.test.py`](conformance/hardware.test.py)はそれらをパッケージの定数と比較します。マニュアルがディスク上にあれば、`python3 -m conformance.quotes`は引用した9つの文すべてをマニュアル内で見つけます。
+マニュアルに照らしているのは6つの図表、タイルレイアウト、マップエントリ、カラーワード、スプライトテーブル、オブジェクトサイズ、そしてMode 7の行列、中心、マップです。[`conformance/hardware.json`](conformance/hardware.json)はそれぞれについて、該当する文、マニュアルのページ、ファイルのページを保持し、[`conformance/hardware.test.py`](conformance/hardware.test.py)、[`conformance/hardware_sprites.test.py`](conformance/hardware_sprites.test.py)、[`conformance/hardware_mode7.test.py`](conformance/hardware_mode7.test.py)はそれらをパッケージと比較します。マニュアルがディスク上にあれば、`python3 -m conformance.quotes`は引用した25の文すべてをマニュアル内で見つけます。マニュアルに印刷されていない3点は、固定したコミットのaresに従います。乗算されるときのMode 7スクロールオフセットの幅、下位6ビットを失うMode 7の積、オブジェクトサイズ設定6と7です。[`conformance/divergences.json`](conformance/divergences.json)にそれぞれのファイルと行を記しています。
 
 往復変換が完全に通っても、デコーダとエンコーダが一致していることしか示せません。レコードとコードの両方で2つの反転ビットを入れ替えると、すべての走査とすべてのレコードチェックに通りながら、すべてのマップを誤ってデコードします。以下の2つのチェックは、このリポジトリが書いたものではないものに基づいています。同じ図表の2つ目の読み方と、カートリッジのバイト列です。
 
@@ -528,8 +528,9 @@ done
 
 ## 参考文献
 
-- _SNES Development Manual, Book I_、Nintendo of America Inc.、日付なし。Appendix A、A-10、A-12、A-17ページ。240ページ、21,022,582バイト、SHA-256 `f1405241000046abba7849376d2ec53cf85f1ad2e9950d69a7c2cf1f3ff6b791`。再配布できないため、このリポジトリには含まれていません。`python3 -m conformance.documents`はこれを https://archive.org/download/SNESDevManual/book1_text.pdf から、gitが無視する`docs/manufacturer/`にダウンロードし、それ以外のファイルは拒否します。`python3 -m conformance.documents --check`は既にあるコピーを検証します。
+- _SNES Development Manual, Book I_、Nintendo of America Inc.、日付なし。Appendix A、A-3、A-4、A-10、A-11、A-12、A-17ページ、および第27章、2-27-1、2-27-9、2-27-10ページ。240ページ、21,022,582バイト、SHA-256 `f1405241000046abba7849376d2ec53cf85f1ad2e9950d69a7c2cf1f3ff6b791`。再配布できないため、このリポジトリには含まれていません。`python3 -m conformance.documents`はこれを https://archive.org/download/SNESDevManual/book1_text.pdf から、gitが無視する`docs/manufacturer/`にダウンロードし、それ以外のファイルは拒否します。`python3 -m conformance.documents --check`は既にあるコピーを検証します。
 - David LindecrantzによるSuperFamiconv、MIT、コミット`d903daf1b74c9ec6db7949fe62af2f0b58bdc23b`、https://github.com/Optiroc/SuperFamiconv 。ビットプレーン、カラー、マップエントリの図表を独立に読むために使います。`unpack_native_tile`、`pack_native_color`、`pack_native_mapentry`はビルド時にコンパイルされ、コミットされることはありません。
+- ares、ISC、コミット`9408cb43d4948fc3ea6e152a307a34348df3fe04`、https://github.com/ares-emulator/ares 。マニュアルに印刷されていない点のために`ares/sfc/ppu/mode7.cpp`の27行から32行と`ares/sfc/ppu/oam.cpp`の57行から71行を読みます。コンパイルも同梱もしません。
 
 ## 引用
 

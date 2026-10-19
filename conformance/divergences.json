@@ -30,6 +30,18 @@
       "wouldSettleIt": "Already settled by page A-17."
     },
     {
+      "id": "mode-7-products-lose-six-bits",
+      "parts": ["snes-graphics"],
+      "severity": "medium",
+      "status": "closed",
+      "documentSays": "Book I page 2-27-9 and appendix page A-16 print the transform as a matrix product with the centre taken off and put back, in 8.8 fixed point. Neither says how many bits each product keeps.",
+      "referenceDoes": "ares at commit 9408cb43d4948fc3ea6e152a307a34348df3fe04, ares/sfc/ppu/mode7.cpp lines 28 to 32: s32 originX = (a * clip(hoffset - hcenter) & ~63) + (b * clip(voffset - vcenter) & ~63) + (b * y & ~63) + (hcenter << 8); the same for originY with c and d; then s32 pixelX = originX + a * x >> 8; and s32 pixelY = originY + c * x >> 8;",
+      "packageFollows": "reference",
+      "reasoning": "The products with the scroll offset and with the screen row lose their low six bits before the sum, and the products with the screen column keep every bit. Field.at computes the same three truncated terms, the same untruncated column term and the same final shift, so the package and ares agree term for term. Before this entry the truncation was stated with no source behind it.",
+      "wouldReopenIt": "A frame captured on a console in which a matrix entry whose products stay under 64 still moves the field, or a second implementation that truncates a different set of products.",
+      "wouldSettleIt": "Settled at the second-implementation rung. A console capture would raise it to a measurement."
+    },
+    {
       "id": "the-mode-7-offset-keeps-ten-bits",
       "parts": ["snes-graphics"],
       "severity": "medium",

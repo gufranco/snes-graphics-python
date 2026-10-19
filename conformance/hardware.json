@@ -5,6 +5,7 @@
       "hardware.json, for anything Nintendo printed: which byte holds which plane, which bits hold a character code, how a colour is packed",
       "an exhaustive walk of the format, for anything that follows from those figures by enumeration rather than by judgement",
       "an independent reading of the same figures, pinned in pinned.json, for whether the figures were read correctly here at all",
+      "ares's source at the commit each entry in divergences.json names, for the Mode 7 offset width, the bits each Mode 7 product keeps and the two unprinted object size settings, none of which the manual prints",
       "real cartridge bytes, for whether the published grouping is the one that holds pictures"
     ],
     "why": "These are layouts rather than silicon, and the input spaces are small enough to walk from end to end, so the second rung is enumeration rather than a recording. Every two-bit tile that can exist is decoded and re-encoded, which leaves no case untried.\n\nWhat that cannot do is catch a misreading. Every figure here was read off a rendered page by one person and written into this file; the code is held to this file, and the walk proves the code agrees with itself. Swap the two flip bits here and in the code together and all of it still passes, because a consistently wrong decoder round-trips perfectly. So the third rung is somebody else's reading of the same figures, and it sits below the figures because it cannot overrule them: it answers whether they were read right, not what they say.",
@@ -154,16 +155,202 @@
       "conformance/hardware.test.py::PrintedBehaviourTest.test_each_colour_channel_is_read_from_the_bits_the_figure_gives_it"
     ]
   },
+  "objectData": {
+    "manualPage": "A-3",
+    "pdfPage": 198,
+    "title": "OBJECT DATA",
+    "note": "Read off the rendered page. Each object takes two words at OAM addresses 2n and 2n+1, and words 256 to 271 hold two more bits for each of eight objects. The bits are drawn as D15 to D0 of a word, whose low byte is the first byte in memory.",
+    "objects": 128,
+    "wordsPerObject": 2,
+    "highTable": {
+      "firstWord": 256,
+      "lastWord": 271,
+      "objectsPerWord": 8,
+      "bitsPerObject": 2,
+      "positionMsbBit": 0,
+      "sizeBit": 1,
+      "positionMsbQuote": "The base position of the OBJ on the H-direction will be determined by both H-position (8-bit) and the H-position MSB.",
+      "sizeQuote": "Size Large/Small: Determine the size to be used either of 2 OBJ's by register <2101H>.",
+      "heldBy": [
+        "conformance/hardware_sprites.test.py::ObjectDataTest.test_each_sprite_keeps_its_two_high_bits_where_the_figure_puts_them"
+      ]
+    },
+    "fields": [
+      {
+        "name": "OBJ H-POSITION",
+        "word": 0,
+        "bits": "D7 to D0",
+        "mask": "0x00FF",
+        "heldBy": [
+          "conformance/hardware_sprites.test.py::ObjectDataTest.test_a_sprite_reads_each_printed_field_from_its_own_bits",
+          "conformance/hardware_sprites.test.py::ObjectDataTest.test_a_sprite_writes_each_printed_field_into_its_own_bits"
+        ]
+      },
+      {
+        "name": "OBJ V-POSITION",
+        "word": 0,
+        "bits": "D15 to D8",
+        "mask": "0xFF00",
+        "heldBy": [
+          "conformance/hardware_sprites.test.py::ObjectDataTest.test_a_sprite_reads_each_printed_field_from_its_own_bits",
+          "conformance/hardware_sprites.test.py::ObjectDataTest.test_a_sprite_writes_each_printed_field_into_its_own_bits"
+        ]
+      },
+      {
+        "name": "NAME",
+        "word": 1,
+        "bits": "D8 to D0",
+        "mask": "0x01FF",
+        "meaningQuote": "CHARACTER CODE NUMBER",
+        "heldBy": [
+          "conformance/hardware_sprites.test.py::ObjectDataTest.test_a_sprite_reads_each_printed_field_from_its_own_bits",
+          "conformance/hardware_sprites.test.py::ObjectDataTest.test_a_sprite_writes_each_printed_field_into_its_own_bits"
+        ]
+      },
+      {
+        "name": "COLOR",
+        "word": 1,
+        "bits": "D11 to D9",
+        "mask": "0x0E00",
+        "meaningQuote": "Designate palette for 1 character",
+        "heldBy": [
+          "conformance/hardware_sprites.test.py::ObjectDataTest.test_a_sprite_reads_each_printed_field_from_its_own_bits",
+          "conformance/hardware_sprites.test.py::ObjectDataTest.test_a_sprite_writes_each_printed_field_into_its_own_bits"
+        ]
+      },
+      {
+        "name": "OBJ PRIORITY",
+        "word": 1,
+        "bits": "D13 to D12",
+        "mask": "0x3000",
+        "meaningQuote": "Determine the display priority when OBJ is combined with BG1 ~ BG4 (per character).",
+        "heldBy": [
+          "conformance/hardware_sprites.test.py::ObjectDataTest.test_a_sprite_reads_each_printed_field_from_its_own_bits",
+          "conformance/hardware_sprites.test.py::ObjectDataTest.test_a_sprite_writes_each_printed_field_into_its_own_bits"
+        ]
+      },
+      {
+        "name": "H",
+        "word": 1,
+        "bits": "D14",
+        "mask": "0x4000",
+        "meaningQuote": "X-direction Flip (H-Flip)",
+        "heldBy": [
+          "conformance/hardware_sprites.test.py::ObjectDataTest.test_a_sprite_reads_each_printed_field_from_its_own_bits",
+          "conformance/hardware_sprites.test.py::ObjectDataTest.test_a_sprite_writes_each_printed_field_into_its_own_bits"
+        ]
+      },
+      {
+        "name": "V",
+        "word": 1,
+        "bits": "D15",
+        "mask": "0x8000",
+        "meaningQuote": "Y-direction (V-Flip)",
+        "heldBy": [
+          "conformance/hardware_sprites.test.py::ObjectDataTest.test_a_sprite_reads_each_printed_field_from_its_own_bits",
+          "conformance/hardware_sprites.test.py::ObjectDataTest.test_a_sprite_writes_each_printed_field_into_its_own_bits"
+        ]
+      }
+    ],
+    "position": {
+      "manualPage": "A-4",
+      "pdfPage": 199,
+      "bits": 9,
+      "lowest": -256,
+      "highest": 255,
+      "rangeQuote": "OBJECT DISPLAY H-POSITION (9-BIT) (RANGE -256 ~ 255)",
+      "quote": "The H-position is a complementary expression of 2 (9-bit).",
+      "heldBy": [
+        "conformance/hardware_sprites.test.py::ObjectDataTest.test_the_ninth_position_bit_gives_the_printed_range"
+      ]
+    },
+    "document": "developmentManual"
+  },
+  "objectSizes": {
+    "manualPage": "2-27-1",
+    "pdfPage": 115,
+    "title": "OBJSEL",
+    "quote": "OBJECT SIZE: DESIGNATE OBJECT SIZE",
+    "note": "The table under register 2101H, read off the rendered page. Each row is one setting of S2 S1 S0 and gives the small and the large size in dots; every size printed is square. Settings 110 and 111 are not printed, and divergences.json records where those two come from.",
+    "settings": [
+      [0, 8, 16],
+      [1, 8, 32],
+      [2, 8, 64],
+      [3, 16, 32],
+      [4, 16, 64],
+      [5, 32, 64]
+    ],
+    "settingsAre": "[setting, small dots, large dots]",
+    "heldBy": [
+      "conformance/hardware_sprites.test.py::ObjectSizeTest.test_each_printed_setting_gives_the_printed_square_sizes"
+    ],
+    "document": "developmentManual"
+  },
+  "mode7": {
+    "matrix": {
+      "manualPage": "2-27-9",
+      "pdfPage": 123,
+      "bits": 16,
+      "fractionBits": 8,
+      "quote": "The most significant bit of the upper 8-bit is for the signed bit. (MP15 is the signed bit. There is a decimal point between M7 & M8.)",
+      "heldBy": [
+        "conformance/hardware_mode7.test.py::MatrixTest.test_a_parameter_of_one_at_the_printed_point_leaves_a_pixel_where_it_was",
+        "conformance/hardware_mode7.test.py::MatrixTest.test_the_top_bit_of_a_parameter_is_its_sign"
+      ]
+    },
+    "formula": {
+      "manualPage": "2-27-9",
+      "pdfPage": 123,
+      "assembled": true,
+      "quote": "[X2, Y2] = [[A, B], [C, D]] [X1 - X0, Y1 - Y0] + [X0, Y0]",
+      "note": "Printed as a picture. X0 and Y0 are the centre, X1 and Y1 the display coordinate, X2 and Y2 the coordinate before calculation. Appendix page A-16 prints the same transform. Neither says how wide the difference is or how many bits each product keeps, and divergences.json records what ares does there.",
+      "heldBy": [
+        "conformance/hardware_mode7.test.py::MatrixTest.test_the_centre_is_taken_off_before_the_matrix_and_put_back_after"
+      ]
+    },
+    "centre": {
+      "manualPage": "2-27-10",
+      "pdfPage": 124,
+      "bits": 13,
+      "quote": "The coordinate value of X0 & Y0 can be designated by 13-bit (complement of 2).",
+      "heldBy": [
+        "conformance/hardware_mode7.test.py::FieldTest.test_a_centre_and_a_scroll_take_the_printed_range"
+      ]
+    },
+    "screen": {
+      "manualPage": "A-11",
+      "pdfPage": 206,
+      "title": "BG SC DATA (MODE 7)",
+      "fieldDots": 1024,
+      "nameBits": "D7 to D0",
+      "characterDataBits": "D15 to D8",
+      "characterBytes": 64,
+      "scrollLowest": -4096,
+      "scrollHighest": 4095,
+      "nameQuote": "NAME (00H~FFH)",
+      "sizeQuote": "32-CHR x 4-SCREEN x 8-DOT/CHR = 1024-DOT",
+      "scrollQuote": "RANGE OF H-SCROLL: -4096 ~ 4095 DOT",
+      "characterQuote": "data (64-byte) is as follows",
+      "heldBy": [
+        "conformance/hardware_mode7.test.py::FieldTest.test_the_field_is_the_printed_number_of_dots_across",
+        "conformance/hardware_mode7.test.py::FieldTest.test_a_name_is_the_low_byte_of_the_word_and_a_dot_the_high_byte",
+        "conformance/hardware_mode7.test.py::FieldTest.test_a_character_is_the_printed_number_of_bytes",
+        "conformance/hardware_mode7.test.py::FieldTest.test_a_centre_and_a_scroll_take_the_printed_range"
+      ]
+    },
+    "document": "developmentManual"
+  },
   "notStated": [
     "Anything about timing. These are layouts in memory; when the PPU reads them is a different question and not one this package asks.",
-    "The Mode 7 tilemap, which the manual gives its own figure for on the following page and which this package treats separately.",
-    "What the hardware does with a character code above the range the field can hold, since the field cannot hold one."
+    "What the hardware does with a character code above the range the field can hold, since the field cannot hold one.",
+    "How wide the scroll offset minus the centre is when the Mode 7 multiplier takes it, and how many bits each product keeps. The formula on page 2-27-9 says neither; divergences.json records what ares does.",
+    "Object size settings 110 and 111, which the table on page 2-27-1 does not print; divergences.json records what ares does."
   ],
   "documents": {
     "developmentManual": {
       "publisher": "Nintendo of America Inc.",
       "title": "SNES Development Manual, Book 1",
-      "section": "Appendix A, PPU Registers: CHR DATA CONSTRUCTION and BG SC DATA",
+      "section": "Appendix A, PPU Registers: CHR DATA CONSTRUCTION, BG SC DATA, OBJECT DATA and BG SC DATA (MODE 7); chapter 27, registers 2101H and 211BH to 2120H",
       "readOn": "2026-08-21",
       "retrievedFrom": "archive.org/details/SNESDevManual, book1_text.pdf",
       "sha256": "f1405241000046abba7849376d2ec53cf85f1ad2e9950d69a7c2cf1f3ff6b791",

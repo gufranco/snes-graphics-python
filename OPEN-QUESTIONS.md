@@ -124,9 +124,13 @@ So the boundary is visible rather than implied:
   plane must reach its own bit of every pixel and no other bit of anything.
 - **Every sprite's two bits in the second table.** 512 cases, without disturbing
   its neighbours.
-- **That each layout matches the figure Nintendo printed.** Held by
-  [`conformance/hardware.test.py`](conformance/hardware.test.py), which is what
-  separates a round trip from a claim about the hardware.
+- **That each layout matches the figure Nintendo printed.** The tile, the map
+  entry, the colour word, the sprite table, the object sizes and the Mode 7
+  matrix, centre and map. Held by
+  [`conformance/hardware.test.py`](conformance/hardware.test.py),
+  [`conformance/hardware_sprites.test.py`](conformance/hardware_sprites.test.py)
+  and [`conformance/hardware_mode7.test.py`](conformance/hardware_mode7.test.py),
+  which is what separates a round trip from a claim about the hardware.
 - **That each walk can fail.** The tests break each format deliberately and
   confirm the walk catches it.
 
@@ -143,5 +147,7 @@ Absent rather than unknown, and absent on purpose:
   terms are added, so a matrix entry small enough that its product falls under
   sixty four contributes nothing at all: a very slow rotation stays exactly still
   and then jumps. A model more accurate than the hardware is wrong, and software
-  tuned on hardware looks broken on one.
+  tuned on hardware looks broken on one. The manual does not print which products
+  lose bits, so this follows ares at a pinned commit, term for term, as
+  `conformance/divergences.json` records.
 - **Anything with a clock.** These are layouts. There is no part here to drive.

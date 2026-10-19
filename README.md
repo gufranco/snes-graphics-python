@@ -1,6 +1,6 @@
 # SNES Graphics Formats
 
-The Super Nintendo tile, colour, background map, sprite and Mode 7 formats in Python, with the tile, map entry and colour layouts held to Nintendo's development manual and every input space small enough to walk walked from end to end.
+The Super Nintendo tile, colour, background map, sprite and Mode 7 formats in Python, with the tile, map entry, colour, sprite table and Mode 7 layouts held to Nintendo's development manual and every input space small enough to walk walked from end to end.
 
 English | [日本語](README.ja.md) | [简体中文](README.zh-Hans.md) | [繁體中文（香港）](README.zh-HK.md)
 
@@ -8,7 +8,7 @@ English | [日本語](README.ja.md) | [简体中文](README.zh-Hans.md) | [繁�
 [![Release](https://img.shields.io/github/v/release/gufranco/snes-graphics-python)](https://github.com/gufranco/snes-graphics-python/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-**7** formats, **165,248** cases settled by walking their whole input space, **66,432** cases compared against SuperFamiconv, **11,765** regions of real cartridge data read three ways, **0** failures, **910** tests, **100%** statement and branch coverage, no dependencies
+**7** formats, **165,248** cases settled by walking their whole input space, **66,432** cases compared against SuperFamiconv, **11,765** regions of real cartridge data read three ways, **0** failures, **924** tests, **100%** statement and branch coverage, no dependencies
 
 ```python
 from snesgfx import tiles
@@ -417,7 +417,7 @@ There is no six bit depth, because no background mode has one. Nothing here read
 
 ## Is it right
 
-Three figures are held to the manual: the tile layout, the map entry and the colour word. [`conformance/hardware.json`](conformance/hardware.json) carries each with its sentence, the manual page and the file page, and [`conformance/hardware.test.py`](conformance/hardware.test.py) compares them with the constants in the package. `python3 -m conformance.quotes` locates all 9 quoted sentences in the manual when it is on disk.
+Six figures are held to the manual: the tile layout, the map entry, the colour word, the sprite table, the object sizes, and the Mode 7 matrix, centre and map. [`conformance/hardware.json`](conformance/hardware.json) carries each with its sentence, the manual page and the file page, and [`conformance/hardware.test.py`](conformance/hardware.test.py), [`conformance/hardware_sprites.test.py`](conformance/hardware_sprites.test.py) and [`conformance/hardware_mode7.test.py`](conformance/hardware_mode7.test.py) compare them with the package. `python3 -m conformance.quotes` locates all 25 quoted sentences in the manual when it is on disk. Three things the manual does not print follow ares at a pinned commit: how wide the Mode 7 scroll offset is when it is multiplied, which Mode 7 products lose six bits, and object size settings 6 and 7. [`conformance/divergences.json`](conformance/divergences.json) names the file and lines of each.
 
 A complete round trip only shows that a decoder and an encoder agree. Swapping the two flip bits in the record and in the code together passes every walk and every record check, and decodes every map wrong. Two checks below rest on something this repository did not write: a second reading of the same figures, and cartridge bytes.
 
@@ -528,8 +528,9 @@ Each module has a test file beside it, named after it, and each runs on its own,
 
 ## References
 
-- _SNES Development Manual, Book I_, Nintendo of America Inc., undated. Appendix A, pages A-10, A-12 and A-17. 240 pages, 21,022,582 bytes, SHA-256 `f1405241000046abba7849376d2ec53cf85f1ad2e9950d69a7c2cf1f3ff6b791`. It is not redistributable and is not in this repository. `python3 -m conformance.documents` downloads it from https://archive.org/download/SNESDevManual/book1_text.pdf into `docs/manufacturer/`, which git ignores, and refuses any other file. `python3 -m conformance.documents --check` verifies a copy already there.
+- _SNES Development Manual, Book I_, Nintendo of America Inc., undated. Appendix A, pages A-3, A-4, A-10, A-11, A-12 and A-17, and chapter 27, pages 2-27-1, 2-27-9 and 2-27-10. 240 pages, 21,022,582 bytes, SHA-256 `f1405241000046abba7849376d2ec53cf85f1ad2e9950d69a7c2cf1f3ff6b791`. It is not redistributable and is not in this repository. `python3 -m conformance.documents` downloads it from https://archive.org/download/SNESDevManual/book1_text.pdf into `docs/manufacturer/`, which git ignores, and refuses any other file. `python3 -m conformance.documents --check` verifies a copy already there.
 - SuperFamiconv by David Lindecrantz, MIT, at commit `d903daf1b74c9ec6db7949fe62af2f0b58bdc23b`, https://github.com/Optiroc/SuperFamiconv, for an independent reading of the bit plane, colour and map entry figures. `unpack_native_tile`, `pack_native_color` and `pack_native_mapentry` are compiled at build time and never committed.
+- ares, ISC, at commit `9408cb43d4948fc3ea6e152a307a34348df3fe04`, https://github.com/ares-emulator/ares, read for what the manual does not print: `ares/sfc/ppu/mode7.cpp` lines 27 to 32 and `ares/sfc/ppu/oam.cpp` lines 57 to 71. Nothing from it is compiled or carried.
 
 ## Citing this
 
