@@ -8,7 +8,7 @@ Super Nintendoのタイル、カラー、背景マップ、スプライト、Mod
 [![Release](https://img.shields.io/github/v/release/gufranco/snes-graphics-python)](https://github.com/gufranco/snes-graphics-python/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-**7**種類のフォーマット、入力空間全体の走査で確定した**165,248**ケース、SuperFamiconvと比較した**66,432**ケース、3通りに読んだ実カートリッジデータの**11,765**領域、失敗**0**件、テスト**906**件、ステートメントとブランチのカバレッジ**100%**、依存関係なし
+**7**種類のフォーマット、入力空間全体の走査で確定した**165,248**ケース、SuperFamiconvと比較した**66,432**ケース、3通りに読んだ実カートリッジデータの**11,765**領域、失敗**0**件、テスト**909**件、ステートメントとブランチのカバレッジ**100%**、依存関係なし
 
 ```python
 from snesgfx import tiles
@@ -327,6 +327,7 @@ print(oam.sizes(0), oam.size_of(back, 0), oam.size_of(back, 6))
 | `mode7.Field(matrix, centre=(0, 0), scroll=(0, 0))`           | 中心とスクロールを伴う行列。中心とスクロールはそれぞれ符号付き13ビット値として読みます                                                                 |
 | `field.at(x, y)`                                              | 画面ピクセルが表示するフィールドピクセル。スクロールオフセットとの積と`y`との積は、加算の前に下位6ビットを失います。`x`との積は下位6ビットを保持します |
 | `mode7.signed13(value)`, `mode7.signed16(value)`              | 符号拡張                                                                                                                                               |
+| `mode7.clipped(offset)`                                       | 乗算器が受け取る形のスクロールオフセットから中心を引いた値。下位10ビットを残し、ビット13を符号とします。`field.at`は両方の軸に適用します               |
 | `mode7.wrap(x, y)`, `mode7.outside(x, y)`                     | 1024×1024のフィールド内に折り返した位置と、その位置がフィールドの外にあるかどうか                                                                      |
 | `mode7.deinterleave(vram)`, `mode7.interleave(names, pixels)` | ワードをマップのバイトとピクセルのバイトに分割し、また結合します                                                                                       |
 | `mode7.tile(pixels, index)`                                   | タイル1枚の64ピクセル。1ピクセル1バイト                                                                                                                |
@@ -338,6 +339,7 @@ print(oam.sizes(0), oam.size_of(back, 0), oam.size_of(back, 6))
 | `mode7.FRACTION_BITS`                                            | 8                                       |
 | `mode7.TRUNCATE`                                                 | `~0x3F`                                 |
 | `mode7.SIGN13`, `mode7.RANGE13`, `mode7.SIGN16`, `mode7.RANGE16` | `0x1000`, `0x2000`, `0x8000`, `0x10000` |
+| `mode7.OFFSET_SIGN`, `mode7.OFFSET_MASK`                         | `0x2000`, `0x3FF`                       |
 
 ```python
 from snesgfx import mode7

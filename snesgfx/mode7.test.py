@@ -94,6 +94,38 @@ class TruncationTest(unittest.TestCase):
         self.assertEqual(field.at(0, 1), (0, 1))
 
 
+class OffsetTest(unittest.TestCase):
+    def test_an_offset_of_a_whole_field_from_the_centre_keeps_only_its_low_ten_bits(self) -> None:
+        # Arrange
+        field = placed(scroll=(1024, 0))
+
+        # Act
+        shown = field.at(0, 0)
+
+        # Assert
+        self.assertEqual(shown, (0, 0))
+
+    def test_a_negative_offset_past_a_field_keeps_its_sign_and_its_low_ten_bits(self) -> None:
+        # Arrange
+        field = placed(scroll=(0x1BFF, 0))
+
+        # Act
+        shown = field.at(0, 0)
+
+        # Assert
+        self.assertEqual(shown, (-1, 0))
+
+    def test_an_offset_inside_the_field_is_used_whole(self) -> None:
+        # Arrange
+        field = placed(centre=(128, 112), scroll=(64, 0))
+
+        # Act
+        shown = field.at(10, 20)
+
+        # Assert
+        self.assertEqual(shown, (74, 20))
+
+
 class WrapTest(unittest.TestCase):
     def test_a_coordinate_inside_the_field_is_left_alone(self) -> None:
         self.assertEqual(mode7.wrap(100, 200), (100, 200))

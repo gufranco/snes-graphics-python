@@ -53,7 +53,12 @@ name and one that cannot be imported can only be handled by catching everything.
 3. **Exhaustion.** Walking a format's whole input space. Strong, and about this
    package rather than about the hardware, which is the entry worth reading
    twice below.
-4. **Anything else.** Nothing is cited from below rung three.
+4. **A second implementation's source, at a pinned commit.** Only for what the
+   manual does not print and a walk cannot decide. ares is read at the commit
+   each entry in
+   [`conformance/divergences.json`](conformance/divergences.json) names, with the
+   file and lines.
+5. **Anything else.** Nothing is cited from below rung four.
 
 ## What is settled and what is not
 

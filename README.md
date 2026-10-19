@@ -8,7 +8,7 @@ English | [日本語](README.ja.md) | [简体中文](README.zh-Hans.md) | [繁�
 [![Release](https://img.shields.io/github/v/release/gufranco/snes-graphics-python)](https://github.com/gufranco/snes-graphics-python/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-**7** formats, **165,248** cases settled by walking their whole input space, **66,432** cases compared against SuperFamiconv, **11,765** regions of real cartridge data read three ways, **0** failures, **906** tests, **100%** statement and branch coverage, no dependencies
+**7** formats, **165,248** cases settled by walking their whole input space, **66,432** cases compared against SuperFamiconv, **11,765** regions of real cartridge data read three ways, **0** failures, **909** tests, **100%** statement and branch coverage, no dependencies
 
 ```python
 from snesgfx import tiles
@@ -327,6 +327,7 @@ Sprite 5 keeps its low four bytes at offset 20. Its two high bits sit in byte 51
 | `mode7.Field(matrix, centre=(0, 0), scroll=(0, 0))`           | A matrix with its centre and scroll, each read as signed thirteen bit values                                                                                   |
 | `field.at(x, y)`                                              | The field pixel a screen pixel shows. The products with the scroll offset and with `y` lose their low six bits before the sum; the products with `x` keep them |
 | `mode7.signed13(value)`, `mode7.signed16(value)`              | Sign extension                                                                                                                                                 |
+| `mode7.clipped(offset)`                                       | The scroll offset minus the centre as the multiplier takes it: its low ten bits, with bit 13 as the sign. `field.at` applies it to both axes                   |
 | `mode7.wrap(x, y)`, `mode7.outside(x, y)`                     | A position wrapped into the 1024 by 1024 field, and whether it lies outside                                                                                    |
 | `mode7.deinterleave(vram)`, `mode7.interleave(names, pixels)` | Split the words into map bytes and pixel bytes, and join them back                                                                                             |
 | `mode7.tile(pixels, index)`                                   | The 64 pixels of one tile, a byte each                                                                                                                         |
@@ -338,6 +339,7 @@ Sprite 5 keeps its low four bytes at offset 20. Its two high bits sit in byte 51
 | `mode7.FRACTION_BITS`                                            | 8                                       |
 | `mode7.TRUNCATE`                                                 | `~0x3F`                                 |
 | `mode7.SIGN13`, `mode7.RANGE13`, `mode7.SIGN16`, `mode7.RANGE16` | `0x1000`, `0x2000`, `0x8000`, `0x10000` |
+| `mode7.OFFSET_SIGN`, `mode7.OFFSET_MASK`                         | `0x2000`, `0x3FF`                       |
 
 ```python
 from snesgfx import mode7

@@ -8,7 +8,7 @@
 [![Release](https://img.shields.io/github/v/release/gufranco/snes-graphics-python)](https://github.com/gufranco/snes-graphics-python/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-**7** 种格式，**165,248** 个用例通过遍历完整输入空间得到确认，**66,432** 个用例与 SuperFamiconv 比对，**11,765** 个真实卡带数据区域按三种方式读取，**0** 个失败，**906** 个测试，**100%** 语句和分支覆盖率，无依赖
+**7** 种格式，**165,248** 个用例通过遍历完整输入空间得到确认，**66,432** 个用例与 SuperFamiconv 比对，**11,765** 个真实卡带数据区域按三种方式读取，**0** 个失败，**909** 个测试，**100%** 语句和分支覆盖率，无依赖
 
 ```python
 from snesgfx import tiles
@@ -321,16 +321,17 @@ print(oam.sizes(0), oam.size_of(back, 0), oam.size_of(back, 6))
 
 ### Mode 7
 
-| 调用                                                          | 作用                                                                                           |
-| :------------------------------------------------------------ | :--------------------------------------------------------------------------------------------- |
-| `mode7.Matrix(a, b, c, d)`                                    | 四个矩阵寄存器。每个属性都按有符号十六位值读取，格式为 8.8 定点                                |
-| `mode7.Field(matrix, centre=(0, 0), scroll=(0, 0))`           | 一个矩阵及其中心和滚动量，二者都按有符号十三位值读取                                           |
-| `field.at(x, y)`                                              | 一个屏幕像素显示的场像素。与滚动偏移和与 `y` 的乘积在求和前丢弃低六位；与 `x` 的乘积保留低六位 |
-| `mode7.signed13(value)`、`mode7.signed16(value)`              | 符号扩展                                                                                       |
-| `mode7.wrap(x, y)`、`mode7.outside(x, y)`                     | 回绕到 1024 乘 1024 场内的位置，以及位置是否在场外                                             |
-| `mode7.deinterleave(vram)`、`mode7.interleave(names, pixels)` | 把字拆分成地图字节和像素字节，以及把它们重新合并                                               |
-| `mode7.tile(pixels, index)`                                   | 一个图块的 64 个像素，每个像素一个字节                                                         |
-| `mode7.name_at(names, x, y)`                                  | 一个场像素下的图块名称                                                                         |
+| 调用                                                          | 作用                                                                                            |
+| :------------------------------------------------------------ | :---------------------------------------------------------------------------------------------- |
+| `mode7.Matrix(a, b, c, d)`                                    | 四个矩阵寄存器。每个属性都按有符号十六位值读取，格式为 8.8 定点                                 |
+| `mode7.Field(matrix, centre=(0, 0), scroll=(0, 0))`           | 一个矩阵及其中心和滚动量，二者都按有符号十三位值读取                                            |
+| `field.at(x, y)`                                              | 一个屏幕像素显示的场像素。与滚动偏移和与 `y` 的乘积在求和前丢弃低六位；与 `x` 的乘积保留低六位  |
+| `mode7.signed13(value)`、`mode7.signed16(value)`              | 符号扩展                                                                                        |
+| `mode7.clipped(offset)`                                       | 滚动偏移减去中心后，乘法器所接收的形式：保留低十位，以第 13 位为符号。`field.at` 对两个轴都应用 |
+| `mode7.wrap(x, y)`、`mode7.outside(x, y)`                     | 回绕到 1024 乘 1024 场内的位置，以及位置是否在场外                                              |
+| `mode7.deinterleave(vram)`、`mode7.interleave(names, pixels)` | 把字拆分成地图字节和像素字节，以及把它们重新合并                                                |
+| `mode7.tile(pixels, index)`                                   | 一个图块的 64 个像素，每个像素一个字节                                                          |
+| `mode7.name_at(names, x, y)`                                  | 一个场像素下的图块名称                                                                          |
 
 | 常量                                                             | 值                                      |
 | :--------------------------------------------------------------- | :-------------------------------------- |
@@ -338,6 +339,7 @@ print(oam.sizes(0), oam.size_of(back, 0), oam.size_of(back, 6))
 | `mode7.FRACTION_BITS`                                            | 8                                       |
 | `mode7.TRUNCATE`                                                 | `~0x3F`                                 |
 | `mode7.SIGN13`、`mode7.RANGE13`、`mode7.SIGN16`、`mode7.RANGE16` | `0x1000`、`0x2000`、`0x8000`、`0x10000` |
+| `mode7.OFFSET_SIGN`、`mode7.OFFSET_MASK`                         | `0x2000`、`0x3FF`                       |
 
 ```python
 from snesgfx import mode7

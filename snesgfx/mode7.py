@@ -20,6 +20,10 @@ SIGN16 = 0x8000
 
 RANGE16 = 0x10000
 
+OFFSET_SIGN = 0x2000
+
+OFFSET_MASK = 0x3FF
+
 
 def signed13(value: int) -> int:
     value &= RANGE13 - 1
@@ -29,6 +33,10 @@ def signed13(value: int) -> int:
 def signed16(value: int) -> int:
     value &= RANGE16 - 1
     return value - RANGE16 if value & SIGN16 else value
+
+
+def clipped(offset: int) -> int:
+    return offset | ~OFFSET_MASK if offset & OFFSET_SIGN else offset & OFFSET_MASK
 
 
 class Matrix:
@@ -74,8 +82,8 @@ class Field:
     def at(self, x: int, y: int) -> tuple[int, int]:
         centre_x, centre_y = (signed13(value) for value in self.centre)
         scroll_x, scroll_y = (signed13(value) for value in self.scroll)
-        origin_x = scroll_x - centre_x
-        origin_y = scroll_y - centre_y
+        origin_x = clipped(scroll_x - centre_x)
+        origin_y = clipped(scroll_y - centre_y)
 
         field_x = (
             (self.matrix.a * origin_x & TRUNCATE)

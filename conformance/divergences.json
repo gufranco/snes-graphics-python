@@ -29,6 +29,18 @@
       "wouldSettleIt": "The CGRAM figure at A-17, or a passage giving the channel width outright."
     },
     {
+      "id": "the-mode-7-offset-keeps-ten-bits",
+      "parts": ["snes-graphics"],
+      "severity": "medium",
+      "status": "closed",
+      "documentSays": "Book I page 2-27-9 prints the transform as the matrix applied to the display coordinate minus the centre, with the centre added back, and page 2-27-10 gives the centre thirteen bits in two's complement. Neither page says how wide that difference is when the multiplier takes it.",
+      "referenceDoes": "ares at commit 9408cb43d4948fc3ea6e152a307a34348df3fe04, ares/sfc/ppu/mode7.cpp lines 27 to 29: auto clip = [](s32 n) -> s32 { return n & 0x2000 ? (n | ~1023) : (n & 1023); }; and the two products with the scroll offset multiply clip(hoffset - hcenter) and clip(voffset - vcenter).",
+      "packageFollows": "reference",
+      "reasoning": "The manual is silent on the width, so the second implementation is the highest source that speaks to it. Before this the package multiplied the whole difference, so a scroll 1024 or more pixels from the centre drew the field from a point a whole field away from where ares draws it.",
+      "wouldReopenIt": "A frame captured on a console with the scroll at least 1024 pixels from the centre that disagrees, or a second implementation that multiplies the whole difference.",
+      "wouldSettleIt": "Settled at the second-implementation rung. A console capture would raise it to a measurement."
+    },
+    {
       "id": "nothing-here-is-a-timing-claim",
       "parts": ["snes-graphics"],
       "severity": "low",
