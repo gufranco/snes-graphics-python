@@ -134,8 +134,25 @@ class SizeTest(unittest.TestCase):
     def test_a_size_setting_names_two_sizes(self) -> None:
         self.assertEqual(oam.sizes(0), ((8, 8), (16, 16)))
 
-    def test_the_last_setting_is_the_largest_pair(self) -> None:
-        self.assertEqual(oam.sizes(7), ((32, 32), (64, 64)))
+    def test_the_last_setting_pairs_a_tall_small_size_with_a_square_large_one(self) -> None:
+        # Arrange
+        setting = 7
+
+        # Act
+        pair = oam.sizes(setting)
+
+        # Assert
+        self.assertEqual(pair, ((16, 32), (32, 32)))
+
+    def test_the_one_before_it_pairs_two_tall_sizes(self) -> None:
+        # Arrange
+        setting = 6
+
+        # Act
+        pair = oam.sizes(setting)
+
+        # Assert
+        self.assertEqual(pair, ((16, 32), (32, 64)))
 
     def test_a_setting_the_hardware_does_not_have_is_refused(self) -> None:
         with self.assertRaises(OutOfRange):

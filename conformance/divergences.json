@@ -41,6 +41,18 @@
       "wouldSettleIt": "Settled at the second-implementation rung. A console capture would raise it to a measurement."
     },
     {
+      "id": "object-size-settings-six-and-seven",
+      "parts": ["snes-graphics"],
+      "severity": "medium",
+      "status": "closed",
+      "documentSays": "Book I page 2-27-1 prints six object size settings, 000 to 101, from 8 and 16 dots up to 32 and 64 dots. Settings 110 and 111 are not printed.",
+      "referenceDoes": "ares at commit 9408cb43d4948fc3ea6e152a307a34348df3fe04, ares/sfc/ppu/oam.cpp lines 57 to 71: small widths { 8, 8, 8, 16, 16, 32, 16, 16}, large widths {16, 32, 64, 32, 64, 64, 32, 32}, small heights { 8, 8, 8, 16, 16, 32, 32, 32}, large heights {16, 32, 64, 32, 64, 64, 64, 32}. Setting 6 is 16 by 32 and 32 by 64, and setting 7 is 16 by 32 and 32 by 32.",
+      "packageFollows": "reference",
+      "reasoning": "For the two settings the manual leaves out, the second implementation is the highest source that speaks. Setting 7 used to read 32 by 32 and 64 by 64, which no source on this machine gives. ares also draws a small sprite in settings 6 and 7 sixteen lines tall while object interlace is on; that depends on a register this package does not model, and the table here is the one without it.",
+      "wouldReopenIt": "A frame captured on a console under setting 6 or 7 that disagrees, or a second implementation with a different pair.",
+      "wouldSettleIt": "Settled at the second-implementation rung. A console capture would raise it to a measurement."
+    },
+    {
       "id": "nothing-here-is-a-timing-claim",
       "parts": ["snes-graphics"],
       "severity": "low",

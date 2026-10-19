@@ -8,7 +8,7 @@ Super Nintendoのタイル、カラー、背景マップ、スプライト、Mod
 [![Release](https://img.shields.io/github/v/release/gufranco/snes-graphics-python)](https://github.com/gufranco/snes-graphics-python/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-**7**種類のフォーマット、入力空間全体の走査で確定した**165,248**ケース、SuperFamiconvと比較した**66,432**ケース、3通りに読んだ実カートリッジデータの**11,765**領域、失敗**0**件、テスト**909**件、ステートメントとブランチのカバレッジ**100%**、依存関係なし
+**7**種類のフォーマット、入力空間全体の走査で確定した**165,248**ケース、SuperFamiconvと比較した**66,432**ケース、3通りに読んだ実カートリッジデータの**11,765**領域、失敗**0**件、テスト**910**件、ステートメントとブランチのカバレッジ**100%**、依存関係なし
 
 ```python
 from snesgfx import tiles
