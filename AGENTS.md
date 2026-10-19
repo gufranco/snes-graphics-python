@@ -119,11 +119,14 @@ wrong question.
 
 ## Test cartridges
 
-[`conformance/testroms.json`](conformance/testroms.json) lists the 9 test
-cartridges in `snes-roms/5 Tools & Service Test Carts/` that put pictures on a
-screen to be judged: both 240p Test Suite builds, HD Retrovision, Nintendo's
-Burn-in, NTF 2.5 and Test Program, both Aging programs and the Control Deck
-Tester. Each is pinned by SHA-256 and never committed.
+[`conformance/testroms.json`](conformance/testroms.json) lists the test
+cartridges that put pictures on a screen to be judged. Nine are in
+`snes-roms/5 Tools & Service Test Carts/`: both 240p Test Suite builds, HD
+Retrovision, Nintendo's Burn-in, NTF 2.5 and Test Program, both Aging programs
+and the Control Deck Tester. A tenth, byuu's OAM Size Test from the
+[higan snes-test-roms mirror](https://gitlab.com/higan/snes-test-roms) at
+`26e8aa91`, steps the size bit and `$2101`'s size setting under a sprite. Each
+is pinned by SHA-256 and never committed.
 
 Every one is `hosted` and waits on `snes-machine`, a whole-console member no
 plan names yet. None of them hands this package a tile, a palette or a map: they

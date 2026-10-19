@@ -80,6 +80,15 @@
       "exercises": "the tile, palette and background map formats, through the PPU that draws its screens",
       "outcome": "hosted",
       "needs": "snes-machine"
+    },
+    {
+      "id": "oam-size-test-byuu-2006",
+      "title": "OAM Size Test 1.0, byuu, 2006-08-23",
+      "sha256": "25f0daa3215e122f6746fdc8f5bf83e2fd29fa79ecc8b479b45cb5d288636505",
+      "source": "https://gitlab.com/higan/snes-test-roms at 26e8aa91e0d3b90b901e7e693bc4a8244b391d7b, jonasquinn-test-roms/test_oam/test_oam.smc",
+      "exercises": "the sprite table's size bit and the size settings in $2101, through the PPU that draws the sprite",
+      "outcome": "hosted",
+      "needs": "snes-machine"
     }
   ]
 }
