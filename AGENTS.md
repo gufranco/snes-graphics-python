@@ -117,6 +117,25 @@ rather than a shortcoming: the first version of this check swapped the plane
 pairs as its control and reported no separation, which is the right answer to the
 wrong question.
 
+## Test cartridges
+
+[`conformance/testroms.json`](conformance/testroms.json) lists the 9 test
+cartridges in `snes-roms/5 Tools & Service Test Carts/` that put pictures on a
+screen to be judged: both 240p Test Suite builds, HD Retrovision, Nintendo's
+Burn-in, NTF 2.5 and Test Program, both Aging programs and the Control Deck
+Tester. Each is pinned by SHA-256 and never committed.
+
+Every one is `hosted` and waits on `snes-machine`, a whole-console member no
+plan names yet. None of them hands this package a tile, a palette or a map: they
+build their screens with their own code, through the PPU, and the verdict is
+the picture a person reads off a television. This package decodes layouts it is
+given, and nothing in these images says where a layout starts, so there is no
+command to run here until a machine can run them.
+
+The `BIOS/` and `CPU/` folders, the SA-1 demonstrations and the other images
+in that folder are left out: none is a test of what a layout looks like on
+screen.
+
 ## Every gate, in the order to run them
 
 ```bash
