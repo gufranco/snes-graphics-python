@@ -128,12 +128,12 @@ and the Control Deck Tester. A tenth, byuu's OAM Size Test from the
 `26e8aa91`, steps the size bit and `$2101`'s size setting under a sprite. Each
 is pinned by SHA-256 and never committed.
 
-Every one is `hosted` and waits on `snes-machine`, a whole-console member no
-plan names yet. None of them hands this package a tile, a palette or a map: they
-build their screens with their own code, through the PPU, and the verdict is
-the picture a person reads off a television. This package decodes layouts it is
-given, and nothing in these images says where a layout starts, so there is no
-command to run here until a machine can run them.
+Every one is `hosted` and waits on `snes-ppu`, an S-PPU member no plan names
+yet. None of them hands this package a tile, a palette or a map: they write
+their screens through the PPU's ports, and the factory programs check VRAM,
+OAM and CGRAM by reading those ports back. This package models the layouts the
+ports carry, not the ports, the counters or sprite evaluation, so there is no
+command to run here until a PPU member can run them.
 
 The `BIOS/` and `CPU/` folders, the SA-1 demonstrations and the other images
 in that folder are left out: none is a test of what a layout looks like on

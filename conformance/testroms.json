@@ -7,7 +7,7 @@
       "source": "snes-roms/5 Tools & Service Test Carts/240p Test Suite (World) (v1.061) (NTSC) (Program) (Aftermarket) (Unl).sfc",
       "exercises": "the tile, palette and background map formats, through the PPU that draws its screens",
       "outcome": "hosted",
-      "needs": "snes-machine"
+      "needs": "snes-ppu"
     },
     {
       "id": "240p-test-suite-pal",
@@ -16,7 +16,7 @@
       "source": "snes-roms/5 Tools & Service Test Carts/240p Test Suite (World) (v1.061) (PAL) (Program) (Aftermarket) (Unl).sfc",
       "exercises": "the tile, palette and background map formats, through the PPU that draws its screens",
       "outcome": "hosted",
-      "needs": "snes-machine"
+      "needs": "snes-ppu"
     },
     {
       "id": "burn-in-rev-d",
@@ -25,7 +25,7 @@
       "source": "snes-roms/5 Tools & Service Test Carts/Burn-in - Test Cartridge (USA) (Rev D).sfc",
       "exercises": "the tile, palette and background map formats, through the PPU that draws its screens",
       "outcome": "hosted",
-      "needs": "snes-machine"
+      "needs": "snes-ppu"
     },
     {
       "id": "hd-retrovision-1-4",
@@ -34,7 +34,7 @@
       "source": "snes-roms/5 Tools & Service Test Carts/HD Retrovision Test Rom (PD) v1.4 HD Retrovision.sfc",
       "exercises": "the tile, palette and background map formats, through the PPU that draws its screens",
       "outcome": "hosted",
-      "needs": "snes-machine"
+      "needs": "snes-ppu"
     },
     {
       "id": "ntf-2-5-rev-a",
@@ -43,7 +43,7 @@
       "source": "snes-roms/5 Tools & Service Test Carts/NTF 2.5 Test Cartridge (USA) (Rev A).sfc",
       "exercises": "the tile, palette and background map formats, through the PPU that draws its screens",
       "outcome": "hosted",
-      "needs": "snes-machine"
+      "needs": "snes-ppu"
     },
     {
       "id": "test-program",
@@ -52,7 +52,7 @@
       "source": "snes-roms/5 Tools & Service Test Carts/SNES Test Program (U).sfc",
       "exercises": "the tile, palette and background map formats, through the PPU that draws its screens",
       "outcome": "hosted",
-      "needs": "snes-machine"
+      "needs": "snes-ppu"
     },
     {
       "id": "snsp-aging-1-02",
@@ -61,7 +61,7 @@
       "source": "snes-roms/5 Tools & Service Test Carts/SNSP Aging Ver 1.02 (Japan) (En).sfc",
       "exercises": "the tile, palette and background map formats, through the PPU that draws its screens",
       "outcome": "hosted",
-      "needs": "snes-machine"
+      "needs": "snes-ppu"
     },
     {
       "id": "aging-1-00",
@@ -70,7 +70,7 @@
       "source": "snes-roms/5 Tools & Service Test Carts/Super Famicom Aging Program Ver. 1.00 (Japan) (En).sfc",
       "exercises": "the tile, palette and background map formats, through the PPU that draws its screens",
       "outcome": "hosted",
-      "needs": "snes-machine"
+      "needs": "snes-ppu"
     },
     {
       "id": "control-deck-tester-rev-1",
@@ -79,7 +79,7 @@
       "source": "snes-roms/5 Tools & Service Test Carts/Super NES Control Deck Tester (Japan) (En) (Rev 1).sfc",
       "exercises": "the tile, palette and background map formats, through the PPU that draws its screens",
       "outcome": "hosted",
-      "needs": "snes-machine"
+      "needs": "snes-ppu"
     },
     {
       "id": "oam-size-test-byuu-2006",
@@ -88,7 +88,7 @@
       "source": "https://gitlab.com/higan/snes-test-roms at 26e8aa91e0d3b90b901e7e693bc4a8244b391d7b, jonasquinn-test-roms/test_oam/test_oam.smc",
       "exercises": "the sprite table's size bit and the size settings in $2101, through the PPU that draws the sprite",
       "outcome": "hosted",
-      "needs": "snes-machine"
+      "needs": "snes-ppu"
     }
   ]
 }
