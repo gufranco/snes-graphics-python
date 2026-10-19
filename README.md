@@ -35,10 +35,10 @@ The 32 bytes are one four bit tile as video memory holds it. `tiles.decode` turn
 
 ## Install
 
-| Requirement | Version |
-|:--|:--|
-| Python | 3.12 or newer |
-| git | Any |
+| Requirement | Version       |
+| :---------- | :------------ |
+| Python      | 3.12 or newer |
+| git         | Any           |
 
 ```bash
 git clone https://github.com/gufranco/snes-graphics-python.git
@@ -60,26 +60,26 @@ Releases follow [Semantic Versioning](https://semver.org/) and are cut from the 
 
 The package has one module per layout and a catalogue over them. The catalogue lets a tool hold bytes and a format name without knowing each module's call shape. Every module is also imported directly.
 
-| Module | Holds |
-|:--|:--|
-| [`snesgfx/tiles.py`](snesgfx/tiles.py) | Bit plane tiles at 2, 4 and 8 bits a pixel, and flipping |
-| [`snesgfx/palette.py`](snesgfx/palette.py) | The fifteen bit colour word and the palette blocks each depth reaches |
-| [`snesgfx/tilemap.py`](snesgfx/tilemap.py) | The background map entry and the quadrants a map is stored in |
-| [`snesgfx/oam.py`](snesgfx/oam.py) | The sprite table, both the 512 byte low table and the 32 byte high table |
-| [`snesgfx/mode7.py`](snesgfx/mode7.py) | The Mode 7 matrix in the hardware's fixed point, and the interleaved map and pixels |
-| [`snesgfx/models.py`](snesgfx/models.py) | The catalogue |
-| [`snesgfx/errors.py`](snesgfx/errors.py) | Every exception the package raises |
-| [`snesgfx/doctor.py`](snesgfx/doctor.py) | The doctor |
-| [`snesgfx/environment.py`](snesgfx/environment.py) | The machine checks the doctor prints |
+| Module                                             | Holds                                                                               |
+| :------------------------------------------------- | :---------------------------------------------------------------------------------- |
+| [`snesgfx/tiles.py`](snesgfx/tiles.py)             | Bit plane tiles at 2, 4 and 8 bits a pixel, and flipping                            |
+| [`snesgfx/palette.py`](snesgfx/palette.py)         | The fifteen bit colour word and the palette blocks each depth reaches               |
+| [`snesgfx/tilemap.py`](snesgfx/tilemap.py)         | The background map entry and the quadrants a map is stored in                       |
+| [`snesgfx/oam.py`](snesgfx/oam.py)                 | The sprite table, both the 512 byte low table and the 32 byte high table            |
+| [`snesgfx/mode7.py`](snesgfx/mode7.py)             | The Mode 7 matrix in the hardware's fixed point, and the interleaved map and pixels |
+| [`snesgfx/models.py`](snesgfx/models.py)           | The catalogue                                                                       |
+| [`snesgfx/errors.py`](snesgfx/errors.py)           | Every exception the package raises                                                  |
+| [`snesgfx/doctor.py`](snesgfx/doctor.py)           | The doctor                                                                          |
+| [`snesgfx/environment.py`](snesgfx/environment.py) | The machine checks the doctor prints                                                |
 
 ### The catalogue
 
-| Name | Content |
-|:--|:--|
-| `snesgfx.FORMATS` | The seven `Format` records, keyed by canonical name |
+| Name                         | Content                                                                                                                                                |
+| :--------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `snesgfx.FORMATS`            | The seven `Format` records, keyed by canonical name                                                                                                    |
 | `snesgfx.format_named(name)` | The `Format` a name or an alias means. Case, spaces, hyphens and underscores are ignored. Raises `UnknownFormat` for any other name, listing the seven |
-| `snesgfx.Format` | A record with `name`, `aliases`, `summary`, `decode` and `encode` |
-| `snesgfx.__version__` | The installed version |
+| `snesgfx.Format`             | A record with `name`, `aliases`, `summary`, `decode` and `encode`                                                                                      |
+| `snesgfx.__version__`        | The installed version                                                                                                                                  |
 
 `Format.decode` and `Format.encode` take a whole buffer. On the three tile formats they read and write a sheet of tiles through `tiles.decode_sheet` and `tiles.encode_sheet`. On `mode7` they split and join the interleaved words. On the other three they are the module's own `decode` and `encode`.
 
@@ -122,22 +122,22 @@ oam ('sprites', 'objects', 'obj')
 
 ### Tiles
 
-| Call | Effect |
-|:--|:--|
-| `tiles.decode(data, depth)` | One tile of `depth` times 8 bytes to 64 colour numbers, row by row |
-| `tiles.encode(pixels, depth)` | 64 colour numbers to one tile |
-| `tiles.decode_sheet(data, depth)` | Consecutive tiles to a list of 64-number lists |
-| `tiles.encode_sheet(sheet, depth)` | A list of tiles back to bytes |
-| `tiles.flip(pixels, horizontal=False, vertical=False)` | A mirrored copy of one tile |
-| `tiles.tile_bytes(depth)` | 16, 32 or 64 |
-| `tiles.depth_of(name)` | The depth an integer or a name in `tiles.NAMES` means |
+| Call                                                   | Effect                                                             |
+| :----------------------------------------------------- | :----------------------------------------------------------------- |
+| `tiles.decode(data, depth)`                            | One tile of `depth` times 8 bytes to 64 colour numbers, row by row |
+| `tiles.encode(pixels, depth)`                          | 64 colour numbers to one tile                                      |
+| `tiles.decode_sheet(data, depth)`                      | Consecutive tiles to a list of 64-number lists                     |
+| `tiles.encode_sheet(sheet, depth)`                     | A list of tiles back to bytes                                      |
+| `tiles.flip(pixels, horizontal=False, vertical=False)` | A mirrored copy of one tile                                        |
+| `tiles.tile_bytes(depth)`                              | 16, 32 or 64                                                       |
+| `tiles.depth_of(name)`                                 | The depth an integer or a name in `tiles.NAMES` means              |
 
-| Constant | Value |
-|:--|:--|
-| `tiles.DEPTHS` | `(2, 4, 8)` |
-| `tiles.TILE_PIXELS`, `tiles.TILE_WIDTH` | 64 and 8 |
-| `tiles.PLANE_PAIR_BYTES` | 16, the bytes one pair of planes takes |
-| `tiles.NAMES` | `2bpp`, `4bpp`, `8bpp`, `4-colour`, `16-colour` and `256-colour`, each mapped to its depth |
+| Constant                                | Value                                                                                      |
+| :-------------------------------------- | :----------------------------------------------------------------------------------------- |
+| `tiles.DEPTHS`                          | `(2, 4, 8)`                                                                                |
+| `tiles.TILE_PIXELS`, `tiles.TILE_WIDTH` | 64 and 8                                                                                   |
+| `tiles.PLANE_PAIR_BYTES`                | 16, the bytes one pair of planes takes                                                     |
+| `tiles.NAMES`                           | `2bpp`, `4bpp`, `8bpp`, `4-colour`, `16-colour` and `256-colour`, each mapped to its depth |
 
 ```python
 from snesgfx import OutOfRange, Truncated, UnknownDepth, tiles
@@ -177,25 +177,25 @@ The first 16 bytes of the four bit tile decode as a complete two bit tile: its t
 
 ### Colour
 
-| Call | Effect |
-|:--|:--|
-| `palette.decode(data)` | Little-endian colour words to `(red, green, blue)` triples of 0 to 255 |
-| `palette.encode(colours)` | Triples to colour words. Each channel keeps its top five bits |
-| `palette.to_rgb(word)`, `palette.to_word(red, green, blue)` | One colour each way. Bit 15 of a word is ignored |
-| `palette.normalise(data)` | A copy with bit 15 of every word cleared |
-| `palette.block_size(depth)` | 4, 16 or 256 colours |
-| `palette.block_start(depth, block)` | The index of a block's first colour |
-| `palette.resolve(table, pixel, depth, block)` | The colour a pixel number reaches through a block |
-| `palette.is_transparent(pixel)` | True for colour number 0 |
+| Call                                                        | Effect                                                                 |
+| :---------------------------------------------------------- | :--------------------------------------------------------------------- |
+| `palette.decode(data)`                                      | Little-endian colour words to `(red, green, blue)` triples of 0 to 255 |
+| `palette.encode(colours)`                                   | Triples to colour words. Each channel keeps its top five bits          |
+| `palette.to_rgb(word)`, `palette.to_word(red, green, blue)` | One colour each way. Bit 15 of a word is ignored                       |
+| `palette.normalise(data)`                                   | A copy with bit 15 of every word cleared                               |
+| `palette.block_size(depth)`                                 | 4, 16 or 256 colours                                                   |
+| `palette.block_start(depth, block)`                         | The index of a block's first colour                                    |
+| `palette.resolve(table, pixel, depth, block)`               | The colour a pixel number reaches through a block                      |
+| `palette.is_transparent(pixel)`                             | True for colour number 0                                               |
 
-| Constant | Value |
-|:--|:--|
-| `palette.COLOURS` | 256 |
-| `palette.BYTES_PER_COLOUR` | 2 |
-| `palette.WORD_MASK` | `0x7FFF` |
-| `palette.CHANNEL_BITS`, `palette.CHANNEL_MASK` | 5 and `0x1F` |
-| `palette.BLOCKS` | `{2: 4, 4: 16, 8: 256}` |
-| `palette.TRANSPARENT` | 0 |
+| Constant                                       | Value                   |
+| :--------------------------------------------- | :---------------------- |
+| `palette.COLOURS`                              | 256                     |
+| `palette.BYTES_PER_COLOUR`                     | 2                       |
+| `palette.WORD_MASK`                            | `0x7FFF`                |
+| `palette.CHANNEL_BITS`, `palette.CHANNEL_MASK` | 5 and `0x1F`            |
+| `palette.BLOCKS`                               | `{2: 4, 4: 16, 8: 256}` |
+| `palette.TRANSPARENT`                          | 0                       |
 
 ```python
 from snesgfx import palette
@@ -229,23 +229,23 @@ True False
 
 `tilemap.Entry(tile=0, block=0, priority=False, horizontal_flip=False, vertical_flip=False)` is one map entry.
 
-| Call or attribute | Effect |
-|:--|:--|
-| `Entry.from_word(word)` | The entry a sixteen bit word holds |
-| `entry.word` | The word an entry packs to. Raises `OutOfRange` for a tile above 1023 or a block above 7 |
-| `tilemap.decode(data)`, `tilemap.encode(entries)` | Little-endian words each way |
-| `tilemap.screen_size(size)` | The width and height in tiles of screen size setting 0 to 3 |
-| `tilemap.offset_of(x, y, size)` | The entry index of a tile position, quadrants included. Positions wrap |
-| `tilemap.entry_at(entries, x, y, size)` | The entry at a tile position |
+| Call or attribute                                 | Effect                                                                                   |
+| :------------------------------------------------ | :--------------------------------------------------------------------------------------- |
+| `Entry.from_word(word)`                           | The entry a sixteen bit word holds                                                       |
+| `entry.word`                                      | The word an entry packs to. Raises `OutOfRange` for a tile above 1023 or a block above 7 |
+| `tilemap.decode(data)`, `tilemap.encode(entries)` | Little-endian words each way                                                             |
+| `tilemap.screen_size(size)`                       | The width and height in tiles of screen size setting 0 to 3                              |
+| `tilemap.offset_of(x, y, size)`                   | The entry index of a tile position, quadrants included. Positions wrap                   |
+| `tilemap.entry_at(entries, x, y, size)`           | The entry at a tile position                                                             |
 
-| Constant | Value |
-|:--|:--|
-| `tilemap.SCREEN_SIZES` | `((32, 32), (64, 32), (32, 64), (64, 64))` |
-| `tilemap.QUADRANT_TILES`, `tilemap.QUADRANT_ENTRIES` | 32 and 1024 |
-| `tilemap.BYTES_PER_ENTRY` | 2 |
-| `tilemap.TILE_MASK` | `0x03FF` |
-| `tilemap.BLOCK_SHIFT`, `tilemap.BLOCK_MASK` | 10 and `0x07` |
-| `tilemap.PRIORITY_BIT`, `tilemap.HORIZONTAL_BIT`, `tilemap.VERTICAL_BIT` | `0x2000`, `0x4000`, `0x8000` |
+| Constant                                                                 | Value                                      |
+| :----------------------------------------------------------------------- | :----------------------------------------- |
+| `tilemap.SCREEN_SIZES`                                                   | `((32, 32), (64, 32), (32, 64), (64, 64))` |
+| `tilemap.QUADRANT_TILES`, `tilemap.QUADRANT_ENTRIES`                     | 32 and 1024                                |
+| `tilemap.BYTES_PER_ENTRY`                                                | 2                                          |
+| `tilemap.TILE_MASK`                                                      | `0x03FF`                                   |
+| `tilemap.BLOCK_SHIFT`, `tilemap.BLOCK_MASK`                              | 10 and `0x07`                              |
+| `tilemap.PRIORITY_BIT`, `tilemap.HORIZONTAL_BIT`, `tilemap.VERTICAL_BIT` | `0x2000`, `0x4000`, `0x8000`               |
 
 ```python
 from snesgfx import tilemap
@@ -279,22 +279,22 @@ Column 32 of a 64 by 32 map is entry 1024, the first entry of the second quadran
 
 `oam.Sprite(x=0, y=0, tile=0, block=0, priority=0, table=0, horizontal_flip=False, vertical_flip=False, large=False)` is one sprite.
 
-| Call or attribute | Effect |
-|:--|:--|
-| `oam.decode(data)` | The 544 byte table to 128 sprites. Bit 8 of `x` and `large` come from the high table |
-| `oam.encode(sprites)` | Exactly 128 sprites to 544 bytes. Raises `OutOfRange` for `x` from 512, `y` from 256, `tile` from 512, `block` from 8 or `priority` from 4 |
-| `sprite.screen_x` | `x` as a screen position: from 256 up, `x` minus 512 |
-| `sprite.table` | Bit 0 of the attribute byte, which is also bit 8 of `tile`. `encode` writes that bit from `tile` |
-| `oam.sizes(setting)` | The small and large sizes of object size setting 0 to 7 |
-| `oam.size_of(sprite, setting)` | The size one sprite takes under a setting |
+| Call or attribute              | Effect                                                                                                                                     |
+| :----------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------- |
+| `oam.decode(data)`             | The 544 byte table to 128 sprites. Bit 8 of `x` and `large` come from the high table                                                       |
+| `oam.encode(sprites)`          | Exactly 128 sprites to 544 bytes. Raises `OutOfRange` for `x` from 512, `y` from 256, `tile` from 512, `block` from 8 or `priority` from 4 |
+| `sprite.screen_x`              | `x` as a screen position: from 256 up, `x` minus 512                                                                                       |
+| `sprite.table`                 | Bit 0 of the attribute byte, which is also bit 8 of `tile`. `encode` writes that bit from `tile`                                           |
+| `oam.sizes(setting)`           | The small and large sizes of object size setting 0 to 7                                                                                    |
+| `oam.size_of(sprite, setting)` | The size one sprite takes under a setting                                                                                                  |
 
-| Constant | Value |
-|:--|:--|
-| `oam.SPRITES` | 128 |
-| `oam.LOW_ENTRY_BYTES`, `oam.LOW_TABLE_BYTES` | 4 and 512 |
-| `oam.HIGH_TABLE_BYTES`, `oam.TABLE_BYTES` | 32 and 544 |
-| `oam.SCREEN_WIDTH` | 256 |
-| `oam.SIZES` | The eight `(small, large)` pairs |
+| Constant                                     | Value                            |
+| :------------------------------------------- | :------------------------------- |
+| `oam.SPRITES`                                | 128                              |
+| `oam.LOW_ENTRY_BYTES`, `oam.LOW_TABLE_BYTES` | 4 and 512                        |
+| `oam.HIGH_TABLE_BYTES`, `oam.TABLE_BYTES`    | 32 and 544                       |
+| `oam.SCREEN_WIDTH`                           | 256                              |
+| `oam.SIZES`                                  | The eight `(small, large)` pairs |
 
 ```python
 from snesgfx import oam
@@ -321,22 +321,22 @@ Sprite 5 keeps its low four bytes at offset 20. Its two high bits sit in byte 51
 
 ### Mode 7
 
-| Call | Effect |
-|:--|:--|
-| `mode7.Matrix(a, b, c, d)` | The four matrix registers. Each attribute reads as a signed sixteen bit value, 8.8 fixed point |
-| `mode7.Field(matrix, centre=(0, 0), scroll=(0, 0))` | A matrix with its centre and scroll, each read as signed thirteen bit values |
-| `field.at(x, y)` | The field pixel a screen pixel shows. The products with the scroll offset and with `y` lose their low six bits before the sum; the products with `x` keep them |
-| `mode7.signed13(value)`, `mode7.signed16(value)` | Sign extension |
-| `mode7.wrap(x, y)`, `mode7.outside(x, y)` | A position wrapped into the 1024 by 1024 field, and whether it lies outside |
-| `mode7.deinterleave(vram)`, `mode7.interleave(names, pixels)` | Split the words into map bytes and pixel bytes, and join them back |
-| `mode7.tile(pixels, index)` | The 64 pixels of one tile, a byte each |
-| `mode7.name_at(names, x, y)` | The tile name under a field pixel |
+| Call                                                          | Effect                                                                                                                                                         |
+| :------------------------------------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `mode7.Matrix(a, b, c, d)`                                    | The four matrix registers. Each attribute reads as a signed sixteen bit value, 8.8 fixed point                                                                 |
+| `mode7.Field(matrix, centre=(0, 0), scroll=(0, 0))`           | A matrix with its centre and scroll, each read as signed thirteen bit values                                                                                   |
+| `field.at(x, y)`                                              | The field pixel a screen pixel shows. The products with the scroll offset and with `y` lose their low six bits before the sum; the products with `x` keep them |
+| `mode7.signed13(value)`, `mode7.signed16(value)`              | Sign extension                                                                                                                                                 |
+| `mode7.wrap(x, y)`, `mode7.outside(x, y)`                     | A position wrapped into the 1024 by 1024 field, and whether it lies outside                                                                                    |
+| `mode7.deinterleave(vram)`, `mode7.interleave(names, pixels)` | Split the words into map bytes and pixel bytes, and join them back                                                                                             |
+| `mode7.tile(pixels, index)`                                   | The 64 pixels of one tile, a byte each                                                                                                                         |
+| `mode7.name_at(names, x, y)`                                  | The tile name under a field pixel                                                                                                                              |
 
-| Constant | Value |
-|:--|:--|
-| `mode7.FIELD_TILES`, `mode7.TILE_WIDTH`, `mode7.FIELD_PIXELS` | 128, 8 and 1024 |
-| `mode7.FRACTION_BITS` | 8 |
-| `mode7.TRUNCATE` | `~0x3F` |
+| Constant                                                         | Value                                   |
+| :--------------------------------------------------------------- | :-------------------------------------- |
+| `mode7.FIELD_TILES`, `mode7.TILE_WIDTH`, `mode7.FIELD_PIXELS`    | 128, 8 and 1024                         |
+| `mode7.FRACTION_BITS`                                            | 8                                       |
+| `mode7.TRUNCATE`                                                 | `~0x3F`                                 |
 | `mode7.SIGN13`, `mode7.RANGE13`, `mode7.SIGN16`, `mode7.RANGE16` | `0x1000`, `0x2000`, `0x8000`, `0x10000` |
 
 ```python
@@ -374,12 +374,12 @@ The sheared field shows column 0 although the full products, 48 and 240, add up 
 
 Every exception lives in [`snesgfx/errors.py`](snesgfx/errors.py), and all four are exported from `snesgfx`.
 
-| Exception | Raised when |
-|:--|:--|
-| `Truncated` | A buffer is the wrong length: a tile that is not 8 bytes per bit of its depth, a pixel list that is not 64 long, a sheet or colour or map buffer that does not divide evenly, a sprite table that is not 544 bytes or 128 sprites, Mode 7 words of odd length or halves of unequal length, a Mode 7 tile past the end |
-| `OutOfRange` | A value does not fit its field: a pixel too large for its depth, a channel outside 0 to 255, a colour word above 16 bits, a palette block past the table, a map entry tile or block, a sprite field, a screen size or object size setting, a depth `palette.block_size` does not know |
-| `UnknownDepth` | A tile depth other than 2, 4 and 8, or a name `tiles.depth_of` does not know |
-| `UnknownFormat` | A name `format_named` does not know |
+| Exception       | Raised when                                                                                                                                                                                                                                                                                                           |
+| :-------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Truncated`     | A buffer is the wrong length: a tile that is not 8 bytes per bit of its depth, a pixel list that is not 64 long, a sheet or colour or map buffer that does not divide evenly, a sprite table that is not 544 bytes or 128 sprites, Mode 7 words of odd length or halves of unequal length, a Mode 7 tile past the end |
+| `OutOfRange`    | A value does not fit its field: a pixel too large for its depth, a channel outside 0 to 255, a colour word above 16 bits, a palette block past the table, a map entry tile or block, a sprite field, a screen size or object size setting, a depth `palette.block_size` does not know                                 |
+| `UnknownDepth`  | A tile depth other than 2, 4 and 8, or a name `tiles.depth_of` does not know                                                                                                                                                                                                                                          |
+| `UnknownFormat` | A name `format_named` does not know                                                                                                                                                                                                                                                                                   |
 
 ### The doctor
 
@@ -387,15 +387,15 @@ Every exception lives in [`snesgfx/errors.py`](snesgfx/errors.py), and all four 
 
 ## The formats
 
-| Name | What it is | Aliases |
-|:--|:--|:--|
-| `2bpp` | Two planes, four colours, 16 bytes a tile | `4-colour`, `2bit` |
-| `4bpp` | Four planes, sixteen colours, 32 bytes a tile | `16-colour`, `4bit` |
-| `8bpp` | Eight planes, 256 colours, 64 bytes a tile | `256-colour`, `8bit` |
-| `mode7` | The rotating background: a byte a pixel, map and pixels interleaved word by word | `mode-7`, `m7` |
-| `palette` | Fifteen bit colour, two bytes each, blue highest | `cgram`, `colours`, `colors` |
-| `tilemap` | The background map, sixteen bits an entry, stored in quadrants | `map`, `screen`, `bg` |
-| `oam` | The sprite table, four bytes a sprite plus two bits in a second table | `sprites`, `objects`, `obj` |
+| Name      | What it is                                                                       | Aliases                      |
+| :-------- | :------------------------------------------------------------------------------- | :--------------------------- |
+| `2bpp`    | Two planes, four colours, 16 bytes a tile                                        | `4-colour`, `2bit`           |
+| `4bpp`    | Four planes, sixteen colours, 32 bytes a tile                                    | `16-colour`, `4bit`          |
+| `8bpp`    | Eight planes, 256 colours, 64 bytes a tile                                       | `256-colour`, `8bit`         |
+| `mode7`   | The rotating background: a byte a pixel, map and pixels interleaved word by word | `mode-7`, `m7`               |
+| `palette` | Fifteen bit colour, two bytes each, blue highest                                 | `cgram`, `colours`, `colors` |
+| `tilemap` | The background map, sixteen bits an entry, stored in quadrants                   | `map`, `screen`, `bg`        |
+| `oam`     | The sprite table, four bytes a sprite plus two bits in a second table            | `sprites`, `objects`, `obj`  |
 
 There is no six bit depth, because no background mode has one. Nothing here reads or writes an image file, which keeps the package free of dependencies.
 
@@ -434,13 +434,13 @@ python3 -m conformance.exhaustive
 165,248 cases, 0 checks failed
 ```
 
-| Walk | Cases | What it covers |
-|:--|--:|:--|
-| `tiles-2bpp` | 65,536 | Every two bit tile row pair, decoded and re-encoded |
-| `tiles-planes` | 896 | Every plane of every depth against each of the 64 pixels |
-| `palette` | 32,768 | Every colour word, widened and narrowed back |
-| `tilemap` | 65,536 | Every map entry word, split into fields and packed back |
-| `oam-high` | 512 | Both high bits of each of the 128 sprites, with no neighbour disturbed |
+| Walk           |  Cases | What it covers                                                         |
+| :------------- | -----: | :--------------------------------------------------------------------- |
+| `tiles-2bpp`   | 65,536 | Every two bit tile row pair, decoded and re-encoded                    |
+| `tiles-planes` |    896 | Every plane of every depth against each of the 64 pixels               |
+| `palette`      | 32,768 | Every colour word, widened and narrowed back                           |
+| `tilemap`      | 65,536 | Every map entry word, split into fields and packed back                |
+| `oam-high`     |    512 | Both high bits of each of the 128 sprites, with no neighbour disturbed |
 
 A four bit tile has too many states to walk. The plane walk stands in for it: each plane must reach its own bit of every pixel and nothing else. The tests break each format on purpose and confirm the walk catches it.
 
@@ -457,11 +457,11 @@ python3 -m conformance.against_reference
   66,432 cases compared against the reference, none disagreed
 ```
 
-| Figure | Cases | How the cases are chosen |
-|:--|--:|:--|
-| Bit plane layout | 896 | One bit set at a time, at each depth |
-| Colour packing | 32,768 | Every five bit red, green and blue |
-| Map entry | 32,768 | Every tile, block and pair of flips |
+| Figure           |  Cases | How the cases are chosen             |
+| :--------------- | -----: | :----------------------------------- |
+| Bit plane layout |    896 | One bit set at a time, at each depth |
+| Colour packing   | 32,768 | Every five bit red, green and blue   |
+| Map entry        | 32,768 | Every tile, block and pair of flips  |
 
 This package narrows eight bit channels itself, and the reference is handed the five bits the console stores.
 
@@ -485,29 +485,29 @@ Regions are 2,048 bytes taken every 32 KB from offset `0x8000` up to 2 MB, chose
 
 ### The checking tools
 
-| Command | Arguments | Exit codes |
-|:--|:--|:--|
-| `python3 -m conformance.exhaustive` | `--only NAME` | 0 every walk clean, 1 a walk failed, 2 an unknown name or argument |
-| `python3 -m conformance.build` | `--sources DIR`, `--output PATH`, `--pinned FILE`, `--driver-source FILE` | 0 built, 1 the compiler failed, 2 a bad argument or a failed fetch |
-| `python3 -m conformance.against_reference` | None | 0 no disagreement, or the driver is not built and it says so, 1 a disagreement |
-| `python3 -m conformance.against_cartridges` | `SNES_CARTRIDGE_DIR` in the environment | 0 above the floor, 1 at or below it, 2 nothing to check |
-| `python3 -m conformance.quotes` | None | 0 every quote located or no manual on disk, 1 a quote or citation that does not hold |
-| `python3 -m conformance.documents` | `--check`, `--only SUBSTRING` | 0 every document verified, 1 a refusal, no match or a bad argument |
-| `python3 -m conformance.speed` | None | 0 at least 10,000 four bit decodes a second, 1 below that |
-| `python3 -m conformance.links` | None | 0, or 1 when an address in this file answers 404 or 410 |
-| `python3 -m conformance.package WHEEL` | A built wheel | 0 every module and no test shipped, 1 a fault or no such file, 2 no argument |
+| Command                                     | Arguments                                                                 | Exit codes                                                                           |
+| :------------------------------------------ | :------------------------------------------------------------------------ | :----------------------------------------------------------------------------------- |
+| `python3 -m conformance.exhaustive`         | `--only NAME`                                                             | 0 every walk clean, 1 a walk failed, 2 an unknown name or argument                   |
+| `python3 -m conformance.build`              | `--sources DIR`, `--output PATH`, `--pinned FILE`, `--driver-source FILE` | 0 built, 1 the compiler failed, 2 a bad argument or a failed fetch                   |
+| `python3 -m conformance.against_reference`  | None                                                                      | 0 no disagreement, or the driver is not built and it says so, 1 a disagreement       |
+| `python3 -m conformance.against_cartridges` | `SNES_CARTRIDGE_DIR` in the environment                                   | 0 above the floor, 1 at or below it, 2 nothing to check                              |
+| `python3 -m conformance.quotes`             | None                                                                      | 0 every quote located or no manual on disk, 1 a quote or citation that does not hold |
+| `python3 -m conformance.documents`          | `--check`, `--only SUBSTRING`                                             | 0 every document verified, 1 a refusal, no match or a bad argument                   |
+| `python3 -m conformance.speed`              | None                                                                      | 0 at least 10,000 four bit decodes a second, 1 below that                            |
+| `python3 -m conformance.links`              | None                                                                      | 0, or 1 when an address in this file answers 404 or 410                              |
+| `python3 -m conformance.package WHEEL`      | A built wheel                                                             | 0 every module and no test shipped, 1 a fault or no such file, 2 no argument         |
 
 What the manual does not settle is in [OPEN-QUESTIONS.md](OPEN-QUESTIONS.md), and each entry is also in [`conformance/divergences.json`](conformance/divergences.json) with its status and severity.
 
 ## Working on it
 
-| Need | Where |
-|:--|:--|
-| Every gate and the order to run them | [CONTRIBUTING.md](CONTRIBUTING.md) |
-| The same material for a coding agent | [AGENTS.md](AGENTS.md) |
-| The standard this repository shares with the rest of the family | [FAMILY.md](FAMILY.md) |
-| Bug reports | [GitHub Issues](https://github.com/gufranco/snes-graphics-python/issues) |
-| Security reports | [SECURITY.md](SECURITY.md) |
+| Need                                                            | Where                                                                    |
+| :-------------------------------------------------------------- | :----------------------------------------------------------------------- |
+| Every gate and the order to run them                            | [CONTRIBUTING.md](CONTRIBUTING.md)                                       |
+| The same material for a coding agent                            | [AGENTS.md](AGENTS.md)                                                   |
+| The standard this repository shares with the rest of the family | [FAMILY.md](FAMILY.md)                                                   |
+| Bug reports                                                     | [GitHub Issues](https://github.com/gufranco/snes-graphics-python/issues) |
+| Security reports                                                | [SECURITY.md](SECURITY.md)                                               |
 
 ```bash
 uvx ruff@0.16.3 format --check .
@@ -526,7 +526,7 @@ Each module has a test file beside it, named after it, and each runs on its own,
 
 ## References
 
-- *SNES Development Manual, Book I*, Nintendo of America Inc., undated. Appendix A, pages A-10, A-12 and A-17. 240 pages, 21,022,582 bytes, SHA-256 `f1405241000046abba7849376d2ec53cf85f1ad2e9950d69a7c2cf1f3ff6b791`. It is not redistributable and is not in this repository. `python3 -m conformance.documents` downloads it from https://archive.org/download/SNESDevManual/book1_text.pdf into `docs/manufacturer/`, which git ignores, and refuses any other file. `python3 -m conformance.documents --check` verifies a copy already there.
+- _SNES Development Manual, Book I_, Nintendo of America Inc., undated. Appendix A, pages A-10, A-12 and A-17. 240 pages, 21,022,582 bytes, SHA-256 `f1405241000046abba7849376d2ec53cf85f1ad2e9950d69a7c2cf1f3ff6b791`. It is not redistributable and is not in this repository. `python3 -m conformance.documents` downloads it from https://archive.org/download/SNESDevManual/book1_text.pdf into `docs/manufacturer/`, which git ignores, and refuses any other file. `python3 -m conformance.documents --check` verifies a copy already there.
 - SuperFamiconv by David Lindecrantz, MIT, at commit `d903daf1b74c9ec6db7949fe62af2f0b58bdc23b`, https://github.com/Optiroc/SuperFamiconv, for an independent reading of the bit plane, colour and map entry figures. `unpack_native_tile`, `pack_native_color` and `pack_native_mapentry` are compiled at build time and never committed.
 
 ## Citing this

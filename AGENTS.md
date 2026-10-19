@@ -27,7 +27,7 @@ Reaching for a module directly is equally supported and often clearer.
 - `tiles.decode(data, depth)` and `tiles.encode(pixels, depth)` for the three
   depths that exist. There is no six bit depth however many tools list one.
 - `palette.decode`, `palette.encode` and `palette.resolve(colours, pixel, depth,
-  block)`. The last is not a lookup by index: which sixteen colours a four bit
+block)`. The last is not a lookup by index: which sixteen colours a four bit
   tile can reach depends on the block the tilemap or sprite entry names, so the
   block is part of the question.
 - `tilemap.decode` and `tilemap.encode`, quadrants included.
@@ -42,7 +42,7 @@ name and one that cannot be imported can only be handled by catching everything.
 
 ## The authority ladder
 
-1. **Manufacturer documentation.** Nintendo's *SNES Development Manual, Book 1*,
+1. **Manufacturer documentation.** Nintendo's _SNES Development Manual, Book 1_,
    Appendix A. Every layout figure is in
    [`conformance/hardware.json`](conformance/hardware.json) with the sentence it
    came from, the manual page and the page in the file, and the file's digest.
@@ -144,19 +144,19 @@ called things like `palette` and `tiles`.
 
 ## Conventions that are not negotiable
 
-| Thing | Rule |
-|:------|:-----|
-| Language | Python only |
-| Comments | None in source, and a docstring counts as one |
-| Test layout | `<module>.test.py` beside the module it covers |
-| Test shape | Arrange, act, assert, each opened by its bare marker |
-| Coverage | 100% statements and branches, enforced |
-| Types | `mypy` at strict, plus every optional error class |
-| Commits | Conventional Commits, subject under 50 characters |
-| Documents | Read, quoted and pinned by digest. Never committed: none is redistributable |
-| Dependencies | None at runtime, which is why nothing here writes an image file |
-| Fidelity | Where the hardware and convenience disagree, the hardware wins, including where the hardware is less accurate |
-| Public API | This and the rest of the family present the same shape where the subject allows. See [FAMILY.md](FAMILY.md) |
+| Thing        | Rule                                                                                                          |
+| :----------- | :------------------------------------------------------------------------------------------------------------ |
+| Language     | Python only                                                                                                   |
+| Comments     | None in source, and a docstring counts as one                                                                 |
+| Test layout  | `<module>.test.py` beside the module it covers                                                                |
+| Test shape   | Arrange, act, assert, each opened by its bare marker                                                          |
+| Coverage     | 100% statements and branches, enforced                                                                        |
+| Types        | `mypy` at strict, plus every optional error class                                                             |
+| Commits      | Conventional Commits, subject under 50 characters                                                             |
+| Documents    | Read, quoted and pinned by digest. Never committed: none is redistributable                                   |
+| Dependencies | None at runtime, which is why nothing here writes an image file                                               |
+| Fidelity     | Where the hardware and convenience disagree, the hardware wins, including where the hardware is less accurate |
+| Public API   | This and the rest of the family present the same shape where the subject allows. See [FAMILY.md](FAMILY.md)   |
 
 The linter's ignores in [`pyproject.toml`](pyproject.toml) carry no comments, so
 their reasons live here:
@@ -198,6 +198,18 @@ their reasons live here:
 - `@unittest\.skipUnless\(SOLD_AS_A_COMPONENT,`, `^def machine_mentions\(` and
   `^def listing\(` in the coverage exclusions: this part only existed inside one
   machine, so the family sweep for machine names is skipped here.
+
+The formatter's ignores in [`.prettierignore`](.prettierignore) carry no
+comments either, so their reasons live here:
+
+- `pnpm-lock.yaml` and `package-lock.json`: the package manager writes them, in
+  its own layout, on every install.
+- `node_modules/`, `.venv/`, `venv/`, `build/`, `dist/` and `*.egg-info/`:
+  installed or built, never written by hand.
+- `.coverage`, `coverage.json`, `htmlcov/` and the tool caches: the output of a
+  run, never committed.
+- `docs/`, `specs/`, `.work/` and `.claude/`: local working material, never
+  committed.
 
 ## Layout
 
@@ -261,7 +273,7 @@ being made in one of them and forgotten in the others, because a test in this
 repository cannot see the others, so the check is a command rather than a suite:
 
 ```sh
-shared() { sed '/^\*Everything above this line/q' "$1"; }
+shared() { sed '/^_Everything above this line/q' "$1"; }
 
 grep -o 'github\.com/[^/]*/\([a-z0-9-]*\))' FAMILY.md | sed 's|.*/||; s|)||' | sort -u |
 while read -r member; do

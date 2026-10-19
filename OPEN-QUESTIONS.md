@@ -74,7 +74,6 @@ under three labels with D15 outside them, and prints the direct colour packing
 beneath it. That page is a picture with nothing in its text layer, which is why
 it stayed unread while the manual sat one link away.
 
-
 **Whether the published grouping is the one cartridges actually use.** It is, by
 a margin nobody has to take on trust. Every other check here proves the code
 agrees with a record, with a second reading of the same manual, and with itself
@@ -90,12 +89,12 @@ strawmen: contiguous planes is how other consoles of the period stored the same
 kind of tile, and two pixels to a byte is the obvious way to hold sixteen
 colours.
 
-| Reading | Regions won |
-| --- | --- |
-| the published grouping | 6,178 of 11,765, 52.5% |
-| contiguous planes | 3,735, 31.7% |
-| two pixels to a byte | 1,852, 15.7% |
-| a reading with nothing in it | 33.3% |
+| Reading                      | Regions won            |
+| ---------------------------- | ---------------------- |
+| the published grouping       | 6,178 of 11,765, 52.5% |
+| contiguous planes            | 3,735, 31.7%           |
+| two pixels to a byte         | 1,852, 15.7%           |
+| a reading with nothing in it | 33.3%                  |
 
 Regions are picked by where they sit rather than by what is in them, and all
 three readings see the same regions, so the reading under test gets no help from

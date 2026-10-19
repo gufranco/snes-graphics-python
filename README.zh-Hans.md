@@ -35,10 +35,10 @@ for row in range(8):
 
 ## 安装
 
-| 要求 | 版本 |
-|:--|:--|
+| 要求   | 版本        |
+| :----- | :---------- |
 | Python | 3.12 或更高 |
-| git | 任意 |
+| git    | 任意        |
 
 ```bash
 git clone https://github.com/gufranco/snes-graphics-python.git
@@ -60,26 +60,26 @@ python3 snesgfx/doctor.py
 
 这个包每种布局对应一个模块，并在它们之上提供一个目录。借助目录，工具只需持有字节和格式名称，不必了解每个模块的调用方式。每个模块也可以直接导入。
 
-| 模块 | 内容 |
-|:--|:--|
-| [`snesgfx/tiles.py`](snesgfx/tiles.py) | 每像素 2、4、8 位的位平面图块，以及翻转 |
-| [`snesgfx/palette.py`](snesgfx/palette.py) | 十五位颜色字，以及每种位深能用到的调色板块 |
-| [`snesgfx/tilemap.py`](snesgfx/tilemap.py) | 背景地图条目，以及地图存储所用的象限 |
-| [`snesgfx/oam.py`](snesgfx/oam.py) | 精灵表，包括 512 字节的低位表和 32 字节的高位表 |
-| [`snesgfx/mode7.py`](snesgfx/mode7.py) | 采用硬件定点格式的 Mode 7 矩阵，以及交错存放的地图和像素 |
-| [`snesgfx/models.py`](snesgfx/models.py) | 目录 |
-| [`snesgfx/errors.py`](snesgfx/errors.py) | 这个包抛出的所有异常 |
-| [`snesgfx/doctor.py`](snesgfx/doctor.py) | 诊断脚本 |
-| [`snesgfx/environment.py`](snesgfx/environment.py) | 诊断脚本打印的机器检查 |
+| 模块                                               | 内容                                                     |
+| :------------------------------------------------- | :------------------------------------------------------- |
+| [`snesgfx/tiles.py`](snesgfx/tiles.py)             | 每像素 2、4、8 位的位平面图块，以及翻转                  |
+| [`snesgfx/palette.py`](snesgfx/palette.py)         | 十五位颜色字，以及每种位深能用到的调色板块               |
+| [`snesgfx/tilemap.py`](snesgfx/tilemap.py)         | 背景地图条目，以及地图存储所用的象限                     |
+| [`snesgfx/oam.py`](snesgfx/oam.py)                 | 精灵表，包括 512 字节的低位表和 32 字节的高位表          |
+| [`snesgfx/mode7.py`](snesgfx/mode7.py)             | 采用硬件定点格式的 Mode 7 矩阵，以及交错存放的地图和像素 |
+| [`snesgfx/models.py`](snesgfx/models.py)           | 目录                                                     |
+| [`snesgfx/errors.py`](snesgfx/errors.py)           | 这个包抛出的所有异常                                     |
+| [`snesgfx/doctor.py`](snesgfx/doctor.py)           | 诊断脚本                                                 |
+| [`snesgfx/environment.py`](snesgfx/environment.py) | 诊断脚本打印的机器检查                                   |
 
 ### 目录
 
-| 名称 | 内容 |
-|:--|:--|
-| `snesgfx.FORMATS` | 七个 `Format` 记录，以规范名称为键 |
+| 名称                         | 内容                                                                                                                  |
+| :--------------------------- | :-------------------------------------------------------------------------------------------------------------------- |
+| `snesgfx.FORMATS`            | 七个 `Format` 记录，以规范名称为键                                                                                    |
 | `snesgfx.format_named(name)` | 一个名称或别名对应的 `Format`。忽略大小写、空格、连字符和下划线。遇到其他名称时抛出 `UnknownFormat`，并列出这七个名称 |
-| `snesgfx.Format` | 一个包含 `name`、`aliases`、`summary`、`decode` 和 `encode` 的记录 |
-| `snesgfx.__version__` | 已安装的版本 |
+| `snesgfx.Format`             | 一个包含 `name`、`aliases`、`summary`、`decode` 和 `encode` 的记录                                                    |
+| `snesgfx.__version__`        | 已安装的版本                                                                                                          |
 
 `Format.decode` 和 `Format.encode` 接受整个缓冲区。对于三种图块格式，它们通过 `tiles.decode_sheet` 和 `tiles.encode_sheet` 读写一整张图块表。对于 `mode7`，它们拆分和合并交错的字。对于其余三种格式，它们就是模块自身的 `decode` 和 `encode`。
 
@@ -122,22 +122,22 @@ oam ('sprites', 'objects', 'obj')
 
 ### 图块
 
-| 调用 | 作用 |
-|:--|:--|
-| `tiles.decode(data, depth)` | 把一个 `depth` 乘 8 字节的图块转换成 64 个颜色编号，逐行排列 |
-| `tiles.encode(pixels, depth)` | 把 64 个颜色编号转换成一个图块 |
-| `tiles.decode_sheet(data, depth)` | 把连续的图块转换成由 64 个编号的列表组成的列表 |
-| `tiles.encode_sheet(sheet, depth)` | 把图块列表转换回字节 |
-| `tiles.flip(pixels, horizontal=False, vertical=False)` | 一个图块的镜像副本 |
-| `tiles.tile_bytes(depth)` | 16、32 或 64 |
-| `tiles.depth_of(name)` | 一个整数或 `tiles.NAMES` 中的名称所表示的位深 |
+| 调用                                                   | 作用                                                         |
+| :----------------------------------------------------- | :----------------------------------------------------------- |
+| `tiles.decode(data, depth)`                            | 把一个 `depth` 乘 8 字节的图块转换成 64 个颜色编号，逐行排列 |
+| `tiles.encode(pixels, depth)`                          | 把 64 个颜色编号转换成一个图块                               |
+| `tiles.decode_sheet(data, depth)`                      | 把连续的图块转换成由 64 个编号的列表组成的列表               |
+| `tiles.encode_sheet(sheet, depth)`                     | 把图块列表转换回字节                                         |
+| `tiles.flip(pixels, horizontal=False, vertical=False)` | 一个图块的镜像副本                                           |
+| `tiles.tile_bytes(depth)`                              | 16、32 或 64                                                 |
+| `tiles.depth_of(name)`                                 | 一个整数或 `tiles.NAMES` 中的名称所表示的位深                |
 
-| 常量 | 值 |
-|:--|:--|
-| `tiles.DEPTHS` | `(2, 4, 8)` |
-| `tiles.TILE_PIXELS`、`tiles.TILE_WIDTH` | 64 和 8 |
-| `tiles.PLANE_PAIR_BYTES` | 16，一对平面占用的字节数 |
-| `tiles.NAMES` | `2bpp`、`4bpp`、`8bpp`、`4-colour`、`16-colour` 和 `256-colour`，各自映射到对应的位深 |
+| 常量                                    | 值                                                                                    |
+| :-------------------------------------- | :------------------------------------------------------------------------------------ |
+| `tiles.DEPTHS`                          | `(2, 4, 8)`                                                                           |
+| `tiles.TILE_PIXELS`、`tiles.TILE_WIDTH` | 64 和 8                                                                               |
+| `tiles.PLANE_PAIR_BYTES`                | 16，一对平面占用的字节数                                                              |
+| `tiles.NAMES`                           | `2bpp`、`4bpp`、`8bpp`、`4-colour`、`16-colour` 和 `256-colour`，各自映射到对应的位深 |
 
 ```python
 from snesgfx import OutOfRange, Truncated, UnknownDepth, tiles
@@ -177,25 +177,25 @@ OutOfRange 4 does not fit in 2 bits
 
 ### 颜色
 
-| 调用 | 作用 |
-|:--|:--|
-| `palette.decode(data)` | 把小端序颜色字转换成取值 0 到 255 的 `(red, green, blue)` 三元组 |
-| `palette.encode(colours)` | 把三元组转换成颜色字。每个通道保留最高五位 |
-| `palette.to_rgb(word)`、`palette.to_word(red, green, blue)` | 单个颜色的双向转换。忽略字的第 15 位 |
-| `palette.normalise(data)` | 一个把每个字的第 15 位清零的副本 |
-| `palette.block_size(depth)` | 4、16 或 256 种颜色 |
-| `palette.block_start(depth, block)` | 一个块的第一个颜色的索引 |
-| `palette.resolve(table, pixel, depth, block)` | 一个像素编号通过某个块对应到的颜色 |
-| `palette.is_transparent(pixel)` | 颜色编号为 0 时为 True |
+| 调用                                                        | 作用                                                             |
+| :---------------------------------------------------------- | :--------------------------------------------------------------- |
+| `palette.decode(data)`                                      | 把小端序颜色字转换成取值 0 到 255 的 `(red, green, blue)` 三元组 |
+| `palette.encode(colours)`                                   | 把三元组转换成颜色字。每个通道保留最高五位                       |
+| `palette.to_rgb(word)`、`palette.to_word(red, green, blue)` | 单个颜色的双向转换。忽略字的第 15 位                             |
+| `palette.normalise(data)`                                   | 一个把每个字的第 15 位清零的副本                                 |
+| `palette.block_size(depth)`                                 | 4、16 或 256 种颜色                                              |
+| `palette.block_start(depth, block)`                         | 一个块的第一个颜色的索引                                         |
+| `palette.resolve(table, pixel, depth, block)`               | 一个像素编号通过某个块对应到的颜色                               |
+| `palette.is_transparent(pixel)`                             | 颜色编号为 0 时为 True                                           |
 
-| 常量 | 值 |
-|:--|:--|
-| `palette.COLOURS` | 256 |
-| `palette.BYTES_PER_COLOUR` | 2 |
-| `palette.WORD_MASK` | `0x7FFF` |
-| `palette.CHANNEL_BITS`、`palette.CHANNEL_MASK` | 5 和 `0x1F` |
-| `palette.BLOCKS` | `{2: 4, 4: 16, 8: 256}` |
-| `palette.TRANSPARENT` | 0 |
+| 常量                                           | 值                      |
+| :--------------------------------------------- | :---------------------- |
+| `palette.COLOURS`                              | 256                     |
+| `palette.BYTES_PER_COLOUR`                     | 2                       |
+| `palette.WORD_MASK`                            | `0x7FFF`                |
+| `palette.CHANNEL_BITS`、`palette.CHANNEL_MASK` | 5 和 `0x1F`             |
+| `palette.BLOCKS`                               | `{2: 4, 4: 16, 8: 256}` |
+| `palette.TRANSPARENT`                          | 0                       |
 
 ```python
 from snesgfx import palette
@@ -229,23 +229,23 @@ True False
 
 `tilemap.Entry(tile=0, block=0, priority=False, horizontal_flip=False, vertical_flip=False)` 是一个地图条目。
 
-| 调用或属性 | 作用 |
-|:--|:--|
-| `Entry.from_word(word)` | 一个十六位字所保存的条目 |
-| `entry.word` | 条目打包成的字。图块大于 1023 或块大于 7 时抛出 `OutOfRange` |
-| `tilemap.decode(data)`、`tilemap.encode(entries)` | 小端序字的双向转换 |
-| `tilemap.screen_size(size)` | 屏幕尺寸设置 0 到 3 对应的以图块计的宽度和高度 |
-| `tilemap.offset_of(x, y, size)` | 一个图块位置的条目索引，已考虑象限。位置会回绕 |
-| `tilemap.entry_at(entries, x, y, size)` | 一个图块位置上的条目 |
+| 调用或属性                                        | 作用                                                         |
+| :------------------------------------------------ | :----------------------------------------------------------- |
+| `Entry.from_word(word)`                           | 一个十六位字所保存的条目                                     |
+| `entry.word`                                      | 条目打包成的字。图块大于 1023 或块大于 7 时抛出 `OutOfRange` |
+| `tilemap.decode(data)`、`tilemap.encode(entries)` | 小端序字的双向转换                                           |
+| `tilemap.screen_size(size)`                       | 屏幕尺寸设置 0 到 3 对应的以图块计的宽度和高度               |
+| `tilemap.offset_of(x, y, size)`                   | 一个图块位置的条目索引，已考虑象限。位置会回绕               |
+| `tilemap.entry_at(entries, x, y, size)`           | 一个图块位置上的条目                                         |
 
-| 常量 | 值 |
-|:--|:--|
-| `tilemap.SCREEN_SIZES` | `((32, 32), (64, 32), (32, 64), (64, 64))` |
-| `tilemap.QUADRANT_TILES`、`tilemap.QUADRANT_ENTRIES` | 32 和 1024 |
-| `tilemap.BYTES_PER_ENTRY` | 2 |
-| `tilemap.TILE_MASK` | `0x03FF` |
-| `tilemap.BLOCK_SHIFT`、`tilemap.BLOCK_MASK` | 10 和 `0x07` |
-| `tilemap.PRIORITY_BIT`、`tilemap.HORIZONTAL_BIT`、`tilemap.VERTICAL_BIT` | `0x2000`、`0x4000`、`0x8000` |
+| 常量                                                                     | 值                                         |
+| :----------------------------------------------------------------------- | :----------------------------------------- |
+| `tilemap.SCREEN_SIZES`                                                   | `((32, 32), (64, 32), (32, 64), (64, 64))` |
+| `tilemap.QUADRANT_TILES`、`tilemap.QUADRANT_ENTRIES`                     | 32 和 1024                                 |
+| `tilemap.BYTES_PER_ENTRY`                                                | 2                                          |
+| `tilemap.TILE_MASK`                                                      | `0x03FF`                                   |
+| `tilemap.BLOCK_SHIFT`、`tilemap.BLOCK_MASK`                              | 10 和 `0x07`                               |
+| `tilemap.PRIORITY_BIT`、`tilemap.HORIZONTAL_BIT`、`tilemap.VERTICAL_BIT` | `0x2000`、`0x4000`、`0x8000`               |
 
 ```python
 from snesgfx import tilemap
@@ -279,22 +279,22 @@ print(tilemap.entry_at(entries, 40, 2, 3))
 
 `oam.Sprite(x=0, y=0, tile=0, block=0, priority=0, table=0, horizontal_flip=False, vertical_flip=False, large=False)` 是一个精灵。
 
-| 调用或属性 | 作用 |
-|:--|:--|
-| `oam.decode(data)` | 把 544 字节的表转换成 128 个精灵。`x` 的第 8 位和 `large` 来自高位表 |
-| `oam.encode(sprites)` | 把恰好 128 个精灵转换成 544 字节。`x` 达到 512、`y` 达到 256、`tile` 达到 512、`block` 达到 8 或 `priority` 达到 4 时抛出 `OutOfRange` |
-| `sprite.screen_x` | 作为屏幕位置的 `x`：从 256 起取 `x` 减 512 |
-| `sprite.table` | 属性字节的第 0 位，它同时也是 `tile` 的第 8 位。`encode` 根据 `tile` 写入这一位 |
-| `oam.sizes(setting)` | 对象尺寸设置 0 到 7 的小尺寸和大尺寸 |
-| `oam.size_of(sprite, setting)` | 某个设置下单个精灵的尺寸 |
+| 调用或属性                     | 作用                                                                                                                                   |
+| :----------------------------- | :------------------------------------------------------------------------------------------------------------------------------------- |
+| `oam.decode(data)`             | 把 544 字节的表转换成 128 个精灵。`x` 的第 8 位和 `large` 来自高位表                                                                   |
+| `oam.encode(sprites)`          | 把恰好 128 个精灵转换成 544 字节。`x` 达到 512、`y` 达到 256、`tile` 达到 512、`block` 达到 8 或 `priority` 达到 4 时抛出 `OutOfRange` |
+| `sprite.screen_x`              | 作为屏幕位置的 `x`：从 256 起取 `x` 减 512                                                                                             |
+| `sprite.table`                 | 属性字节的第 0 位，它同时也是 `tile` 的第 8 位。`encode` 根据 `tile` 写入这一位                                                        |
+| `oam.sizes(setting)`           | 对象尺寸设置 0 到 7 的小尺寸和大尺寸                                                                                                   |
+| `oam.size_of(sprite, setting)` | 某个设置下单个精灵的尺寸                                                                                                               |
 
-| 常量 | 值 |
-|:--|:--|
-| `oam.SPRITES` | 128 |
-| `oam.LOW_ENTRY_BYTES`、`oam.LOW_TABLE_BYTES` | 4 和 512 |
-| `oam.HIGH_TABLE_BYTES`、`oam.TABLE_BYTES` | 32 和 544 |
-| `oam.SCREEN_WIDTH` | 256 |
-| `oam.SIZES` | 八个 `(small, large)` 对 |
+| 常量                                         | 值                       |
+| :------------------------------------------- | :----------------------- |
+| `oam.SPRITES`                                | 128                      |
+| `oam.LOW_ENTRY_BYTES`、`oam.LOW_TABLE_BYTES` | 4 和 512                 |
+| `oam.HIGH_TABLE_BYTES`、`oam.TABLE_BYTES`    | 32 和 544                |
+| `oam.SCREEN_WIDTH`                           | 256                      |
+| `oam.SIZES`                                  | 八个 `(small, large)` 对 |
 
 ```python
 from snesgfx import oam
@@ -321,22 +321,22 @@ print(oam.sizes(0), oam.size_of(back, 0), oam.size_of(back, 6))
 
 ### Mode 7
 
-| 调用 | 作用 |
-|:--|:--|
-| `mode7.Matrix(a, b, c, d)` | 四个矩阵寄存器。每个属性都按有符号十六位值读取，格式为 8.8 定点 |
-| `mode7.Field(matrix, centre=(0, 0), scroll=(0, 0))` | 一个矩阵及其中心和滚动量，二者都按有符号十三位值读取 |
-| `field.at(x, y)` | 一个屏幕像素显示的场像素。与滚动偏移和与 `y` 的乘积在求和前丢弃低六位；与 `x` 的乘积保留低六位 |
-| `mode7.signed13(value)`、`mode7.signed16(value)` | 符号扩展 |
-| `mode7.wrap(x, y)`、`mode7.outside(x, y)` | 回绕到 1024 乘 1024 场内的位置，以及位置是否在场外 |
-| `mode7.deinterleave(vram)`、`mode7.interleave(names, pixels)` | 把字拆分成地图字节和像素字节，以及把它们重新合并 |
-| `mode7.tile(pixels, index)` | 一个图块的 64 个像素，每个像素一个字节 |
-| `mode7.name_at(names, x, y)` | 一个场像素下的图块名称 |
+| 调用                                                          | 作用                                                                                           |
+| :------------------------------------------------------------ | :--------------------------------------------------------------------------------------------- |
+| `mode7.Matrix(a, b, c, d)`                                    | 四个矩阵寄存器。每个属性都按有符号十六位值读取，格式为 8.8 定点                                |
+| `mode7.Field(matrix, centre=(0, 0), scroll=(0, 0))`           | 一个矩阵及其中心和滚动量，二者都按有符号十三位值读取                                           |
+| `field.at(x, y)`                                              | 一个屏幕像素显示的场像素。与滚动偏移和与 `y` 的乘积在求和前丢弃低六位；与 `x` 的乘积保留低六位 |
+| `mode7.signed13(value)`、`mode7.signed16(value)`              | 符号扩展                                                                                       |
+| `mode7.wrap(x, y)`、`mode7.outside(x, y)`                     | 回绕到 1024 乘 1024 场内的位置，以及位置是否在场外                                             |
+| `mode7.deinterleave(vram)`、`mode7.interleave(names, pixels)` | 把字拆分成地图字节和像素字节，以及把它们重新合并                                               |
+| `mode7.tile(pixels, index)`                                   | 一个图块的 64 个像素，每个像素一个字节                                                         |
+| `mode7.name_at(names, x, y)`                                  | 一个场像素下的图块名称                                                                         |
 
-| 常量 | 值 |
-|:--|:--|
-| `mode7.FIELD_TILES`、`mode7.TILE_WIDTH`、`mode7.FIELD_PIXELS` | 128、8 和 1024 |
-| `mode7.FRACTION_BITS` | 8 |
-| `mode7.TRUNCATE` | `~0x3F` |
+| 常量                                                             | 值                                      |
+| :--------------------------------------------------------------- | :-------------------------------------- |
+| `mode7.FIELD_TILES`、`mode7.TILE_WIDTH`、`mode7.FIELD_PIXELS`    | 128、8 和 1024                          |
+| `mode7.FRACTION_BITS`                                            | 8                                       |
+| `mode7.TRUNCATE`                                                 | `~0x3F`                                 |
 | `mode7.SIGN13`、`mode7.RANGE13`、`mode7.SIGN16`、`mode7.RANGE16` | `0x1000`、`0x2000`、`0x8000`、`0x10000` |
 
 ```python
@@ -374,12 +374,12 @@ print(mode7.signed13(0x1FFF), mode7.wrap(-1, 1024), mode7.outside(1024, 0))
 
 所有异常都在 [`snesgfx/errors.py`](snesgfx/errors.py) 中，四个异常都从 `snesgfx` 导出。
 
-| 异常 | 抛出条件 |
-|:--|:--|
-| `Truncated` | 缓冲区长度错误：图块不是每位深 8 字节，像素列表长度不是 64，图块表、颜色或地图缓冲区无法整除，精灵表不是 544 字节或 128 个精灵，Mode 7 字的长度为奇数或两半长度不等，Mode 7 图块超出末尾 |
-| `OutOfRange` | 值超出其字段范围：像素对其位深而言过大，通道超出 0 到 255，颜色字超过 16 位，调色板块超出表，地图条目的图块或块，精灵字段，屏幕尺寸或对象尺寸设置，`palette.block_size` 不认识的位深 |
-| `UnknownDepth` | 2、4、8 以外的图块位深，或 `tiles.depth_of` 不认识的名称 |
-| `UnknownFormat` | `format_named` 不认识的名称 |
+| 异常            | 抛出条件                                                                                                                                                                                 |
+| :-------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Truncated`     | 缓冲区长度错误：图块不是每位深 8 字节，像素列表长度不是 64，图块表、颜色或地图缓冲区无法整除，精灵表不是 544 字节或 128 个精灵，Mode 7 字的长度为奇数或两半长度不等，Mode 7 图块超出末尾 |
+| `OutOfRange`    | 值超出其字段范围：像素对其位深而言过大，通道超出 0 到 255，颜色字超过 16 位，调色板块超出表，地图条目的图块或块，精灵字段，屏幕尺寸或对象尺寸设置，`palette.block_size` 不认识的位深     |
+| `UnknownDepth`  | 2、4、8 以外的图块位深，或 `tiles.depth_of` 不认识的名称                                                                                                                                 |
+| `UnknownFormat` | `format_named` 不认识的名称                                                                                                                                                              |
 
 ### 诊断脚本
 
@@ -387,15 +387,15 @@ print(mode7.signed13(0x1FFF), mode7.wrap(-1, 1024), mode7.outside(1024, 0))
 
 ## 格式
 
-| 名称 | 说明 | 别名 |
-|:--|:--|:--|
-| `2bpp` | 两个平面，四种颜色，每个图块 16 字节 | `4-colour`、`2bit` |
-| `4bpp` | 四个平面，十六种颜色，每个图块 32 字节 | `16-colour`、`4bit` |
-| `8bpp` | 八个平面，256 种颜色，每个图块 64 字节 | `256-colour`、`8bit` |
-| `mode7` | 可旋转的背景：每像素一个字节，地图和像素逐字交错 | `mode-7`、`m7` |
-| `palette` | 十五位颜色，每个颜色两个字节，蓝色在最高位 | `cgram`、`colours`、`colors` |
-| `tilemap` | 背景地图，每个条目十六位，按象限存储 | `map`、`screen`、`bg` |
-| `oam` | 精灵表，每个精灵四个字节，另加第二张表中的两位 | `sprites`、`objects`、`obj` |
+| 名称      | 说明                                             | 别名                         |
+| :-------- | :----------------------------------------------- | :--------------------------- |
+| `2bpp`    | 两个平面，四种颜色，每个图块 16 字节             | `4-colour`、`2bit`           |
+| `4bpp`    | 四个平面，十六种颜色，每个图块 32 字节           | `16-colour`、`4bit`          |
+| `8bpp`    | 八个平面，256 种颜色，每个图块 64 字节           | `256-colour`、`8bit`         |
+| `mode7`   | 可旋转的背景：每像素一个字节，地图和像素逐字交错 | `mode-7`、`m7`               |
+| `palette` | 十五位颜色，每个颜色两个字节，蓝色在最高位       | `cgram`、`colours`、`colors` |
+| `tilemap` | 背景地图，每个条目十六位，按象限存储             | `map`、`screen`、`bg`        |
+| `oam`     | 精灵表，每个精灵四个字节，另加第二张表中的两位   | `sprites`、`objects`、`obj`  |
 
 没有六位位深，因为没有任何背景模式使用它。这里没有任何代码读写图像文件，这让这个包保持无依赖。
 
@@ -434,13 +434,13 @@ python3 -m conformance.exhaustive
 165,248 cases, 0 checks failed
 ```
 
-| 遍历 | 用例数 | 覆盖范围 |
-|:--|--:|:--|
-| `tiles-2bpp` | 65,536 | 每一对二位图块行，解码后再重新编码 |
-| `tiles-planes` | 896 | 每种位深的每个平面，对 64 个像素逐一检查 |
-| `palette` | 32,768 | 每个颜色字，扩展后再缩回 |
-| `tilemap` | 65,536 | 每个地图条目字，拆分成字段后再打包回去 |
-| `oam-high` | 512 | 128 个精灵各自的两个高位，且不干扰相邻精灵 |
+| 遍历           | 用例数 | 覆盖范围                                   |
+| :------------- | -----: | :----------------------------------------- |
+| `tiles-2bpp`   | 65,536 | 每一对二位图块行，解码后再重新编码         |
+| `tiles-planes` |    896 | 每种位深的每个平面，对 64 个像素逐一检查   |
+| `palette`      | 32,768 | 每个颜色字，扩展后再缩回                   |
+| `tilemap`      | 65,536 | 每个地图条目字，拆分成字段后再打包回去     |
+| `oam-high`     |    512 | 128 个精灵各自的两个高位，且不干扰相邻精灵 |
 
 四位图块的状态太多，无法遍历。平面遍历代替了它：每个平面必须正好对应到每个像素中属于自己的那一位，不能涉及其他位。测试会故意破坏每种格式，确认遍历能发现问题。
 
@@ -457,11 +457,11 @@ python3 -m conformance.against_reference
   66,432 cases compared against the reference, none disagreed
 ```
 
-| 数据 | 用例数 | 用例的选取方式 |
-|:--|--:|:--|
-| 位平面布局 | 896 | 每种位深下，每次只置一位 |
-| 颜色打包 | 32,768 | 每一种五位红、绿、蓝组合 |
-| 地图条目 | 32,768 | 每个图块、块和每对翻转组合 |
+| 数据       | 用例数 | 用例的选取方式             |
+| :--------- | -----: | :------------------------- |
+| 位平面布局 |    896 | 每种位深下，每次只置一位   |
+| 颜色打包   | 32,768 | 每一种五位红、绿、蓝组合   |
+| 地图条目   | 32,768 | 每个图块、块和每对翻转组合 |
 
 这个包自己把八位通道缩减为五位，而传给参照实现的是主机实际存储的五位值。
 
@@ -485,29 +485,29 @@ the published layout won 52.5% against a floor of 33.3%
 
 ### 检查工具
 
-| 命令 | 参数 | 退出码 |
-|:--|:--|:--|
-| `python3 -m conformance.exhaustive` | `--only NAME` | 0 所有遍历都通过，1 有遍历失败，2 未知名称或参数 |
-| `python3 -m conformance.build` | `--sources DIR`、`--output PATH`、`--pinned FILE`、`--driver-source FILE` | 0 构建成功，1 编译器失败，2 参数错误或获取失败 |
-| `python3 -m conformance.against_reference` | 无 | 0 没有分歧，或驱动程序尚未构建并给出提示，1 存在分歧 |
-| `python3 -m conformance.against_cartridges` | 环境变量中的 `SNES_CARTRIDGE_DIR` | 0 高于下限，1 等于或低于下限，2 没有可检查的内容 |
-| `python3 -m conformance.quotes` | 无 | 0 所有引用都已定位或磁盘上没有手册，1 有引用或出处不成立 |
-| `python3 -m conformance.documents` | `--check`、`--only SUBSTRING` | 0 所有文档都已验证，1 拒绝、无匹配或参数错误 |
-| `python3 -m conformance.speed` | 无 | 0 每秒至少 10,000 次四位解码，1 低于该值 |
-| `python3 -m conformance.links` | 无 | 0，或在本文件中的地址返回 404 或 410 时为 1 |
-| `python3 -m conformance.package WHEEL` | 一个已构建的 wheel | 0 包含所有模块且未打包测试，1 存在问题或文件不存在，2 缺少参数 |
+| 命令                                        | 参数                                                                      | 退出码                                                         |
+| :------------------------------------------ | :------------------------------------------------------------------------ | :------------------------------------------------------------- |
+| `python3 -m conformance.exhaustive`         | `--only NAME`                                                             | 0 所有遍历都通过，1 有遍历失败，2 未知名称或参数               |
+| `python3 -m conformance.build`              | `--sources DIR`、`--output PATH`、`--pinned FILE`、`--driver-source FILE` | 0 构建成功，1 编译器失败，2 参数错误或获取失败                 |
+| `python3 -m conformance.against_reference`  | 无                                                                        | 0 没有分歧，或驱动程序尚未构建并给出提示，1 存在分歧           |
+| `python3 -m conformance.against_cartridges` | 环境变量中的 `SNES_CARTRIDGE_DIR`                                         | 0 高于下限，1 等于或低于下限，2 没有可检查的内容               |
+| `python3 -m conformance.quotes`             | 无                                                                        | 0 所有引用都已定位或磁盘上没有手册，1 有引用或出处不成立       |
+| `python3 -m conformance.documents`          | `--check`、`--only SUBSTRING`                                             | 0 所有文档都已验证，1 拒绝、无匹配或参数错误                   |
+| `python3 -m conformance.speed`              | 无                                                                        | 0 每秒至少 10,000 次四位解码，1 低于该值                       |
+| `python3 -m conformance.links`              | 无                                                                        | 0，或在本文件中的地址返回 404 或 410 时为 1                    |
+| `python3 -m conformance.package WHEEL`      | 一个已构建的 wheel                                                        | 0 包含所有模块且未打包测试，1 存在问题或文件不存在，2 缺少参数 |
 
 手册没有确定的内容记录在 [OPEN-QUESTIONS.md](OPEN-QUESTIONS.md) 中，每个条目也连同其状态和严重程度记录在 [`conformance/divergences.json`](conformance/divergences.json) 中。
 
 ## 参与开发
 
-| 需求 | 位置 |
-|:--|:--|
-| 所有门禁检查及其运行顺序 | [CONTRIBUTING.md](CONTRIBUTING.md) |
-| 面向编码智能体的同样内容 | [AGENTS.md](AGENTS.md) |
-| 本仓库与同系列其他仓库共享的标准 | [FAMILY.md](FAMILY.md) |
-| bug 报告 | [GitHub Issues](https://github.com/gufranco/snes-graphics-python/issues) |
-| 安全报告 | [SECURITY.md](SECURITY.md) |
+| 需求                             | 位置                                                                     |
+| :------------------------------- | :----------------------------------------------------------------------- |
+| 所有门禁检查及其运行顺序         | [CONTRIBUTING.md](CONTRIBUTING.md)                                       |
+| 面向编码智能体的同样内容         | [AGENTS.md](AGENTS.md)                                                   |
+| 本仓库与同系列其他仓库共享的标准 | [FAMILY.md](FAMILY.md)                                                   |
+| bug 报告                         | [GitHub Issues](https://github.com/gufranco/snes-graphics-python/issues) |
+| 安全报告                         | [SECURITY.md](SECURITY.md)                                               |
 
 ```bash
 uvx ruff@0.16.3 format --check .
@@ -526,7 +526,7 @@ done
 
 ## 参考资料
 
-- *SNES Development Manual, Book I*，Nintendo of America Inc.，未注明日期。附录 A，第 A-10、A-12 和 A-17 页。共 240 页，21,022,582 字节，SHA-256 `f1405241000046abba7849376d2ec53cf85f1ad2e9950d69a7c2cf1f3ff6b791`。该手册不可再分发，不包含在本仓库中。`python3 -m conformance.documents` 从 https://archive.org/download/SNESDevManual/book1_text.pdf 下载它到 git 忽略的 `docs/manufacturer/` 中，并拒绝任何其他文件。`python3 -m conformance.documents --check` 验证已在该位置的副本。
+- _SNES Development Manual, Book I_，Nintendo of America Inc.，未注明日期。附录 A，第 A-10、A-12 和 A-17 页。共 240 页，21,022,582 字节，SHA-256 `f1405241000046abba7849376d2ec53cf85f1ad2e9950d69a7c2cf1f3ff6b791`。该手册不可再分发，不包含在本仓库中。`python3 -m conformance.documents` 从 https://archive.org/download/SNESDevManual/book1_text.pdf 下载它到 git 忽略的 `docs/manufacturer/` 中，并拒绝任何其他文件。`python3 -m conformance.documents --check` 验证已在该位置的副本。
 - SuperFamiconv，作者 David Lindecrantz，MIT 许可，提交 `d903daf1b74c9ec6db7949fe62af2f0b58bdc23b`，https://github.com/Optiroc/SuperFamiconv ，用于对位平面、颜色和地图条目数据进行独立解读。`unpack_native_tile`、`pack_native_color` 和 `pack_native_mapentry` 在构建时编译，从不提交。
 
 ## 引用本项目
