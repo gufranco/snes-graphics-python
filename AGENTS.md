@@ -233,7 +233,7 @@ conformance/
   exhaustive.py     the walks that settle a format rather than sampling it
   hardware.json     what Nintendo printed, with the sentence and the page
   hardware.test.py  the gate that holds each layout to those figures
-  divergences.json  where a figure follows by arithmetic rather than being printed
+  divergences.json  where a figure rests on something other than a printed one
   links.py          the weekly check that every cited address still answers
   speed.py          the throughput floor
 ```

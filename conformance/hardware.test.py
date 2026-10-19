@@ -100,9 +100,14 @@ class DocumentTest(unittest.TestCase):
         self.assertEqual(missing, [])
 
     def test_what_the_figures_do_not_state_is_recorded(self) -> None:
-        stated = self.declared["notStated"]
+        # Arrange
+        record = self.declared
 
-        self.assertGreaterEqual(len(stated), 4)
+        # Act
+        stated = record["notStated"]
+
+        # Assert
+        self.assertGreaterEqual(len(stated), 3)
 
 
 class CharacterTest(unittest.TestCase):
@@ -388,10 +393,15 @@ class DivergenceTest(unittest.TestCase):
 
         self.assertIn("Removing the comparison", entry["wouldReopenIt"])
 
-    def test_the_channel_width_being_arithmetic_is_recorded(self) -> None:
-        named = {entry["id"] for entry in self.entries}
+    def test_the_channel_width_is_recorded_as_printed_on_page_a_17(self) -> None:
+        # Arrange
+        named = {entry["id"]: entry for entry in self.entries}
 
-        self.assertIn("the-channel-width-is-arithmetic", named)
+        # Act
+        entry = named["the-channel-width-is-printed"]
+
+        # Assert
+        self.assertEqual((entry["status"], entry["packageFollows"]), ("closed", "document"))
 
 
 if __name__ == "__main__":

@@ -18,15 +18,16 @@
       "wouldSettleIt": "Already settled: every field of the tilemap entry and every word count of the character formats is now held to the manual."
     },
     {
-      "id": "the-channel-width-is-arithmetic",
+      "id": "the-channel-width-is-printed",
       "parts": ["snes-graphics"],
       "severity": "low",
-      "status": "open",
-      "documentSays": "That a colour is two bytes, and that register 2132H orders its fields blue, green, red.",
+      "status": "closed",
+      "documentSays": "Appendix page A-17, file page 212, prints CG-RAM COLOR DATA as fifteen cells under BLUE, GREEN and RED, five to each label, with D15 outside them.",
       "referenceDoes": "Uses five bits per channel and leaves the top bit of the word unused.",
-      "packageFollows": "neither",
-      "reasoning": "Fifteen bits over three channels gives five each. That follows from the two figures rather than being printed as one, so it is named here rather than quoted in hardware.json as though Nintendo had written it down.",
-      "wouldSettleIt": "The CGRAM figure at A-17, or a passage giving the channel width outright."
+      "packageFollows": "document",
+      "reasoning": "This entry used to say the width followed by arithmetic from two other figures, because the page that prints it is a picture with nothing in the text layer. The page was rendered and read, and hardware.json quotes it under colour.channelBits.",
+      "wouldReopenIt": "A reading of page A-17 that puts a different number of cells under a label.",
+      "wouldSettleIt": "Already settled by page A-17."
     },
     {
       "id": "the-mode-7-offset-keeps-ten-bits",

@@ -29,10 +29,11 @@ else.
 
 ## What would settle almost all of them
 
-One more page of the same manual. Both entries below are figures that Appendix A
-either prints on a page not yet read or does not print at all.
+Nothing available. The one entry below that is a question asks about a value the
+field cannot hold, so no page of the manual and no capture through this layout
+reaches it, and the other entry is a scope boundary.
 
-## Where a figure follows by arithmetic rather than being printed
+## Where nobody wrote it down
 
 ### What the hardware does with a character code above the range the field holds.
 

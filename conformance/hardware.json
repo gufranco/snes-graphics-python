@@ -155,7 +155,6 @@
     ]
   },
   "notStated": [
-    "The width of a colour channel. Fifteen bits over three channels gives five each and leaves the top bit of the word unused, which is arithmetic rather than a figure Nintendo prints.",
     "Anything about timing. These are layouts in memory; when the PPU reads them is a different question and not one this package asks.",
     "The Mode 7 tilemap, which the manual gives its own figure for on the following page and which this package treats separately.",
     "What the hardware does with a character code above the range the field can hold, since the field cannot hold one."
