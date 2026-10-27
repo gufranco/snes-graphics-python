@@ -8,7 +8,7 @@
 [![Release](https://img.shields.io/github/v/release/gufranco/snes-graphics-python)](https://github.com/gufranco/snes-graphics-python/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-**7** 種格式，**165,248** 個案例透過遍歷整個輸入空間確定，**66,432** 個案例與 SuperFamiconv 比對，**11,765** 個真實卡帶數據區域以三種方式讀取，**0** 個失敗，**949** 個測試，**100%** 語句及分支覆蓋率，無依賴套件
+**7** 種格式，**165,248** 個案例透過遍歷整個輸入空間確定，**66,432** 個案例與 SuperFamiconv 比對，**11,765** 個真實卡帶數據區域以三種方式讀取，**0** 個失敗，**1000** 個測試，**100%** 語句及分支覆蓋率，無依賴套件
 
 ```python
 from snesgfx import tiles
@@ -483,7 +483,7 @@ SNES_CARTRIDGE_DIR=/path/to/your/images python3 -m conformance.against_cartridge
 the published layout won 52.5% against a floor of 33.3%
 ```
 
-區域為 2,048 位元組，從偏移 `0x8000` 起每 32 KB 取一個，直到 2 MB，按位置選取，只有在不同位元組少於 8 種時才跳過。統計量只看相鄰像素是否相等，從不看它們的顏色，所以對調平面配對的得分相同。這種對調只會改變顏色的編號。這裡不包含任何卡帶：該次執行在一部機器上的 7,578 個映像檔中讀取了 300 個，以種子 11 抽取，[`conformance/cartridges.json`](conformance/cartridges.json) 記錄了計數和語料庫摘要。未設定該變數時，執行器會先在檢出目錄內的 `cartridges/` 中尋找，再到旁邊的 `snes-roms` 目錄中尋找。
+區域為 2,048 位元組，從偏移 `0x8000` 起每 32 KB 取一個，直到 2 MB，按位置選取，只有在不同位元組少於 8 種時才跳過。統計量只看相鄰像素是否相等，從不看它們的顏色，所以對調平面配對的得分相同。這種對調只會改變顏色的編號。這裡不包含任何卡帶：該次執行在一部機器上的 7,578 個映像檔中讀取了 300 個，以種子 11 抽取，[`conformance/cartridges.json`](conformance/cartridges.json) 記錄了計數和語料庫摘要。未設定該變數時，執行器會先在檢出目錄內的 `external/cartridges/` 中尋找，再到包含它的專案的 `external/cartridges/` 中尋找；那裏只保存它抽取的 300 個映像。
 
 ### 檢查工具
 

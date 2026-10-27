@@ -8,7 +8,7 @@
 [![Release](https://img.shields.io/github/v/release/gufranco/snes-graphics-python)](https://github.com/gufranco/snes-graphics-python/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-**7** 种格式，**165,248** 个用例通过遍历完整输入空间得到确认，**66,432** 个用例与 SuperFamiconv 比对，**11,765** 个真实卡带数据区域按三种方式读取，**0** 个失败，**949** 个测试，**100%** 语句和分支覆盖率，无依赖
+**7** 种格式，**165,248** 个用例通过遍历完整输入空间得到确认，**66,432** 个用例与 SuperFamiconv 比对，**11,765** 个真实卡带数据区域按三种方式读取，**0** 个失败，**1000** 个测试，**100%** 语句和分支覆盖率，无依赖
 
 ```python
 from snesgfx import tiles
@@ -483,7 +483,7 @@ SNES_CARTRIDGE_DIR=/path/to/your/images python3 -m conformance.against_cartridge
 the published layout won 52.5% against a floor of 33.3%
 ```
 
-区域大小为 2,048 字节，从偏移 `0x8000` 开始每隔 32 KB 取一个，直到 2 MB。区域按位置选取，只有在不同字节少于 8 种时才跳过。这个统计量只看相邻像素是否相同，从不看它们的颜色，因此交换平面对得分相同。这种交换只是给颜色重新编号。本仓库不包含任何卡带：这次运行在一台机器上的 7,578 个镜像中读取了 300 个，抽样种子为 11，[`conformance/cartridges.json`](conformance/cartridges.json) 记录了计数和语料摘要。未设置该变量时，运行器先在检出目录中的 `cartridges/` 查找，再在它旁边的 `snes-roms` 目录中查找。
+区域大小为 2,048 字节，从偏移 `0x8000` 开始每隔 32 KB 取一个，直到 2 MB。区域按位置选取，只有在不同字节少于 8 种时才跳过。这个统计量只看相邻像素是否相同，从不看它们的颜色，因此交换平面对得分相同。这种交换只是给颜色重新编号。本仓库不包含任何卡带：这次运行在一台机器上的 7,578 个镜像中读取了 300 个，抽样种子为 11，[`conformance/cartridges.json`](conformance/cartridges.json) 记录了计数和语料摘要。未设置该变量时，运行器先在检出目录中的 `external/cartridges/` 查找，再在包含它的项目的 `external/cartridges/` 中查找；那里只保存它抽取的 300 个映像。
 
 ### 检查工具
 

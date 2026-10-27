@@ -21,9 +21,9 @@ RECORD = Path(__file__).resolve().parent / "cartridges.json"
 
 DIRECTORY_VARIABLE = "SNES_CARTRIDGE_DIR"
 
-DEFAULT_DIRECTORY = ROOT / "cartridges"
+DEFAULT_DIRECTORY = ROOT / "external" / "cartridges"
 
-ALONGSIDE = ROOT.parent / "snes-roms"
+ALONGSIDE = ROOT.parent / "external" / "cartridges"
 
 SUFFIXES = (".sfc", ".smc")
 

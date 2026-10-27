@@ -139,6 +139,30 @@ The `BIOS/` and `CPU/` folders, the SA-1 demonstrations and the other images
 in that folder are left out: none is a test of what a layout looks like on
 screen.
 
+## Files kept in `external/`
+
+Everything this member reads and may not ship sits in `external/`, which git
+ignores and Dropbox is told to leave alone, per FAMILY.md's "Where the files a
+member reads are kept". [`artifacts.manifest.json`](artifacts.manifest.json)
+names all 301 by size, CRC32, MD5, SHA-1 and SHA-256:
+
+- `external/SuperFamiconv`, the reference sources, a sparse git checkout at the
+  commit [`conformance/pinned.json`](conformance/pinned.json) pins. A test
+  holds its commit to that record.
+- `external/cartridges/`, the 300 images the tile layout check draws with seed
+  11 from the cartridge library, and only those, at the paths the library
+  gives them. Over them alone the check reproduces every count in
+  [`conformance/cartridges.json`](conformance/cartridges.json).
+
+```bash
+python3 -m conformance.external
+python3 -m conformance.external --describe external/<file>
+```
+
+The first says which are here, verified, missing or wrong. The second prints
+the manifest entry for a file being added, which gets its entry in the same
+change.
+
 ## Every gate, in the order to run them
 
 ```bash
@@ -260,6 +284,9 @@ conformance/
   divergences.json  where a figure rests on something other than a printed one
   links.py          the weekly check that every cited address still answers
   speed.py          the throughput floor
+  external.py       which files in external/ are here, verified, missing or wrong
+external/           the reference sources and the 300 sampled cartridges, never committed
+artifacts.manifest.json  every file in external/, by size and every digest
 ```
 
 ## Things that will bite you

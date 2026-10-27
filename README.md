@@ -8,7 +8,7 @@ English | [日本語](README.ja.md) | [简体中文](README.zh-Hans.md) | [繁�
 [![Release](https://img.shields.io/github/v/release/gufranco/snes-graphics-python)](https://github.com/gufranco/snes-graphics-python/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-**7** formats, **165,248** cases settled by walking their whole input space, **66,432** cases compared against SuperFamiconv, **11,765** regions of real cartridge data read three ways, **0** failures, **949** tests, **100%** statement and branch coverage, no dependencies
+**7** formats, **165,248** cases settled by walking their whole input space, **66,432** cases compared against SuperFamiconv, **11,765** regions of real cartridge data read three ways, **0** failures, **1000** tests, **100%** statement and branch coverage, no dependencies
 
 ```python
 from snesgfx import tiles
@@ -483,7 +483,7 @@ SNES_CARTRIDGE_DIR=/path/to/your/images python3 -m conformance.against_cartridge
 the published layout won 52.5% against a floor of 33.3%
 ```
 
-Regions are 2,048 bytes taken every 32 KB from offset `0x8000` up to 2 MB, chosen by position and skipped only when they hold fewer than 8 distinct bytes. The statistic looks at whether neighbours are equal, never at their colour, so swapping the plane pairs scores the same. That swap only renames colours. No cartridge is carried: the run read 300 of the 7,578 images on one machine, drawn with seed 11, and [`conformance/cartridges.json`](conformance/cartridges.json) records the counts and the corpus digest. Without the variable the runner looks in `cartridges/` inside the checkout, then in a `snes-roms` directory beside it.
+Regions are 2,048 bytes taken every 32 KB from offset `0x8000` up to 2 MB, chosen by position and skipped only when they hold fewer than 8 distinct bytes. The statistic looks at whether neighbours are equal, never at their colour, so swapping the plane pairs scores the same. That swap only renames colours. No cartridge is carried: the run read 300 of the 7,578 images on one machine, drawn with seed 11, and [`conformance/cartridges.json`](conformance/cartridges.json) records the counts and the corpus digest. Without the variable the runner looks in `external/cartridges/` inside the checkout, then in the `external/cartridges/` of the project it sits in; the 300 images it draws are the only ones kept there.
 
 ### The checking tools
 

@@ -8,7 +8,7 @@ Super Nintendoのタイル、カラー、背景マップ、スプライト、Mod
 [![Release](https://img.shields.io/github/v/release/gufranco/snes-graphics-python)](https://github.com/gufranco/snes-graphics-python/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-**7**種類のフォーマット、入力空間全体の走査で確定した**165,248**ケース、SuperFamiconvと比較した**66,432**ケース、3通りに読んだ実カートリッジデータの**11,765**領域、失敗**0**件、テスト**949**件、ステートメントとブランチのカバレッジ**100%**、依存関係なし
+**7**種類のフォーマット、入力空間全体の走査で確定した**165,248**ケース、SuperFamiconvと比較した**66,432**ケース、3通りに読んだ実カートリッジデータの**11,765**領域、失敗**0**件、テスト**1000**件、ステートメントとブランチのカバレッジ**100%**、依存関係なし
 
 ```python
 from snesgfx import tiles
@@ -483,7 +483,7 @@ SNES_CARTRIDGE_DIR=/path/to/your/images python3 -m conformance.against_cartridge
 the published layout won 52.5% against a floor of 33.3%
 ```
 
-領域はオフセット`0x8000`から2 MBまで32 KBごとに取った2,048バイトで、位置で選び、異なるバイトが8種類未満の場合にだけスキップします。この統計は隣接ピクセルが等しいかどうかだけを見て、その色は見ないため、プレーンの組を入れ替えても同じスコアになります。その入れ替えは色の名前を付け替えるだけです。カートリッジは含めていません。この実行では1台のマシン上の7,578個のイメージのうち300個をシード11で抽出して読み、[`conformance/cartridges.json`](conformance/cartridges.json)がその件数とコーパスのダイジェストを記録しています。環境変数がない場合、ランナーはチェックアウト内の`cartridges/`を探し、次にその隣の`snes-roms`ディレクトリを探します。
+領域はオフセット`0x8000`から2 MBまで32 KBごとに取った2,048バイトで、位置で選び、異なるバイトが8種類未満の場合にだけスキップします。この統計は隣接ピクセルが等しいかどうかだけを見て、その色は見ないため、プレーンの組を入れ替えても同じスコアになります。その入れ替えは色の名前を付け替えるだけです。カートリッジは含めていません。この実行では1台のマシン上の7,578個のイメージのうち300個をシード11で抽出して読み、[`conformance/cartridges.json`](conformance/cartridges.json)がその件数とコーパスのダイジェストを記録しています。環境変数がない場合、ランナーはチェックアウト内の`external/cartridges/`を探し、次にこのチェックアウトを含むプロジェクトの`external/cartridges/`を探します。そこに置くのは抽出される300本のイメージだけです。
 
 ### チェック用ツール
 
