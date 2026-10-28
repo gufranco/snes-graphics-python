@@ -8,7 +8,7 @@
 [![Release](https://img.shields.io/github/v/release/gufranco/snes-graphics-python)](https://github.com/gufranco/snes-graphics-python/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-**7** 種格式，**165,248** 個案例透過遍歷整個輸入空間確定，**66,432** 個案例與 SuperFamiconv 比對，**11,765** 個真實卡帶數據區域以三種方式讀取，**0** 個失敗，**1000** 個測試，**100%** 語句及分支覆蓋率，無依賴套件
+**7** 種格式，**165,248** 個案例透過遍歷整個輸入空間確定，**66,432** 個案例與 SuperFamiconv 比對，**11,765** 個真實卡帶數據區域以三種方式讀取，**0** 個失敗，**1002** 個測試，**100%** 語句及分支覆蓋率，無依賴套件
 
 ```python
 from snesgfx import tiles
