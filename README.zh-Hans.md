@@ -4,9 +4,11 @@
 
 [English](README.md) | [日本語](README.ja.md) | 简体中文 | [繁體中文（香港）](README.zh-HK.md)
 
-[![CI](https://github.com/gufranco/snes-graphics-python/actions/workflows/ci.yml/badge.svg)](https://github.com/gufranco/snes-graphics-python/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/gufranco/snes-graphics-python)](https://github.com/gufranco/snes-graphics-python/releases)
-[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![ci](https://img.shields.io/github/actions/workflow/status/gufranco/snes-graphics-python/ci.yml?branch=main&style=flat-square&label=ci)](https://github.com/gufranco/snes-graphics-python/actions/workflows/ci.yml)
+[![release](https://img.shields.io/github/v/release/gufranco/snes-graphics-python?style=flat-square&label=release)](https://github.com/gufranco/snes-graphics-python/releases/latest)
+[![coverage](https://img.shields.io/badge/coverage-100%25-brightgreen?style=flat-square)](https://github.com/gufranco/snes-graphics-python/actions/workflows/ci.yml)
+[![openssf scorecard](https://img.shields.io/ossf-scorecard/github.com/gufranco/snes-graphics-python?style=flat-square&label=openssf%20scorecard)](https://scorecard.dev/viewer/?uri=github.com/gufranco/snes-graphics-python)
+[![license](https://img.shields.io/github/license/gufranco/snes-graphics-python?style=flat-square&label=license)](LICENSE)
 
 **7** 种格式，**165,248** 个用例通过遍历完整输入空间得到确认，**66,432** 个用例与 SuperFamiconv 比对，**11,765** 个真实卡带数据区域按三种方式读取，**0** 个失败，**1002** 个测试，**100%** 语句和分支覆盖率，无依赖
 

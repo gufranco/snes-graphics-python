@@ -4,9 +4,11 @@ The Super Nintendo tile, colour, background map, sprite and Mode 7 formats in Py
 
 English | [日本語](README.ja.md) | [简体中文](README.zh-Hans.md) | [繁體中文（香港）](README.zh-HK.md)
 
-[![CI](https://github.com/gufranco/snes-graphics-python/actions/workflows/ci.yml/badge.svg)](https://github.com/gufranco/snes-graphics-python/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/gufranco/snes-graphics-python)](https://github.com/gufranco/snes-graphics-python/releases)
-[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![ci](https://img.shields.io/github/actions/workflow/status/gufranco/snes-graphics-python/ci.yml?branch=main&style=flat-square&label=ci)](https://github.com/gufranco/snes-graphics-python/actions/workflows/ci.yml)
+[![release](https://img.shields.io/github/v/release/gufranco/snes-graphics-python?style=flat-square&label=release)](https://github.com/gufranco/snes-graphics-python/releases/latest)
+[![coverage](https://img.shields.io/badge/coverage-100%25-brightgreen?style=flat-square)](https://github.com/gufranco/snes-graphics-python/actions/workflows/ci.yml)
+[![openssf scorecard](https://img.shields.io/ossf-scorecard/github.com/gufranco/snes-graphics-python?style=flat-square&label=openssf%20scorecard)](https://scorecard.dev/viewer/?uri=github.com/gufranco/snes-graphics-python)
+[![license](https://img.shields.io/github/license/gufranco/snes-graphics-python?style=flat-square&label=license)](LICENSE)
 
 **7** formats, **165,248** cases settled by walking their whole input space, **66,432** cases compared against SuperFamiconv, **11,765** regions of real cartridge data read three ways, **0** failures, **1002** tests, **100%** statement and branch coverage, no dependencies
 
