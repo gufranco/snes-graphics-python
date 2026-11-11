@@ -10,7 +10,7 @@
 [![openssf scorecard](https://img.shields.io/ossf-scorecard/github.com/gufranco/snes-graphics-python?style=flat-square&label=openssf%20scorecard)](https://scorecard.dev/viewer/?uri=github.com/gufranco/snes-graphics-python)
 [![license](https://img.shields.io/github/license/gufranco/snes-graphics-python?style=flat-square&label=license)](LICENSE)
 
-**7** 種格式，**165,248** 個案例透過遍歷整個輸入空間確定，**66,432** 個案例與 SuperFamiconv 比對，**11,765** 個真實卡帶數據區域以三種方式讀取，**0** 個失敗，**1002** 個測試，**100%** 語句及分支覆蓋率，無依賴套件
+**7** 種格式，**165,248** 個案例透過遍歷整個輸入空間確定，**66,432** 個案例與 SuperFamiconv 比對，**11,765** 個真實卡帶數據區域以三種方式讀取，**0** 個失敗，**1003** 個測試，**100%** 語句及分支覆蓋率，無依賴套件
 
 ```python
 from snesgfx import tiles
